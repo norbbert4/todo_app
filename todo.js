@@ -4,7 +4,7 @@
     const saveButton = document.querySelector('main header button');    // gomb az új teendő mentésére
     const todoTable = document.querySelector('#todo-content');          // táblázat törzse a teendők megjelenítésére
 
-    const apiUrl = 'https://todoapp.norbbert4.hu/api/';
+    const apiUrl = 'http://localhost/todo/api/';
 
     
 // -- Segédfüggvények --

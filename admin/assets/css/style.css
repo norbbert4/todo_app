@@ -1,0 +1,65 @@
+body {
+    width:100%;
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 250px auto;
+    grid-template-rows: auto;
+}
+nav {
+    background-color: rgba(0, 0, 0, 0.7);
+    color:white;
+    padding: 1rem;
+}
+
+.list-group-item a {
+    text-decoration: none;
+}
+
+main {
+    padding: 1rem;
+    position: relative;
+}
+
+main #editbox {
+    position: absolute;
+    width: 90%;
+    height: 90%;
+    top: 5%;
+    left: 5%;
+    border: 1px solid black;
+    background-color: white;
+    box-shadow: 0 0.3rem 1rem rgba(0, 0, 0, 0.5);
+}
+
+main #editbox .content {
+    padding: 2rem;
+}
+
+main #editbox .close {
+    width: 1.2rem;
+    height: 1.2rem;
+    border-radius: 0.6rem;
+    background-color: red;
+    color: white;
+    user-select: none;
+    cursor: pointer;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+}
+
+.box-hide {
+    display: none;
+}
+
+.logged {
+    font-weight: bold;
+}
+
+.btn-singleline {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    max-width: 100%;
+    width: 100%;
+}
