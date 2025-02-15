@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Feb 09, 2025 at 01:32 PM
+-- Generation Time: Feb 15, 2025 at 10:20 AM
 -- Server version: 10.11.10-MariaDB
 -- PHP Version: 8.2.20
 
@@ -36,22 +36,6 @@ CREATE TABLE `logins` (
   `login_token` varchar(32) DEFAULT NULL,
   `login_state` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `logins`
---
-
-INSERT INTO `logins` (`login_id`, `login_user_id`, `login_date`, `action_date`, `logout_date`, `login_token`, `login_state`) VALUES
-(1, 1, '2024-05-17 18:33:35', '2024-05-17 18:33:49', '2024-08-23 18:18:38', 'f07a583854f3fd7b2014ee341e32950f', 0),
-(2, 1, '2024-08-23 18:15:38', '2024-08-23 18:15:49', '2024-08-23 18:18:38', 'bc5ed0961963aa2d81e136c5b1776d41', 0),
-(3, 1, '2024-08-23 18:20:41', '2024-08-23 18:25:25', '2025-02-05 19:59:03', '633b5e984a17a50195ed45d9c4ef23e0', 0),
-(4, 1, '2025-02-05 19:32:38', '2025-02-05 19:47:42', '2025-02-05 19:59:03', '3c6317045e46daba16bdcf7f1041cd82', 0),
-(5, 2, '2025-02-05 19:47:19', '2025-02-05 19:47:32', '0000-00-00 00:00:00', 'ea95dbccef5d3f0d460b9981db70433e', 1),
-(6, 1, '2025-02-05 20:01:26', '2025-02-05 20:16:16', '2025-02-09 11:58:44', '238751ea5e9660c7911eab2d90909fdc', 0),
-(7, 1, '2025-02-09 11:41:04', '2025-02-09 11:58:26', '2025-02-09 11:58:44', '4ef5b20e49a2df38adf8bf20c65512bf', 0),
-(8, 1, '2025-02-09 11:58:51', '2025-02-09 13:11:23', '2025-02-09 13:13:01', '0c6606a6256e9939583f7cb9d8021044', 0),
-(9, 1, '2025-02-09 13:16:40', '2025-02-09 13:18:22', '2025-02-09 13:23:11', '4a3e3596ae2046493d01bfced8e7861c', 0),
-(10, 1, '2025-02-09 13:23:20', '2025-02-09 13:31:28', '2025-02-09 13:31:47', '8bc2b220c78f06d8ba0a6973cf5c96f0', 0);
 
 -- --------------------------------------------------------
 
@@ -94,7 +78,8 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`user_ID`, `user_fullname`, `user_name`, `user_pw`, `user_state`) VALUES
 (1, 'Administrator', 'admin', '$2y$10$Fz2hM3bSQH2zZWfwdylH3.wlPnpc/.JV342pR0rrxk/qLmXLsMx26', 1),
-(2, 'Felhasználó', 'user', '$2y$10$Fz2hM3bSQH2zZWfwdylH3.wlPnpc/.JV342pR0rrxk/qLmXLsMx26', 1);
+(2, 'Felhasználó', 'user', '$2y$10$Fz2hM3bSQH2zZWfwdylH3.wlPnpc/.JV342pR0rrxk/qLmXLsMx26', 1),
+(5, 'Róbert', 'bobby', '$2y$10$I.mXf3cod4yEJZKZ3D6.WOxccbWh2zR/5LEm0jAchmz8HhojcwNOe', 1);
 
 --
 -- Indexes for dumped tables
@@ -127,7 +112,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `logins`
 --
 ALTER TABLE `logins`
-  MODIFY `login_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `login_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `todos`
@@ -139,7 +124,7 @@ ALTER TABLE `todos`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `user_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Constraints for dumped tables

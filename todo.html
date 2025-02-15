@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo list</title>
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <script src="./assets/js/todo.js" defer></script>
+</head>
+<body>
+
+    <main>
+
+        <header>
+            <h1>Teendőim</h1>
+            <form>
+                <input 
+                    type="text" 
+                    name="todo" 
+                    autocomplete="off" 
+                    placeholder="Mi lesz az új teendő?">
+
+                <button type="button">MENTÉS</button>
+            </form>
+        </header>
+
+
+        <footer>
+            <table>
+                <thead>
+                    <th>ID</th>
+                    <th>Teendő</th>
+                    <th></th>
+                </thead>
+                <tbody id="todo-content">
+                </tbody>
+            </table>
+        </footer>
+    </main>
+
+    
+    <nav>
+        Nincs jogosultságod a tartalom megtekintéséhez.
+    </nav>
+    
+</body>
+</html>

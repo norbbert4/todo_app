@@ -1,3 +1,28 @@
+const main = document.querySelector('main');
+const nav = document.querySelector('nav');
+let userData = { user_ID: 0, token: '-' };
+if (localStorage.getItem('userData') !== null) userData = JSON.parse(localStorage.getItem('userData'));
+
+const check = async () => {
+    if (userData.token.length > 0) {
+        fetch(`/todo_app/api/authentication/login.php?token=${userData.token}&user_id=${userData.user_ID}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success == true) {
+                nav.innerHTML = '';
+                nav.remove();
+                console.log(data);
+            } else {
+                main.innerHTML = '';
+                main.remove();
+                console.log(data);
+            }
+        })
+    }
+}
+
+check();
+
 // -- Deklarációk --
 
     const todoInput = document.querySelector('main header input');      // input mező az új teendő beírására

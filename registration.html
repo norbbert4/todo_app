@@ -5,22 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="./assets/css/style.css">
-    <script src="./assets/js/login.js" defer></script>
+    <script src="./assets/js/reg.js" defer></script>
 </head>
 <body>
 
     <form style="padding: 20px; background-color: white;">
+        <label for="fullname">fullname: </label>
+        <input type="text" name="fullname" id="fullname">
+        <br><br>
         <label for="username">username: </label>
         <input type="text" name="username" id="username">
         <br><br>
         <label for="password">password: </label>
         <input type="password" name="password" id="password">
         <br><br>
-        <button type="button" id="login-button">LOGIN</button>
+        <button type="button" id="reg-button">REGISTRATION</button>
         <br><br>
-        <div id="login-info"></div>
+        <div id="reg-info"></div>
         <br><br>
-        <a href="./registration.html">registration</a>
+        <a href="./index.html">login</a>
     </form>
     
 </body>
