@@ -1,0 +1,151 @@
+/* Alap háttér és font beállítások */
+body {
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Központozás a body-n */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* A bal oldali szöveg és a jobb oldali form szélessége */
+.col-md-7 {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 500px; /* Maximális szélesség beállítása */
+    margin: 20px;
+}
+
+/* Bal oldali üdvözlő szöveg */
+.login_bal_text {
+    font-size: 2.5rem;
+    font-weight: normal;
+    color: white;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.login_bal_text_kis {
+    font-size: 1.1rem;
+    color: white;
+    text-align: center;
+}
+
+/* Jobb oldali form szöveg */
+.login_bejel_text_cim {
+    font-size: 1.5rem;
+    font-weight: normal;
+    color: white;
+    text-align: center;
+}
+
+/* A form megjelenése */
+form {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 2rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* Beviteli mezők */
+.form-control {
+    width: 100%;
+    height: 10%;
+    padding: 0.75rem;
+    font-size: 1rem;
+    color: white;
+    background-color: transparent;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+/* Hover és focus állapotok */
+.form-control:hover,
+.form-control:focus {
+    background-color: #ffffff48;
+    color: white;
+}
+
+.form-control::placeholder {
+    color: rgba(255, 255, 255, 0.776);
+}
+
+/* A gombok */
+.btn-primary {
+    background-color: #202b7e;
+    border: none;
+    padding: 0.75rem;
+    font-size: 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s ease, opacity 0.3s ease;
+    width: 100%;
+}
+
+.btn-primary:hover {
+    background-color: #114393;
+    opacity: 0.8;
+}
+
+/* További információk (pl. regisztráció) */
+.register-link {
+    text-align: center;
+    margin-top: 1rem;
+}
+
+
+
+/* A bejelentkezési információk színe és stílusa */
+#login-info {
+    width: 100%;
+    text-align: center;
+    padding: 0rem 0rem;
+    margin-top: 1rem;
+    color: white;
+    border-radius: 5px;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.bg-red { background-color: red; }
+.bg-green { background-color: green; }
+
+h2
+{
+    margin-bottom: 1.5rem;
+}
+
+p
+{
+    color: white;
+    display: block;
+    text-align: center;
+}
+/* regisztracio szin stilus */
+#reg-info {
+    padding: 15px;
+    margin-top: 10px;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    text-align: center;
+    color: white;
+}
+
+.bg-green {
+    background-color: #4CAF50; /* Zöld szín a sikeres regisztrációhoz */
+}
+
+.bg-red {
+    background-color: #f44336; /* Piros szín a hibához */
+}

@@ -145,3 +145,19 @@ footer table tbody tr td:last-child {
 
 .state-m-button_1 { display: inline; }
 .state-m-button_0 { display: none; }
+
+
+
+#login-info {
+    width: 100%;
+     text-align: center;
+     padding: .5rem 1rem;
+     margin-top: .5rem;
+     color: white;
+     border-radius: .4rem;
+     font-size: .9rem;
+     font-weight: 600;
+ }
+
+ .bg-red { background-color: red; }
+ .bg-green { background-color: green; }
