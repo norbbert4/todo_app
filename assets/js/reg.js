@@ -1,24 +1,26 @@
 
-const fullnameInput = document.getElementById('fullname');
+const apiUrl = 'http://localhost/todo_app/api/authentication/registration.php';
+const emailInput = document.getElementById('email');
 const usernameInput = document.getElementById('username');
 const passwordInput = document.getElementById('password');
 const regButton = document.getElementById('reg-button');
 const regInfo = document.getElementById('reg-info');
+const regForm = document.getElementById('reg-form');
 
 
 const registration = async () => {
     // eltároljuk egy-egy változóban az input mezők értékét
-    const fullname = fullnameInput.value;
+    const email = emailInput.value;
     const username = usernameInput.value;
     const password = passwordInput.value;
 
     // fetch-el meghívjuk a login.php-t
-    fetch('/todo_app/api/authentication/registration.php', {
+    fetch(apiUrl, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ fullname, username, password }), // a header body-jába egy json-sztringet készítünk a két adatból
+        body: JSON.stringify({ email, username, password }), // a header body-jába egy json-sztringet készítünk a két adatból
     })
     .then(response => response.json())
     .then(data => {
@@ -28,7 +30,7 @@ const registration = async () => {
             regInfo.textContent = 'Sikeres regisztráció!';
             // majd újratöltjük az oldalt a dashboard.html-lel
             setTimeout(()=>{
-                window.location.href = "index.html";
+                window.location.href = "./";
             }, 2000);
         } else {
             // sikertelen bejelentkezés során feldobunk egy üzenetet
@@ -41,5 +43,8 @@ const registration = async () => {
 
 
 
-// figyeljük a gombon a kattintást
-regButton.addEventListener('click', registration);
+// figyeljük az űrlap végrehajtását
+regForm.addEventListener('submit', function(event) {
+    event.preventDefault();
+    registration();
+});

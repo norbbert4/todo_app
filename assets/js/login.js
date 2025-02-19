@@ -1,4 +1,5 @@
 
+const loginApiUrl = 'http://localhost/todo_app/api/authentication/login.php';
 const usernameInput = document.getElementById('username');
 const passwordInput = document.getElementById('password');
 const loginButton = document.getElementById('login-button');
@@ -9,7 +10,7 @@ if (localStorage.getItem('userData') !== null) userData = JSON.parse(localStorag
 
 const check = async () => {
     if (userData.token.length > 0) {
-        fetch(`/todo_app/api/authentication/login.php?token=${userData.token}&user_id=${userData.user_ID}`)
+        fetch(`${loginApiUrl}?token=${userData.token}&user_id=${userData.user_ID}`)
         .then(response => response.json())
         .then(data => {
             if (data.success == true) {
@@ -29,7 +30,7 @@ const login = async () => {
     const password = passwordInput.value;
 
     // fetch-el meghívjuk a login.php-t
-    fetch('/todo_app/api/authentication/login.php', {
+    fetch(loginApiUrl, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

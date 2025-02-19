@@ -1,5 +1,5 @@
 <?php
 $title = (string)$data['title'];
 
-$sql = "INSERT todos SET title = '$title'";
+$sql = "INSERT todos SET user_id=$userID, title = '$title'";
 ?>
