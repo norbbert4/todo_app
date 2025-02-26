@@ -166,7 +166,8 @@ switch ($method) {
                 if ($entityID !== 0) {
                     getOneByID($entityID);
                 } else {
-                    getAll();
+                    if (!$count) getAll();
+                    else getCount();
                 }
             } else {
                 getEmpty();

@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Todo list</title>
-    <link rel="stylesheet" href="./assets/css/todo.css?ver=2">
+    <link rel="stylesheet" href="./assets/css/todo.css">
     <script src="./assets/js/todo.js?ver=2" defer></script>
 </head>
 <body>
@@ -14,8 +15,9 @@
         <div class="nav-container">
             <a class="logo">Todo App</a>
             <ul class="nav-links">
+                <li><a href="./todo.html?date=today">Mai teendők</a></li>
+                <li><a href="./todo.html">Összes teendők</a></li>
                 <li><a href="./calendar.html">Naptár</a></li>
-                <li><a href="./todo.html">Teendők</a></li>
                 <li><a href="./account.html">Fiók</a></li>
                 <li><a href="./logout.html">Kijelentkezés</a></li>
             </ul>
@@ -24,7 +26,7 @@
 
     <main>
         <header>
-            <h1>Teendőim</h1>
+            <h1></h1>
             <form>
                 <input 
                     type="text" 
@@ -40,6 +42,7 @@
                 <thead>
                     <th>ID</th>
                     <th>Teendő</th>
+                    <th>Dátum</th>
                     <th></th>
                 </thead>
                 <tbody id="todo-content">

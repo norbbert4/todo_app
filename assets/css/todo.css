@@ -1,19 +1,39 @@
+* {
+    padding: 0;
+    margin: 0;
+    border: none;
+    box-sizing: border-box;
+    transition: all 0.3s ease; 
+}
 
-/* Navigációs sáv stílusok */
+body {
+    font-family: 'Roboto', Arial, sans-serif;
+    width: 100%;
+    min-height: 100vh;
+    background-color: #161616;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; 
+    align-items: center;
+    overflow-y: auto;
+}
+
+/* Navbar (MenuBar) */
 .navbar {
     position: fixed;
     top: 0;
     width: 100%;
     background-color: #333;
     color: white;
-    padding: 10px 20px;
+    padding: 12px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    z-index: 1000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+    z-index: 90; 
+    border-bottom: 1px solid #444;
+    border-radius: 0 0 8px 8px; 
 }
-
 
 .nav-container {
     display: flex;
@@ -24,19 +44,25 @@
 }
 
 .logo {
-    font-family: sans-serif;
-    font-size: 1.5rem;
-    font-weight: bold;
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 700;
     color: white;
     text-decoration: none;
     padding: 5px;
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.logo:hover {
+    color: #1a73e8;
+    transform: translateY(-2px);
 }
 
 .nav-links {
-    font-family: sans-serif;
+    font-family: 'Roboto', sans-serif;
     list-style: none;
     display: flex;
-    gap: 20px;
+    gap: 25px;
     margin: 0;
     padding: 10px;
 }
@@ -48,98 +74,114 @@
 .nav-links a {
     color: white;
     text-decoration: none;
-    font-size: 1rem;
+    font-size: 1.1rem;
+    font-weight: 500;
+    transition: color 0.3s ease, text-decoration 0.3s ease, transform 0.2s ease;
 }
 
 .nav-links a:hover {
+    color: #1a73e8;
     text-decoration: underline;
+    transform: translateY(-2px); 
 }
 
-/* Hogy a main ne takarjon bele a navbarba */
+
 main {
-    margin-top: 60px;
-}
-
-* {
-    padding: 0;
-    margin: 0;
-    border: none;
-    box-sizing: border-box;
-}
-
-body {
     width: 100%;
-    min-height: 100vh;
-    background-color: #161616;
+    max-width: 400px;
+    min-height: 600px;
+    background-color: #272727;
+    border-radius: 12px; 
     display: flex;
     flex-direction: column;
-    align-items: center;
-    overflow-y: auto; /* Engedélyezi a görgetést */
-}
-
-main {
-    width: 350px;
-    min-height: 600px; /* Ha az elem teljesen eltűnik, ez segíthet */
-    background-color: #272727;
-    border-radius: 1rem;
-    display: grid;
-    grid-template-columns: 100%;
-    grid-template-rows: auto 1fr;
     overflow: hidden;
-    color: rgb(179, 179, 179);
-    margin-top: 70px; /* Biztosítja, hogy a navbar alatt legyen */
+    color: #b3b3b3;
+    margin-top: 70px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); 
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    padding: 1rem;
 }
 
+main:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.3);
+    transform: translateY(-2px); 
+}
 
 main header {
-    padding: 1rem;
+    padding: 1.5rem 1rem;
     text-align: center;
-    background: linear-gradient(
-        180deg,
-        #222222,
-        #2f2f2f
-    );
+    background: none; 
+    border-radius: 12px 12px 0 0; 
+    box-shadow: none; 
+    transition: background 0.3s ease;
 }
 
 main header h1 {
-    padding-bottom: .5rem;
-    font-size: 1.5rem;
+    padding-bottom: 1.5rem; 
+    font-size: 1.8rem;
     font-weight: 600;
     text-align: center;
-    margin-bottom: 1rem;
+    margin-bottom: 0;
+    color: #e0e0e0; 
+    transition: color 0.3s ease;
 }
 
+main header .input-container { 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+}
 
 main header input {
     display: block;
     width: 100%;
-    background-color: #333333;
-    padding: 0.75rem 1rem;
-    color: rgb(212, 212, 212);
-    border: 1px solid #333333;
-    border-radius: 0.25rem;
-    margin-bottom: 1rem;
+    max-width: 500px; 
+    background-color: #3a3a3a; 
+    padding: 0.8rem 1.2rem;
+    color: #d4d4d4;
+    border: 1px solid #444;
+    border-radius: 6px; 
+    margin-bottom: 0;
     outline: none;
-    transition: all .5s ease-in-out;
+    transition: all 0.5s ease-in-out, box-shadow 0.3s ease;
+    text-align: center;
+   
 }
 
 main header input:focus {
-    background-color: #090909;
-    border: 1px solid rgba(158, 155, 52, .5);
+    background-color: #2d2d2d;
+    border: 1px solid #1a73e8;
     color: #d0ca1d;
+    box-shadow: 0 0 8px rgba(26, 115, 232, 0.4);
 }
 
 main header button {
-    background-color: #025997;
-    padding: 0.5rem 1rem;
-    color: rgb(241, 241, 241);
-    border-radius: 0.25rem;
+    background-color: #1a73e8;
+    padding: 0.7rem 1.5rem;
+    color: #f1f1f1;
+    border-radius: 6px;
     cursor: pointer;
-    transition: all .25s ease-in-out;
+    font-weight: 500;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    margin-top: 0.5rem; 
 }
 
 main header button:hover {
-    background-color: #0092fa;
+    background-color: #1557b0;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(26, 115, 232, 0.3);
+}
+
+main .todo-list {
+    flex-grow: 1;
+    padding: 1rem 0;
+    overflow-y: auto; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
 }
 
 main footer {
