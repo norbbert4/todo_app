@@ -44,7 +44,7 @@ if ($result->num_rows > 0) {
         'userData' => [
             'email' => $user['user_email'],
             'username' => $user['user_name'],
-            'password' => $user['user_pw'] // Plaintext jelszó, ahogy kértél
+            'password' => $user['user_pw'] // Ez hash-elt, de nem használjuk
         ]
     ];
 } else {
@@ -53,4 +53,3 @@ if ($result->num_rows > 0) {
 
 echo json_encode($response);
 $conn->close();
-?>

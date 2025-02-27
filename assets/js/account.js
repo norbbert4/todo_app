@@ -3,12 +3,14 @@ const emailInput = document.getElementById('email');
 const usernameInput = document.getElementById('username');
 const passwordInput = document.getElementById('password');
 const togglePasswordButton = document.getElementById('toggle-password');
+const resetPasswordButton = document.getElementById('x');
 const profileInfo = document.getElementById('profile-info');
 
 // Felhasználói adatok a localStorage-ból
-let userData = { user_ID: 0, token: '' };
+let userData = { user_ID: 0, token: '', username: '', password: '' };
 if (localStorage.getItem('userData') !== null) {
     userData = JSON.parse(localStorage.getItem('userData'));
+    console.log('Betöltött userData:', userData); // Debug
 }
 
 const apiUrl = 'http://localhost/todo_app/api/authentication/profile.php';
@@ -27,11 +29,14 @@ const fetchProfile = async () => {
     try {
         const response = await fetch(`${apiUrl}?userid=${userData.user_ID}&token=${userData.token}`);
         const data = await response.json();
+        console.log('API válasz:', data); // Debug
 
         if (data.success) {
-            emailInput.value = data.userData.email;
-            usernameInput.value = data.userData.username;
-            passwordInput.value = data.userData.password;
+            emailInput.value = data.userData.email || 'Nincs email'; // Email az API-ból
+            // Felhasználónév: először a localStorage-ból, ha nincs, akkor az API user_name-jéből
+            usernameInput.value = userData.username || data.userData.user_name || 'Nincs felhasználónév';
+            // Jelszó: localStorage-ból, mert az API hash-elt értéket ad
+            passwordInput.value = userData.password || 'Nincs jelszó';
         } else {
             profileInfo.classList.add('bg-red');
             profileInfo.textContent = data.message;
@@ -55,6 +60,16 @@ togglePasswordButton.addEventListener('click', () => {
         passwordInput.type = 'password';
         togglePasswordButton.textContent = 'Jelszó mutatása';
     }
+});
+
+// Jelszó visszaállítás (placeholder)
+resetPasswordButton.addEventListener('click', () => {
+    profileInfo.classList.add('bg-green');
+    profileInfo.textContent = 'Jelszó visszaállítás még nem implementálva!';
+    setTimeout(() => {
+        profileInfo.textContent = '';
+        profileInfo.classList.remove('bg-green');
+    }, 2000);
 });
 
 // Inicializálás
