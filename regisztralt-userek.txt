@@ -1,0 +1,7 @@
+email: user@domain.hu
+username: user
+password: 123456
+
+email: admin@domain.hu
+username: admin
+password: 123456

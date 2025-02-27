@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Feb 15, 2025 at 10:20 AM
+-- Generation Time: Feb 19, 2025 at 09:17 PM
 -- Server version: 10.11.10-MariaDB
 -- PHP Version: 8.2.20
 
@@ -37,6 +37,14 @@ CREATE TABLE `logins` (
   `login_state` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `logins`
+--
+
+INSERT INTO `logins` (`login_id`, `login_user_id`, `login_date`, `action_date`, `logout_date`, `login_token`, `login_state`) VALUES
+(1, 1, '2025-02-19 21:15:38', '2025-02-19 21:16:08', '2025-02-19 21:16:10', '3f77ebe04ced9da128e4d2567858a414', 0),
+(2, 2, '2025-02-19 21:16:31', '2025-02-19 21:16:54', '2025-02-19 21:16:57', '90089b2116e784467a95cb2199f0601c', 0);
+
 -- --------------------------------------------------------
 
 --
@@ -45,6 +53,7 @@ CREATE TABLE `logins` (
 
 CREATE TABLE `todos` (
   `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
   `title` varchar(255) NOT NULL,
   `completed` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -53,10 +62,11 @@ CREATE TABLE `todos` (
 -- Dumping data for table `todos`
 --
 
-INSERT INTO `todos` (`id`, `title`, `completed`) VALUES
-(19, 'Tejet vegyél!!!', 0),
-(20, 'Kell 1 TV újság', 1),
-(25, 'Fizesd be a számlákat!', 1);
+INSERT INTO `todos` (`id`, `user_id`, `title`, `completed`) VALUES
+(1, 1, 'Ez egy feladat user számára', 0),
+(2, 1, 'Ez egy másik feladat user számára', 0),
+(3, 2, 'Ez egy feladat admin számára', 0),
+(4, 2, 'Ez egy másik feladat admin számára', 1);
 
 -- --------------------------------------------------------
 
@@ -66,7 +76,7 @@ INSERT INTO `todos` (`id`, `title`, `completed`) VALUES
 
 CREATE TABLE `users` (
   `user_ID` int(11) NOT NULL,
-  `user_fullname` varchar(255) NOT NULL,
+  `user_email` varchar(255) NOT NULL,
   `user_name` varchar(255) NOT NULL,
   `user_pw` varchar(255) NOT NULL,
   `user_state` int(11) NOT NULL
@@ -76,10 +86,9 @@ CREATE TABLE `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`user_ID`, `user_fullname`, `user_name`, `user_pw`, `user_state`) VALUES
-(1, 'Administrator', 'admin', '$2y$10$Fz2hM3bSQH2zZWfwdylH3.wlPnpc/.JV342pR0rrxk/qLmXLsMx26', 1),
-(2, 'Felhasználó', 'user', '$2y$10$Fz2hM3bSQH2zZWfwdylH3.wlPnpc/.JV342pR0rrxk/qLmXLsMx26', 1),
-(5, 'Róbert', 'bobby', '$2y$10$I.mXf3cod4yEJZKZ3D6.WOxccbWh2zR/5LEm0jAchmz8HhojcwNOe', 1);
+INSERT INTO `users` (`user_ID`, `user_email`, `user_name`, `user_pw`, `user_state`) VALUES
+(1, 'user@domain.hu', 'user', '$2y$10$rx6C1ib2CDx/SqnpZW9BQ.kTPzOFM.l97nDUh1y8V7lQtu.a1cRuK', 1),
+(2, 'admin@domain.hu', 'admin', '$2y$10$kjrUKUPP/nbYWkSB7oJ27O6Y9cEaAPuDQ9h9R1ydULVFBFLWL6mWu', 1);
 
 --
 -- Indexes for dumped tables
@@ -112,19 +121,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `logins`
 --
 ALTER TABLE `logins`
-  MODIFY `login_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `login_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `todos`
 --
 ALTER TABLE `todos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `user_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- Constraints for dumped tables

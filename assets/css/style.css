@@ -1,4 +1,5 @@
 /* Alap háttér és font beállítások */
+
 body {
     background: linear-gradient(135deg, #6a11cb, #2575fc);
     font-family: Arial, sans-serif;
@@ -149,3 +150,74 @@ p
 .bg-red {
     background-color: #f44336; /* Piros szín a hibához */
 }
+
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: rgba(39, 39, 39, 0.95);
+    color: white;
+    padding: 12px 1px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 90; 
+    border-bottom: 1px solid #000000;
+    border-radius: 0 0 8px 8px; 
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.logo {
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: white;
+    text-decoration: none;
+    padding: 5px;
+    transition: color 0.3s ease, transform 0.2s ease;
+}
+
+.logo:hover {
+    color: #1a73e8;
+    transform: translateY(-2px);
+}
+
+.nav-links {
+    font-family: 'Roboto', sans-serif;
+    list-style: none;
+    display: flex;
+    gap: 25px;
+    margin: 0;
+    padding: 10px;
+}
+
+.nav-links li {
+    display: inline;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: 500;
+    transition: color 0.3s ease, text-decoration 0.3s ease, transform 0.2s ease;
+}
+
+.nav-links a:hover {
+    color: #1a73e8;
+    
+    transform: translateY(-2px); 
+}
+
+main {
+    margin-top: 60px;
+}
+

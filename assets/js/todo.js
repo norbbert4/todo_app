@@ -1,20 +1,38 @@
+// -- Deklarációk --
+
+const apiUrl = 'http://localhost/todo_app/api/';
+
+const dateObject = { date: '' };
+const urlSearchParams = new URLSearchParams(window.location.search);
+const params = Object.fromEntries(urlSearchParams.entries());
+if (params.hasOwnProperty("date")) dateObject.date = params.date;
+
+const todoInput = document.querySelector('main header input');      // input mező az új teendő beírására
+const saveButton = document.querySelector('main header button');    // gomb az új teendő mentésére
+const header = document.querySelector('main header h1');    // gomb az új teendő mentésére
+const todoTable = document.querySelector('#todo-content');          // táblázat törzse a teendők megjelenítésére
+
+
 const main = document.querySelector('main');
+const aside = document.querySelector('aside');
 const nav = document.querySelector('nav');
 let userData = { user_ID: 0, token: '-' };
 if (localStorage.getItem('userData') !== null) userData = JSON.parse(localStorage.getItem('userData'));
 
 const check = async () => {
     if (userData.token.length > 0) {
-        fetch(`/todo_app/api/authentication/login.php?token=${userData.token}&user_id=${userData.user_ID}`)
+        fetch(`${apiUrl}authentication/login.php?token=${userData.token}&user_id=${userData.user_ID}`)
         .then(response => response.json())
         .then(data => {
             if (data.success == true) {
-                nav.innerHTML = '';
-                nav.remove();
+                aside.innerHTML = '';
+                aside.remove();
                 console.log(data);
             } else {
                 main.innerHTML = '';
                 main.remove();
+                nav.innerHTML = '';
+                nav.remove();
                 console.log(data);
             }
         })
@@ -23,13 +41,6 @@ const check = async () => {
 
 check();
 
-// -- Deklarációk --
-
-    const todoInput = document.querySelector('main header input');      // input mező az új teendő beírására
-    const saveButton = document.querySelector('main header button');    // gomb az új teendő mentésére
-    const todoTable = document.querySelector('#todo-content');          // táblázat törzse a teendők megjelenítésére
-
-    const apiUrl = 'http://localhost/todo/api/';
 
     
 // -- Segédfüggvények --
@@ -39,6 +50,7 @@ check();
         return `<tr>
                     <td class="state-${todo.completed}">${index+1}</td>
                     <td class="state-${todo.completed}">${todo.title}</td>
+                    <td class="state-${todo.completed}">${todo.date}</td>
                     <td>
                         <button type="button" class="state-button-k state-k-button_${todo.completed}" onclick="todoState(${todo.id}, 1)">&bull;</button>
                         <button type="button" class="state-button-m state-m-button_${todo.completed}" onclick="todoState(${todo.id}, 0)">&laquo;</button>
@@ -53,11 +65,13 @@ check();
     // új teendő mentése
     async function saveTodo() {
         const title = todoInput.value.trim();
-        if (title.length > 0) {
-            const res = await fetch(apiUrl, {
+        const date = new Date().toLocaleDateString("hu-HU").replaceAll('. ', '-').replace('.', '');
+        if (title.length > 0) {            
+            console.log(date);
+            const res = await fetch(`${apiUrl}?token=${userData.token}&userid=${userData.user_ID}&entity=todos`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ title })
+                body: JSON.stringify({ title, date })
             });
             todoInput.value = '';
             renderTable();
@@ -65,35 +79,54 @@ check();
     }
 
     // táblázat renderelő függvény
-    async function renderTable() {
-        const res = await fetch(apiUrl);
-        const todos = await res.json();
+    async function renderTable(date='') {
+        const get_apiUrl = `${apiUrl}?token=${userData.token}&userid=${userData.user_ID}&entity=todos`;
+        const res = await fetch(get_apiUrl);
+        const resjson = await res.json();
+        let todos = [];
+        if (resjson.type == 'result') todos = resjson.body;
+        let todosToRender = [];
+        // teljes teendőim lista
+        if (dateObject.date == '') {
+            todosToRender = todos;
+            header.textContent = 'Összes teendőim';
+        }
+        // mai teendőim lista
+        else if (dateObject.date == 'today') {
+            const date = new Date().toLocaleDateString("hu-HU").replaceAll('. ', '-').replace('.', '');
+            todosToRender = todos.filter( todo => todo.date==date );
+            header.textContent = 'Mai teendőim';
+        }
+        // konkrét dátumra teendőim lista
+        else {
+            todosToRender = todos.filter( todo => todo.date==dateObject.date )
+            header.textContent = `Teendőim (${dateObject.date})`;
+        }
         let tableContent = '';
-        todos.forEach( (todo, index)=> tableContent += createTableRow(todo, index)  )
+        todosToRender.forEach( (todo, index)=> tableContent += createTableRow(todo, index)  )
         todoTable.innerHTML = tableContent;
     }
 
     // teendő törlése
     async function deleteTodo(dID) {
-        await fetch(apiUrl, {
-            method: 'DELETE',
-            body: `id=${dID}`
+        await fetch(`${apiUrl}?token=${userData.token}&userid=${userData.user_ID}&entity=todos&entityid=${dID}`, {
+            method: 'DELETE'
         });
         renderTable();
     }
 
     // teendő állapotának megváltoztatása
     async function todoState(id, completed) {
-        await fetch(apiUrl, {
-            method: 'PUT',
+        await fetch(`${apiUrl}?token=${userData.token}&userid=${userData.user_ID}&entity=todos&entityid=${id}`, {
+            method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ id, completed })
+            body: JSON.stringify({ completed })
         });
         renderTable();
     }
 
 
-renderTable();
+renderTable('2025-02-26');
 
 // mentés gomb eseményfigyelője
 saveButton.addEventListener('click', saveTodo);

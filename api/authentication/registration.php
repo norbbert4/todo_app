@@ -6,7 +6,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // JSON adatok fogadása
     $data = json_decode(file_get_contents("php://input"));
 
-    $fullname = $data->fullname;
+    $email = $data->email;
     $username = $data->username;
     $password = $data->password;
 
@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             )
         );
     } else {
-        $sql2 = "INSERT INTO users (user_fullname, user_name, user_pw, user_state) VALUES ('$fullname', '$username', '$hashedPassword', 1)";
+        $sql2 = "INSERT INTO users (user_email, user_name, user_pw, user_state) VALUES ('$email', '$username', '$hashedPassword', 1)";
         $conn->query($sql2);
         
         $response = array(

@@ -81,6 +81,7 @@ function getEmpty() {
 function getAll() {
     global $conn;
     global $entity;
+    global $userID;
     global $entityName;
     include './entities/'.$entity.'/getall.php';
     $result = $conn->query($sql);       
@@ -100,6 +101,7 @@ function getOneByID($entityID) {
     global $conn;
     global $entity;
     global $entityName;
+    global $userID;
     include './entities/'.$entity.'/getone.php';
     $result = $conn->query($sql);
     if ($result->num_rows > 0) {
@@ -118,6 +120,7 @@ function create($data) {
     global $conn;
     global $entity;
     global $entityName;
+    global $userID;
     include './entities/'.$entity.'/create.php';
     if ($conn->query($sql) === TRUE) {
         setMessage("result", "Sikeres ".$entityName[0]." rögzítés.", $data);
@@ -131,6 +134,7 @@ function updateByID($id, $data) {
     global $conn;
     global $entity;
     global $entityName;
+    global $userID;
     include './entities/'.$entity.'/update.php';
     if ($conn->query($sql) === TRUE) {
         setMessage("result", $entityName[0].": #".$id, $data);
@@ -162,7 +166,8 @@ switch ($method) {
                 if ($entityID !== 0) {
                     getOneByID($entityID);
                 } else {
-                    getAll();
+                    if (!$count) getAll();
+                    else getCount();
                 }
             } else {
                 getEmpty();
