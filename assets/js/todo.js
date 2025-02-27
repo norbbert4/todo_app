@@ -89,18 +89,18 @@ check();
         // teljes teendőim lista
         if (dateObject.date == '') {
             todosToRender = todos;
-            header.textContent = 'Összes teendöim';
+            header.textContent = 'Összes teendőim';
         }
         // mai teendőim lista
         else if (dateObject.date == 'today') {
             const date = new Date().toLocaleDateString("hu-HU").replaceAll('. ', '-').replace('.', '');
             todosToRender = todos.filter( todo => todo.date==date );
-            header.textContent = 'Mai teendöim';
+            header.textContent = 'Mai teendőim';
         }
         // konkrét dátumra teendőim lista
         else {
             todosToRender = todos.filter( todo => todo.date==dateObject.date )
-            header.textContent = `Teendöim (${dateObject.date})`;
+            header.textContent = `Teendőim (${dateObject.date})`;
         }
         let tableContent = '';
         todosToRender.forEach( (todo, index)=> tableContent += createTableRow(todo, index)  )
