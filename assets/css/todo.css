@@ -257,16 +257,21 @@ footer button:hover {
     position: fixed;
     top: 0;
     width: 100%;
-    background: rgba(39, 39, 39, 0.95);
-    color: white;
-    padding: 12px 1px;
+    background: rgba(255, 255, 255, 0.1); /* Átlátszó üveg effektus */
+    color: #ffffff;
+    padding: 15px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    z-index: 90; 
-    border-bottom: 1px solid #000000;
-    border-radius: 0 0 8px 8px; 
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3), 0 1px 6px rgba(0, 0, 0, 0.1); /* 3D-s árnyék */
+    backdrop-filter: blur(10px); /* Erősebb üveg effektus */
+    z-index: 100;
+    border-radius: 0 0 15px 15px;
+    transition: transform 0.3s ease-out; /* Sima mozgás */
+}
+
+.navbar:hover {
+    transform: translateY(-2px); /* Kissebb felugrás hoverre */
 }
 
 .nav-container {
@@ -278,27 +283,26 @@ footer button:hover {
 }
 
 .logo {
-    font-family: 'Roboto', sans-serif;
-    font-size: 1.8rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 2rem;
     font-weight: 700;
-    color: white;
+    color: #ffffff;
     text-decoration: none;
     padding: 5px;
-    transition: color 0.3s ease, transform 0.2s ease;
+    transition: color 0.3s ease, transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1); /* Spring animáció */
 }
 
 .logo:hover {
-    color: #1a73e8;
-    transform: translateY(-2px);
+    color: #00ffcc; /* Neonos cián szín */
+    transform: scale(1.1) rotate(2deg); /* Kissebb forgás és nagyítás */
 }
 
 .nav-links {
-    font-family: 'Roboto', sans-serif;
     list-style: none;
     display: flex;
-    gap: 25px;
+    gap: 35px;
     margin: 0;
-    padding: 10px;
+    padding: 0;
 }
 
 .nav-links li {
@@ -306,15 +310,30 @@ footer button:hover {
 }
 
 .nav-links a {
-    color: white;
+    color: #ffffff;
     text-decoration: none;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     font-weight: 500;
-    transition: color 0.3s ease, text-decoration 0.3s ease, transform 0.2s ease;
+    transition: color 0.3s ease, transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1); /* Spring animáció */
+    position: relative;
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -5px;
+    left: 0;
+    background-color: #00ffcc;
+    transition: width 0.3s ease;
 }
 
 .nav-links a:hover {
-    color: #1a73e8;
-    
-    transform: translateY(-2px); 
+    color: #00ffcc;
+    transform: translateY(-3px) scale(1.05); /* 3D-s felugrás és nagyítás */
+}
+
+.nav-links a:hover::after {
+    width: 100%;
 }
