@@ -50,6 +50,13 @@ $method = $_SERVER['REQUEST_METHOD'];
         $empty = false;
     }
 
+// számláló kérés
+if (isset($_GET['count'])) {
+    $count = $_GET['count'];
+} else {
+    $count = false;
+}
+
 include './entities/entities.php';
 include './modules/_setmessage.php';
 include './modules/_auth.php';
@@ -115,6 +122,25 @@ function getOneByID($entityID) {
     }
 }
 
+// --- GET COUNT --------------------------------------------------------------
+function getCount($entityID) {
+    global $conn;
+    global $entity;
+    global $userID;
+    global $entityName;
+    include './entities/'.$entity.'/getcount.php';
+    $result = $conn->query($sql);       
+    if ($result->num_rows > 0) {
+        $entities = array();
+        if ($row = $result->fetch_assoc()) {
+            $count = $row;
+        }
+        setMessage("result", $entityName, $count);
+    } else {
+        setMessage("error", "Nincs elérhető ".$entityName[0].".", false);
+    }
+}
+
 // --- CREATE ---------------------------------------------------------------
 function create($data) {
     global $conn;
@@ -164,10 +190,10 @@ switch ($method) {
         case 'GET':
             if (!$empty) {
                 if ($entityID !== 0) {
-                    getOneByID($entityID);
+                    if (!$count) getOneByID($entityID);
+                    else getCount($entityID);
                 } else {
-                    if (!$count) getAll();
-                    else getCount();
+                    getAll();
                 }
             } else {
                 getEmpty();

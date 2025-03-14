@@ -43,8 +43,15 @@ function populateYearSelect() {
     console.log('Évek betöltve:', yearSelect.value);
 }
 
+async function getTodoCount(dateStr) {
+    const get_apiUrl = `${apiUrl}?token=${userData.token}&userid=${userData.user_ID}&entity=todos&entityid=${dateStr}&count=1`;
+    const res = await fetch(get_apiUrl);
+    const resjson = await res.json();
+    return resjson;
+}
 
-function renderCalendar() {
+
+async function renderCalendar() {
     if (!calendarGrid) {
         console.error('Naptár rács (calendar-grid) nem található!');
         return;
@@ -71,17 +78,24 @@ function renderCalendar() {
         for (let day = 1; day <= daysInMonth; day++) {
             const dayElement = document.createElement('div');
             dayElement.className = 'day';
-            dayElement.setAttribute('id', `${year}-${String(month + 1).padStart(2, "0")}-${String(day).padStart(2, "0")}`)
+            const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            dayElement.setAttribute('id', `day_${dateStr}`)
             dayElement.textContent = day;
+
+            // naphoz tartozó teendók számlálója
+            let countResult = await getTodoCount(dateStr);
+            console.log(Number(countResult.body.CNT));
+            const todosForDayElement = document.createElement('div');
+            todosForDayElement.className = 'todos-for-day';
+            if (Number(countResult.body.CNT) == 0) todosForDayElement.className = 'todos-for-day todos-for-day_hidden';
+            todosForDayElement.textContent = countResult.body.CNT;
+            dayElement.appendChild(todosForDayElement);
+            // -------------------------------------
 
             const today = new Date();
             if (day === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
                 dayElement.classList.add('today');
-            }
-
-            const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-
-            
+            }            
 
             dayElement.onclick = (event) => {
                 console.log(`Kattintás a ${day}. napra, dátum: ${dateStr}`); 
@@ -129,6 +143,10 @@ async function saveTodo() {
         });
         todoInput.value = '';
         closeForm();
+        let countResult = await getTodoCount(date);
+        const todoCounterDiv = document.querySelector(`#day_${date} div`);
+        todoCounterDiv.classList.remove('todos-for-day_hidden');
+        todoCounterDiv.textContent = Number(countResult.body.CNT);
     }
 }
 
