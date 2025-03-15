@@ -1,4 +1,5 @@
-const loginApiUrl = 'http://localhost/todo_app/api/authentication/login.php';
+// Abszolút URL használata a norbbert4.hu domainhez
+const loginApiUrl = 'https://todoapp.norbbert4.hu/api/authentication/login.php';
 const usernameInput = document.getElementById('username');
 const passwordInput = document.getElementById('password');
 const loginButton = document.getElementById('login-button');
@@ -12,12 +13,13 @@ const check = async () => {
         fetch(`${loginApiUrl}?token=${userData.token}&user_id=${userData.user_ID}`)
         .then(response => response.json())
         .then(data => {
-            if (data.success == true) {
+            if (data.success === true) { // == helyett === jobb gyakorlat
                 window.location.href = "todo.html";
             } else {
                 console.log(data.message);
             }
         })
+        .catch(error => console.error('Hiba az ellenőrzésnél:', error)); // Hiba kezelése
     }
 }
 
@@ -34,14 +36,19 @@ const login = async () => {
         },
         body: JSON.stringify({ username, password }),
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP hiba! Státusz: ${response.status}`);
+        }
+        return response.json();
+    })
     .then(data => {
-        if (data.success == true) {
+        if (data.success === true) {
             const updatedUserData = {
                 user_ID: data.userData.user_ID,
                 token: data.userData.token,
                 username: username, // Beírt felhasználónév
-                password: password // Beírt plaintext jelszó
+                password: password // Beírt plaintext jelszó (nem ajánlott tárolni!)
             };
             console.log('Mentett userData:', updatedUserData); // Debug
             localStorage.setItem('userData', JSON.stringify(updatedUserData));
@@ -55,7 +62,11 @@ const login = async () => {
             loginInfo.textContent = data.error.message;
         }
     })
-    .catch(error => console.error('Hiba:', error));
+    .catch(error => {
+        console.error('Hiba:', error);
+        loginInfo.classList.add('bg-red');
+        loginInfo.textContent = 'Hiba történt a bejelentkezés során!';
+    });
 }
 
 loginButton.addEventListener('click', login);

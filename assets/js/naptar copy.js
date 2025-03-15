@@ -12,7 +12,7 @@ const months = [
     "Július", "Augusztus", "Szeptember", "Október", "November", "December"
 ];
 
-const apiUrl = 'http://localhost/todo_app/api/';
+const apiUrl = 'https://todoapp.norbbert4.hu/api/';
 
 function populateMonthSelect() {
     months.forEach((month, index) => {

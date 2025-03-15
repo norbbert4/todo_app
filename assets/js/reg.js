@@ -1,5 +1,5 @@
 
-const apiUrl = 'http://localhost/todo_app/api/authentication/registration.php';
+const apiUrl = 'https://todoapp.norbbert4.hu/api/authentication/registration.php';
 const emailInput = document.getElementById('email');
 const usernameInput = document.getElementById('username');
 const passwordInput = document.getElementById('password');

@@ -13,7 +13,7 @@ if (localStorage.getItem('userData') !== null) {
     console.log('Betöltött userData:', userData); // Debug
 }
 
-const apiUrl = 'http://localhost/todo_app/api/authentication/profile.php';
+const apiUrl = 'https://todoapp.norbbert4.hu/api/authentication/profile.php';
 
 // Profil adatok lekérése
 const fetchProfile = async () => {

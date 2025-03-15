@@ -1,8 +1,8 @@
 <?php
 // Kapcsolódás az adatbázishoz
 $servername= "localhost";
-$username= "root";
-$password = "";
+$username= "todo_app";
+$password = "T0d0A@ppP@ssw0rd2025";
 $dbname = "todo_app";
 
 $conn = new mysqli($servername, $username, $password, $dbname);

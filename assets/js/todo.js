@@ -1,6 +1,6 @@
 // -- Deklarációk --
 
-const apiUrl = 'http://localhost/todo_app/api/';
+const apiUrl = 'https://todoapp.norbbert4.hu/api/';
 
 const dateObject = { date: '' };
 const urlSearchParams = new URLSearchParams(window.location.search);
