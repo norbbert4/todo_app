@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo Pie Chart</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="./assets/css/diagram.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="assets/js/diagram.js"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a class="logo">Todo App</a>
+            <button class="hamburger" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-links">
+                <li><a href="./todo.html?date=today">Mai teendők</a></li>
+                <li><a href="./todo.html">Összes teendők</a></li>
+                <li><a href="./calendar.html">Naptár</a></li>
+                <li><a href="./diagram.html">Statisztika</a></li>
+                <li><a href="./account.html">Fiók</a></li>
+                <li><a href="./logout.html">Kijelentkezés</a></li>
+            </ul>
+            <!-- Felhasználói információ div -->
+            <div class="user-info" id="user-info"></div>
+        </div>
+    </nav>
+    <main>
+        <header>
+            <h1>Teendők Statisztikája</h1>
+        </header>
+        <section class="chart-container">
+            <canvas id="todoChart"></canvas>
+        </section>
+        <section class="chart-legend">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Állapot</th>
+                        <th>Darabszám</th>
+                        <th>Százalék</th>
+                    </tr>
+                </thead>
+                <tbody id="legend-content">
+                    <!-- Dinamikusan töltjük fel JS-szel -->
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="2">Összesen</td>
+                        <td id="total-count"></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </section>
+    </main>
+</body>
+</html>

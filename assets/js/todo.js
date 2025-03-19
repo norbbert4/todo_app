@@ -27,17 +27,14 @@ const check = async () => {
                     aside.innerHTML = '';
                     aside.remove();
                     if (userInfo) {
-                        // localStorage-ból vesszük a nevet, ha az API nem adja
                         const username = userData.username || data.username || 'Ismeretlen felhasználó';
                         userInfo.textContent = username;
                     }
-                    console.log(data);
                 } else {
                     main.innerHTML = '';
                     main.remove();
                     nav.innerHTML = '';
                     nav.remove();
-                    console.log(data);
                 }
             })
             .catch(error => {
@@ -47,11 +44,9 @@ const check = async () => {
 };
 check();
 
-// -- Időválasztó inicializálása --
+// Időválasztó inicializálása
 function initializeTimePicker() {
     const timePicker = document.getElementById('time-picker');
-
-    // Óra select elem
     const hourSelect = document.createElement('select');
     hourSelect.name = 'start_hour';
     hourSelect.id = 'start-hour';
@@ -67,12 +62,8 @@ function initializeTimePicker() {
         option.textContent = i.toString().padStart(2, '0');
         hourSelect.appendChild(option);
     }
-
-    // Kettőspont
     const colon = document.createElement('span');
     colon.textContent = ':';
-
-    // Perc select elem (5 perces lépésekben)
     const minuteSelect = document.createElement('select');
     minuteSelect.name = 'start_minute';
     minuteSelect.id = 'start-minute';
@@ -88,24 +79,25 @@ function initializeTimePicker() {
         option.textContent = i.toString().padStart(2, '0');
         minuteSelect.appendChild(option);
     }
-
-    // Beszúrás a time-picker div-be
     timePicker.appendChild(hourSelect);
     timePicker.appendChild(colon);
     timePicker.appendChild(minuteSelect);
 }
 
-// Időválasztó elemek deklarálása (miután inicializáltuk)
 initializeTimePicker();
 const startHourSelect = document.querySelector('select[name="start_hour"]');
 const startMinuteSelect = document.querySelector('select[name="start_minute"]');
 
-// -- Segédfüggvények --
+// Inicializáláskor alapból elrejtjük az űrlapot
+todoInputContainer.style.display = 'none';
+saveButton.style.display = 'none';
+
+// Segédfüggvények
 const createTableRow = (todo, index) => {
     return `<tr data-id="${todo.id}">
                 <td class="state-${todo.completed}">${index + 1}</td>
                 <td class="state-${todo.completed}">${todo.title}</td>
-                <td class="state-${todo.completed}">${todo.date}</td>
+                <td class="state-${todo.completed}">${todo.date.substring(0, 10)}</td>
                 <td class="state-${todo.completed}">${todo.start_time || '-'}</td>
                 <td>
                     <button type="button" class="state-button-k state-k-button_${todo.completed}" data-action="complete" data-id="${todo.id}">•</button>
@@ -117,7 +109,7 @@ const createTableRow = (todo, index) => {
 
 todoInput.addEventListener('keydown', (event) => {
     if (event.key === 'Enter') {
-        event.preventDefault(); // Megakadályozza a form alapértelmezett submit eseményét
+        event.preventDefault();
         saveTodo();
     }
 });
@@ -145,7 +137,7 @@ async function deleteTodo(dID) {
         });
         if (res.ok) {
             console.log(`Teendő ${dID} törölve`);
-            await renderTable(); // Frissíti a táblázatot
+            await renderTable();
         } else {
             console.error('Törlés sikertelen:', await res.json());
         }
@@ -154,15 +146,14 @@ async function deleteTodo(dID) {
     }
 }
 
-// -- Fő függvények --
+// Fő függvények
 async function saveTodo() {
     const title = todoInput.value.trim();
     const start_hour = startHourSelect.value;
     const start_minute = startMinuteSelect.value;
     const start_time = start_hour && start_minute ? `${start_hour}:${start_minute}` : null;
-    const date = dateObject.date === 'today' 
-        ? new Date().toLocaleDateString("hu-HU").replaceAll('. ', '-').replace('.', '') 
-        : (dateObject.date || new Date().toLocaleDateString("hu-HU").replaceAll('. ', '-').replace('.', ''));
+    const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+    const date = dateObject.date === 'today' ? today : (dateObject.date || today);
 
     if (title.length > 0) {
         console.log("Mentés dátuma:", date);
@@ -171,10 +162,14 @@ async function saveTodo() {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ title, date, start_time })
         });
-        todoInput.value = '';
-        startHourSelect.value = '';
-        startMinuteSelect.value = '';
-        renderTable();
+        if (res.ok) {
+            todoInput.value = '';
+            startHourSelect.value = '';
+            startMinuteSelect.value = '';
+            await renderTable();
+        } else {
+            console.error('Mentés sikertelen:', await res.json());
+        }
     }
 }
 
@@ -186,7 +181,7 @@ async function renderTable() {
         let todos = [];
         if (resjson.type === 'result') {
             todos = resjson.body;
-            console.log('Todos:', todos); // Debug: Nézzük meg, milyen adatokat ad vissza az API
+            console.log('Todos:', todos);
         } else {
             console.error('Hiba a teendők lekérdezésekor:', resjson.message);
             if (resjson.message === 'Sikertelen autentikáció.') {
@@ -197,40 +192,37 @@ async function renderTable() {
                 todayTodoCount.textContent = 'Teendőid száma: 0';
             }
             todoTable.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #c0c0c0;">Nincs teendő</td></tr>';
+            
         }
 
         let todosToRender = [];
         let todoCountValue = 0;
-        const today = new Date().toISOString().split('T')[0]; // Mai dátum YYYY-MM-DD formátumban
-        console.log('Today:', today); // Debug: Nézzük meg a mai dátumot
+        const today = new Date().toISOString().split('T')[0];
 
-        if (dateObject.date == '') {
-            // "Összes teendőim" nézet
+        if (dateObject.date === '') {
             todosToRender = todos;
             header.textContent = 'Összes teendőim';
             todoCountValue = todos.length;
-            todoInputContainer.setAttribute("style", "display: none;"); // Űrlap elrejtése
-            saveButton.setAttribute("style", "display: none;");
+            todoInputContainer.style.display = 'none'; // Elrejtés sima nézetben
+            saveButton.style.display = 'none';
         } else if (dateObject.date === 'today') {
-            // "Mai teendőim" nézet
             todosToRender = todos.filter(todo => todo.date.substring(0, 10) === today);
             header.textContent = 'Mai teendőim';
             todoCountValue = todosToRender.length;
-            todoInputContainer.setAttribute("style", "display: flex;");
-            saveButton.setAttribute("style", "display: block;");
-            todoInput.placeholder = 'Mi lesz az új teendő?';
+            todoInputContainer.style.display = 'flex'; // Megjelenítés csak date=today esetén
+            saveButton.style.display = 'block';
+            todoInput.placeholder = 'Mi lesz a mai teendő?';
         } else {
-            // Egyéb dátum nézet
             todosToRender = todos.filter(todo => todo.date.substring(0, 10) === dateObject.date);
             header.textContent = `Teendőim (${dateObject.date})`;
             todoCountValue = todosToRender.length;
-            todoInputContainer.setAttribute("style", "display: flex;");
-            saveButton.setAttribute("style", "display: block;");
-            todoInput.placeholder = `Mi lesz ekkor a teendő? (${dateObject.date})`;
+            todoInputContainer.style.display = 'none'; // Elrejtés egyéb dátumoknál
+            saveButton.style.display = 'none';
         }
 
         if (todayTodoCount) {
             todayTodoCount.textContent = `Teendőid száma: ${todoCountValue}`;
+            todayTodoCount.style.display = 'block'; // Mindig látható
         }
 
         let tableContent = '';
@@ -262,5 +254,4 @@ async function todoState(id, completed) {
 
 renderTable();
 
-// Mentés gomb eseményfigyelője
 saveButton.addEventListener('click', saveTodo);
