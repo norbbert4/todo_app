@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Feb 19, 2025 at 09:17 PM
+-- Generation Time: Mar 19, 2025 at 08:50 PM
 -- Server version: 10.11.10-MariaDB
 -- PHP Version: 8.2.20
 
@@ -42,8 +42,9 @@ CREATE TABLE `logins` (
 --
 
 INSERT INTO `logins` (`login_id`, `login_user_id`, `login_date`, `action_date`, `logout_date`, `login_token`, `login_state`) VALUES
-(1, 1, '2025-02-19 21:15:38', '2025-02-19 21:16:08', '2025-02-19 21:16:10', '3f77ebe04ced9da128e4d2567858a414', 0),
-(2, 2, '2025-02-19 21:16:31', '2025-02-19 21:16:54', '2025-02-19 21:16:57', '90089b2116e784467a95cb2199f0601c', 0);
+(1, 2, '2025-03-19 19:11:27', '2025-03-19 19:11:29', '2025-03-19 19:11:40', 'd7ad99239aaa625bc280e7b315dca315', 0),
+(2, 4, '2025-03-19 19:12:06', '2025-03-19 20:31:51', '2025-03-19 20:31:53', '5c2f564d3c100b30787119d26e111761', 0),
+(3, 4, '2025-03-19 20:32:02', '2025-03-19 20:48:33', '0000-00-00 00:00:00', 'fe0bf4abbf2dc4a14592c9e238f6632e', 1);
 
 -- --------------------------------------------------------
 
@@ -55,18 +56,10 @@ CREATE TABLE `todos` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
   `title` varchar(255) NOT NULL,
+  `date` date NOT NULL,
+  `start_time` time NOT NULL,
   `completed` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `todos`
---
-
-INSERT INTO `todos` (`id`, `user_id`, `title`, `completed`) VALUES
-(1, 1, 'Ez egy feladat user számára', 0),
-(2, 1, 'Ez egy másik feladat user számára', 0),
-(3, 2, 'Ez egy feladat admin számára', 0),
-(4, 2, 'Ez egy másik feladat admin számára', 1);
 
 -- --------------------------------------------------------
 
@@ -87,8 +80,10 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_ID`, `user_email`, `user_name`, `user_pw`, `user_state`) VALUES
-(1, 'user@domain.hu', 'user', '$2y$10$rx6C1ib2CDx/SqnpZW9BQ.kTPzOFM.l97nDUh1y8V7lQtu.a1cRuK', 1),
-(2, 'admin@domain.hu', 'admin', '$2y$10$kjrUKUPP/nbYWkSB7oJ27O6Y9cEaAPuDQ9h9R1ydULVFBFLWL6mWu', 1);
+(1, 'user@domain.hu', 'user', '$2y$10$2w.S4PT/s0WPmTPvHSf9SuPO6cfVh5qJ8Z7Zz2QPsv4k5HjriGE2W', 1),
+(2, 'admin@domain.hu', 'admin', '$2y$10$kjrUKUPP/nbYWkSB7oJ27O6Y9cEaAPuDQ9h9R1ydULVFBFLWL6mWu', 1),
+(3, 'teszt@valami.hu', 'teszt', '$2y$10$IVVW6XOjmq.1HS5lBbq3h.W0Cn8bqWAQuXsrRYuX3WnmGQvF0PaB6', 1),
+(4, 'valami@valami.hu', 'bobby1', '$2y$10$eFW/lUJvvl8iAwjAyZnpgOgmI9NimXhNzkuQZFkmP0iUfr.w44Vce', 1);
 
 --
 -- Indexes for dumped tables
@@ -121,19 +116,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `logins`
 --
 ALTER TABLE `logins`
-  MODIFY `login_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `login_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `todos`
 --
 ALTER TABLE `todos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `user_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables
@@ -149,5 +144,3 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-
-ALTER TABLE `todos` ADD COLUMN date DATE NOT NULL DEFAULT '2025-03-15';

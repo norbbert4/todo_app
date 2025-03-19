@@ -5,6 +5,7 @@ const passwordInput = document.getElementById('password');
 const togglePasswordButton = document.getElementById('toggle-password');
 const resetPasswordButton = document.getElementById('x');
 const profileInfo = document.getElementById('profile-info');
+const userInfo = document.getElementById('user-info'); // Felhasználói info a nav-ban
 
 // Felhasználói adatok a localStorage-ból
 let userData = { user_ID: 0, token: '', username: '', password: '' };
@@ -13,7 +14,35 @@ if (localStorage.getItem('userData') !== null) {
     console.log('Betöltött userData:', userData); // Debug
 }
 
-const apiUrl = 'http://localhost/todo_app/api/authentication/profile.php';
+const apiUrl = 'http://localhost/todo_app/api/';
+
+// Autentikáció ellenőrzése és felhasználó nevének megjelenítése a nav-ban
+const check = async () => {
+    if (userData.token.length > 0) {
+        try {
+            const response = await fetch(`${apiUrl}authentication/login.php?token=${userData.token}&user_id=${userData.user_ID}`);
+            const data = await response.json();
+            console.log('Autentikáció API válasz:', data); // Debug
+
+            if (data.success === true) {
+                // Felhasználói név megjelenítése a nav-ban
+                if (userInfo) {
+                    const username = data.username || userData.username || 'Ismeretlen felhasználó';
+                    userInfo.textContent = username;
+                }
+            } else {
+                console.log('Autentikáció sikertelen:', data);
+                localStorage.removeItem('userData');
+                window.location.href = 'index.html';
+            }
+        } catch (error) {
+            console.error('Hiba az autentikáció során:', error);
+        }
+    } else {
+        console.log('Nincs token, átirányítás...');
+        window.location.href = 'index.html';
+    }
+};
 
 // Profil adatok lekérése
 const fetchProfile = async () => {
@@ -27,9 +56,9 @@ const fetchProfile = async () => {
     }
 
     try {
-        const response = await fetch(`${apiUrl}?userid=${userData.user_ID}&token=${userData.token}`);
+        const response = await fetch(`${apiUrl}authentication/profile.php?userid=${userData.user_ID}&token=${userData.token}`);
         const data = await response.json();
-        console.log('API válasz:', data); // Debug
+        console.log('Profil API válasz:', data); // Debug
 
         if (data.success) {
             emailInput.value = data.userData.email || 'Nincs email'; // Email az API-ból
@@ -73,4 +102,5 @@ resetPasswordButton.addEventListener('click', () => {
 });
 
 // Inicializálás
-fetchProfile();
+check(); // Először ellenőrizzük az autentikációt és jelenítsük meg a nevet
+fetchProfile(); // Majd lekérjük a profil adatokat

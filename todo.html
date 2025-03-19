@@ -5,8 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Todo list</title>
-    <link rel="stylesheet" href="./assets/css/todo.css">
-    <script src="./assets/js/todo.js" defer></script>
+    <link rel="stylesheet" href="./assets/css/todo.css?ver=2">
+    <script src="./assets/js/todo.js?ver=2" defer></script>
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 </head>
 <body>
 
@@ -26,6 +27,8 @@
                 <li><a href="./account.html">Fiók</a></li>
                 <li><a href="./logout.html">Kijelentkezés</a></li>
             </ul>
+            <!-- Új elem a bejelentkezett felhasználó számára -->
+            <div class="user-info" id="user-info"></div>
         </div>
     </nav>
 
@@ -33,21 +36,26 @@
         <header>
             <h1></h1>
             <form>
-                <input 
-                    type="text" 
-                    name="todo" 
-                    autocomplete="off" 
-                    placeholder="Mi lesz az új teendő?">
-                <button type="button">MENTÉS</button>
+                <div id="todo-input-container">
+                    <input 
+                        type="text" 
+                        name="todo" 
+                        autocomplete="off" 
+                        placeholder="Mi lesz az új teendő?">
+                    <div class="time-picker" id="time-picker"></div>
+                </div>
+                <button type="button" id="save-button">MENTÉS</button>
             </form>
+            <div id="today-todo-count" class="todo-count-box"></div>
         </header>
 
         <footer>
             <table>
                 <thead>
-                    <th>ID</th>
+                    <th>Számozás</th>
                     <th>Teendő</th>
                     <th>Dátum</th>
+                    <th>Kezdés</th>
                     <th></th>
                 </thead>
                 <tbody id="todo-content">

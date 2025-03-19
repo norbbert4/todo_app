@@ -17,7 +17,6 @@ const todoInputContainer = document.querySelector('#todo-input-container');
 const userInfo = document.querySelector('#user-info');
 let userData = { user_ID: 0, token: '-' };
 if (localStorage.getItem('userData') !== null) userData = JSON.parse(localStorage.getItem('userData'));
-
 const check = async () => {
     if (userData.token.length > 0) {
         fetch(`${apiUrl}authentication/login.php?token=${userData.token}&user_id=${userData.user_ID}`)
@@ -178,7 +177,7 @@ async function saveTodo() {
     }
 }
 
-async function renderTable() {
+async function renderTable(date = '') {
     const get_apiUrl = `${apiUrl}?token=${userData.token}&userid=${userData.user_ID}&entity=todos`;
     try {
         const res = await fetch(get_apiUrl);
@@ -197,6 +196,7 @@ async function renderTable() {
                 todayTodoCount.textContent = 'Teendőid száma: 0';
             }
             todoTable.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #c0c0c0;">Nincs teendő</td></tr>';
+            return;
         }
 
         let todosToRender = [];
@@ -204,28 +204,28 @@ async function renderTable() {
         const today = new Date().toISOString().split('T')[0]; // Mai dátum YYYY-MM-DD formátumban
         console.log('Today:', today); // Debug: Nézzük meg a mai dátumot
 
-        if (dateObject.date == '') {
+        if (dateObject.date === '') {
             // "Összes teendőim" nézet
             todosToRender = todos;
             header.textContent = 'Összes teendőim';
             todoCountValue = todos.length;
-            todoInputContainer.setAttribute("style", "display: none;"); // Űrlap elrejtése
-            saveButton.setAttribute("style", "display: none;");
+            todoInputContainer.style.display = 'none'; // Űrlap elrejtése
+            saveButton.style.display = 'none';
         } else if (dateObject.date === 'today') {
             // "Mai teendőim" nézet
             todosToRender = todos.filter(todo => todo.date.substring(0, 10) === today);
             header.textContent = 'Mai teendőim';
             todoCountValue = todosToRender.length;
-            todoInputContainer.setAttribute("style", "display: flex;");
-            saveButton.setAttribute("style", "display: block;");
+            todoInputContainer.style.display = 'flex'; // Űrlap megjelenítése
+            saveButton.style.display = 'block';
             todoInput.placeholder = 'Mi lesz az új teendő?';
         } else {
             // Egyéb dátum nézet
             todosToRender = todos.filter(todo => todo.date.substring(0, 10) === dateObject.date);
             header.textContent = `Teendőim (${dateObject.date})`;
             todoCountValue = todosToRender.length;
-            todoInputContainer.setAttribute("style", "display: flex;");
-            saveButton.setAttribute("style", "display: block;");
+            todoInputContainer.style.display = 'flex';
+            saveButton.style.display = 'block';
             todoInput.placeholder = `Mi lesz ekkor a teendő? (${dateObject.date})`;
         }
 
@@ -243,7 +243,7 @@ async function renderTable() {
     } catch (error) {
         console.error('Hiba az API hívás során:', error);
         localStorage.removeItem('userData');
-        window.location.href = 'index.html';
+        window.location.href = 'login.html';
         if (todayTodoCount) {
             todayTodoCount.textContent = 'Teendőid száma: 0';
         }
@@ -260,7 +260,7 @@ async function todoState(id, completed) {
     renderTable();
 }
 
-renderTable();
+renderTable('2025-02-26');
 
 // Mentés gomb eseményfigyelője
 saveButton.addEventListener('click', saveTodo);
