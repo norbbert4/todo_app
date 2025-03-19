@@ -14,6 +14,11 @@
     <nav class="navbar">
         <div class="nav-container">
             <a class="logo">Todo App</a>
+            <button class="hamburger" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
             <ul class="nav-links">
                 <li><a href="./todo.html?date=today">Mai teendők</a></li>
                 <li><a href="./todo.html">Összes teendők</a></li>
@@ -53,5 +58,12 @@
 
     <aside style="color: white;">Nincs jogosultságod az alkalmazás használatához. Kérlek jelentkezz be!</aside>
 
+    <script>
+        // Hamburger menü toggle
+        document.querySelector('.hamburger').addEventListener('click', function() {
+            this.classList.toggle('active');
+            document.querySelector('.nav-links').classList.toggle('active');
+        });
+    </script>
 </body>
 </html>
