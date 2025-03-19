@@ -5,6 +5,158 @@ body {
     padding: 0;
 }
 
+/* Navigációs sáv */
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3), 0 1px 6px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    z-index: 100;
+    border-radius: 0 0 15px 15px;
+    transition: transform 0.3s ease-out;
+}
+
+.navbar:hover {
+    transform: translateY(-2px);
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    align-items: center;
+}
+
+.logo {
+    font-family: 'Inter', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #ffffff;
+    text-decoration: none;
+    padding: 5px;
+    transition: color 0.3s ease, transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.logo:hover {
+    color: #00ffcc;
+    transform: scale(1.1) rotate(2deg);
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 35px;
+    margin: 0;
+    padding: 0;
+    margin-top: 10px;
+    transition: all 0.3s ease;
+}
+
+.nav-links li {
+    display: inline;
+}
+
+.nav-links a {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-weight: 500;
+    transition: color 0.3s ease, transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+    position: relative;
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -5px;
+    left: 0;
+    background-color: #00ffcc;
+    transition: width 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: #00ffcc;
+    transform: translateY(-3px) scale(1.05);
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+/* Hamburger gomb */
+.hamburger {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    z-index: 101;
+}
+
+.hamburger span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background: #ffffff;
+    margin: 5px 0;
+    transition: all 0.3s ease;
+}
+
+/* Reszponzív hamburger menü 768px alatt */
+@media (max-width: 768px) {
+    .hamburger {
+        display: block;
+    }
+
+    .nav-links {
+        position: fixed;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        background: rgba(39, 39, 39, 0.95);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 40px;
+        height: calc(100vh - 60px);
+        transform: translateX(-100%);
+        z-index: 99;
+    }
+
+    .nav-links.active {
+        transform: translateX(0);
+    }
+
+    .nav-links li {
+        display: block;
+    }
+
+    .nav-links a {
+        font-size: 1.5rem;
+    }
+
+    .hamburger.active span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+    }
+    .hamburger.active span:nth-child(2) {
+        opacity: 0;
+    }
+    .hamburger.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(7px, -7px);
+    }
+}
+
 /* Központozás a body-n */
 .container {
     display: flex;
@@ -55,6 +207,7 @@ form {
     border: 2px solid #000000; /* Fekete keret */
     transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 0.4s ease; /* Spring animáció */
 }
+
 /* Beviteli mezők */
 .form-control {
     width: 100%;
@@ -69,6 +222,7 @@ form {
     transition: border-color 0.3s ease, background-color 0.3s ease, transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2); /* 3D-s beviteli mező */
 }
+
 /* Hover és focus állapotok */
 .form-control:hover,
 .form-control:focus {
@@ -87,7 +241,7 @@ form {
     border: none;
     padding: 12px 24px;
     font-size: 1.1rem;
-    color:linear-gradient(135deg, #6a11cb, #2575fc); /* Gomb szövege marad fehér, de kontrasztos */
+    color: white; /* Javítva a szín gradient helyett */
     border-radius: 12px;
     cursor: pointer;
     transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), background 0.3s ease, box-shadow 0.3s ease;
@@ -97,7 +251,7 @@ form {
 }
 
 .btn-primary:hover {
-    background: rgba(26, 115, 232, 0.6); /* Sötétebb gradient hoverre */
+    background: rgba(26, 115, 232, 0.8); /* Sötétebb gradient hoverre */
     transform: translateY(-3px) scale(1.05); /* 3D-s felugrás és nagyítás */
     box-shadow: 0 8px 20px rgba(0, 255, 204, 0.5), 0 4px 10px rgba(0, 0, 0, 0.3); /* Mélyebb árnyék */
 }
@@ -107,8 +261,6 @@ form {
     text-align: center;
     margin-top: 1rem;
 }
-
-
 
 /* A bejelentkezési információk színe és stílusa */
 #login-info {
@@ -122,21 +274,7 @@ form {
     font-weight: 600;
 }
 
-.bg-red { background-color: red; }
-.bg-green { background-color: green; }
-
-h2
-{
-    margin-bottom: 1.5rem;
-}
-
-p
-{
-    color: white;
-    display: block;
-    text-align: center;
-}
-/* regisztracio szin stilus */
+/* Regisztrációs információk */
 #reg-info {
     padding: 15px;
     margin-top: 10px;
@@ -144,6 +282,19 @@ p
     font-size: 1.2rem;
     text-align: center;
     color: white;
+}
+
+.bg-red { background-color: red; }
+.bg-green { background-color: green; }
+
+h2 {
+    margin-bottom: 1.5rem;
+}
+
+p {
+    color: white;
+    display: block;
+    text-align: center;
 }
 
 .bg-green {

@@ -21,18 +21,18 @@ body {
 
 /* Naptár konténer - szélekig érő, teljes képernyős */
 .calendar-container {
-    width: 100vw; /* Teljes szélesség */
-    height: 85vh; /* Teljes magasság */
+    width: 100%;
+    max-width: 1200px;
     background: rgba(39, 39, 39, 0.95);
-    border-radius: 0;
+    border-radius: 20px;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
-    position: relative;
-    z-index: 100;
+    align-items: center; /* Középre igazítás */
     overflow: hidden;
-    margin: 0; /* Margók eltávolítása */
+    color: #b3b3b3;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    padding: 1rem;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 /* Naptár fejléc - szélekig ér */
@@ -271,6 +271,8 @@ body {
     color: #1a73e8;
     text-decoration: underline;
 }
+
+/* Navbar */
 .navbar {
     position: fixed;
     top: 0;
@@ -298,6 +300,7 @@ body {
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
+    align-items: center;
 }
 
 .logo {
@@ -321,6 +324,8 @@ body {
     gap: 35px;
     margin: 0;
     padding: 0;
+    margin-top: 10px;
+    transition: all 0.3s ease;
 }
 
 .nav-links li {
@@ -356,6 +361,68 @@ body {
     width: 100%;
 }
 
+/* Hamburger gomb */
+.hamburger {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    z-index: 101;
+}
+
+.hamburger span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background: #ffffff;
+    margin: 5px 0;
+    transition: all 0.3s ease;
+}
+
+/* Reszponzív hamburger menü 768px alatt */
+@media (max-width: 768px) {
+    .hamburger {
+        display: block;
+    }
+
+    .nav-links {
+        position: fixed;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        background: rgba(39, 39, 39, 0.95);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 40px;
+        height: calc(100vh - 60px);
+        transform: translateX(-100%);
+        z-index: 99;
+    }
+
+    .nav-links.active {
+        transform: translateX(0);
+    }
+
+    .nav-links li {
+        display: block;
+    }
+
+    .nav-links a {
+        font-size: 1.5rem;
+    }
+
+    .hamburger.active span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+    }
+    .hamburger.active span:nth-child(2) {
+        opacity: 0;
+    }
+    .hamburger.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(7px, -7px);
+    }
+}
 
 .todos-for-day {
     position: absolute;
@@ -372,4 +439,4 @@ body {
 
 .todos-for-day_hidden {
     display: none;
-} 
+}
