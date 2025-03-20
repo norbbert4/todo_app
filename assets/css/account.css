@@ -9,7 +9,64 @@ body {
     overflow-y: auto;
     padding: 20px;
 }
+.coin-info {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 5px;
+    font-size: 1rem;
+}
 
+.coin-icon {
+    font-size: 1.2rem;
+}
+
+#coin-count {
+    font-weight: 600;
+    color: #ffd700;
+}
+
+
+@media (max-width: 768px) {
+    .user-info {
+        position: absolute;
+        top: 70px;
+        right: 20px;
+        font-size: 1rem;
+        padding: 5px 10px;
+    }
+
+    .coin-info {
+        font-size: 0.9rem;
+    }
+}
+.user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #ffffff;
+    font-size: 1.2rem;
+    font-weight: 500;
+    padding: 5px 15px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+.user-info:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
+}
+
+/* Reszponzív kezelés */
+@media (max-width: 768px) {
+    .user-info {
+        position: absolute;
+        top: 70px;
+        right: 20px;
+        font-size: 1rem;
+        padding: 5px 10px;
+    }
+}
 /* Navigációs sáv - Üveg effektus és 3D-s árnyék */
 .navbar {
     position: fixed;
@@ -31,31 +88,7 @@ body {
 .navbar:hover {
     transform: translateY(-2px); /* Kissebb felugrás hoverre */
 }
-.user-info {
-    color: #ffffff;
-    font-size: 1.2rem;
-    font-weight: 500;
-    padding: 5px 15px;
-    border-radius: 10px;
-    background: rgba(255, 255, 255, 0.1);
-    transition: all 0.3s ease;
-}
 
-.user-info:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: scale(1.05);
-}
-
-/* Reszponzív kezelés */
-@media (max-width: 768px) {
-    .user-info {
-        position: absolute;
-        top: 70px;
-        right: 20px;
-        font-size: 1rem;
-        padding: 5px 10px;
-    }
-}
 
 .nav-container {
     display: flex;
@@ -248,31 +281,6 @@ body {
     flex: 1;
     max-width: 500px;
     margin: 20px;
-}
-.user-info {
-    color: #ffffff;
-    font-size: 1.2rem;
-    font-weight: 500;
-    padding: 5px 15px;
-    border-radius: 10px;
-    background: rgba(255, 255, 255, 0.1);
-    transition: all 0.3s ease;
-}
-
-.user-info:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: scale(1.05);
-}
-
-/* Reszponzív kezelés */
-@media (max-width: 768px) {
-    .user-info {
-        position: absolute;
-        top: 70px;
-        right: 20px;
-        font-size: 1rem;
-        padding: 5px 10px;
-    }
 }
 form {
     background: rgba(20, 20, 20, 0.8); /* Sötétebb üveg effektus */

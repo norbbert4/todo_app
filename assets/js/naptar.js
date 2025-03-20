@@ -1,3 +1,5 @@
+// naptar.js
+
 let currentDate = new Date();
 const calendarGrid = document.getElementById('calendar-grid');
 const monthSelect = document.getElementById('month-select');
@@ -7,7 +9,10 @@ const selectedDateInput = document.getElementById('selected-date');
 const saveButton = document.querySelector('#save-button');
 const goToTodosButton = document.querySelector('#go-to_todos');
 const todoInput = document.querySelector('#title');
-const userInfo = document.querySelector('#user-info'); // Felhasználói info elem
+const userInfo = document.querySelector('#user-info');
+const userCoinContainer = document.querySelector('.user-coin-container');
+const usernameSpan = document.querySelector('.username');
+const coinCountSpan = document.querySelector('.coin-count');
 
 let userData = { user_ID: 0, token: '-' };
 if (localStorage.getItem('userData') !== null) userData = JSON.parse(localStorage.getItem('userData'));
@@ -19,29 +24,37 @@ const months = [
 
 const apiUrl = 'http://localhost/todo_app/api/';
 
-// Autentikáció ellenőrzése és felhasználó nevének megjelenítése
 const check = async () => {
     if (userData.token.length > 0) {
         fetch(`${apiUrl}authentication/login.php?token=${userData.token}&user_id=${userData.user_ID}`)
             .then(response => response.json())
             .then(data => {
                 if (data.success === true) {
-                    // Felhasználói név megjelenítése
-                    if (userInfo) {
-                        const username = data.username || userData.username || 'Ismeretlen felhasználó';
-                        userInfo.textContent = username;
+                    const username = data.username || userData.username || 'Ismeretlen felhasználó';
+                    const coins = data.coins || 0; // Mindig az API-tól kérjük a coin-okat
+                    userData.username = username;
+                    userData.coins = coins;
+                    localStorage.setItem('userData', JSON.stringify(userData));
+                    if (usernameSpan && coinCountSpan) {
+                        usernameSpan.textContent = username;
+                        coinCountSpan.textContent = coins;
                     }
                     console.log('Autentikáció sikeres:', data);
                 } else {
                     console.log('Autentikáció sikertelen:', data);
-                    // Opcionális: átirányítás login oldalra, ha nincs jogosultság
                     localStorage.removeItem('userData');
                     window.location.href = 'login.html';
                 }
             })
             .catch(error => {
                 console.error('Hiba az autentikáció során:', error);
+                localStorage.removeItem('userData');
+                window.location.href = 'login.html';
             });
+    } else {
+        console.log('Nincs token, átirányítás...');
+        localStorage.removeItem('userData');
+        window.location.href = 'login.html';
     }
 };
 check();

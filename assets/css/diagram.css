@@ -17,7 +17,6 @@ body {
     align-items: center;
     padding: 20px;
 }
-
 /* Main konténer */
 main {
     width: 100%;
@@ -128,31 +127,7 @@ header h1 {
 .chart-legend table tfoot td:first-child {
     text-align: left;
 }
-.user-info {
-    color: #ffffff;
-    font-size: 1.2rem;
-    font-weight: 500;
-    padding: 5px 15px;
-    border-radius: 10px;
-    background: rgba(255, 255, 255, 0.1);
-    transition: all 0.3s ease;
-}
 
-.user-info:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: scale(1.05);
-}
-
-/* Reszponzív kezelés */
-@media (max-width: 768px) {
-    .user-info {
-        position: absolute;
-        top: 70px;
-        right: 20px;
-        font-size: 1rem;
-        padding: 5px 10px;
-    }
-}
 .navbar {
     position: fixed;
     top: 0;
@@ -342,5 +317,54 @@ header h1 {
     .chart-legend table tfoot td {
         font-size: 0.7rem;
         padding: 0.5rem 0.6rem;
+    }
+}
+.user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #ffffff;
+    font-size: 1.2rem;
+    font-weight: 500;
+    padding: 5px 15px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.user-info:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
+}
+
+.coin-info {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 5px;
+    font-size: 1rem;
+}
+
+.coin-icon {
+    font-size: 1.2rem;
+}
+
+#coin-count {
+    font-weight: 600;
+    color: #ffd700;
+}
+
+/* Reszponzív kezelés */
+@media (max-width: 768px) {
+    .user-info {
+        position: absolute;
+        top: 70px;
+        right: 20px;
+        font-size: 1rem;
+        padding: 5px 10px;
+    }
+
+    .coin-info {
+        font-size: 0.9rem;
     }
 }

@@ -6,6 +6,9 @@ const togglePasswordButton = document.getElementById('toggle-password');
 const resetPasswordButton = document.getElementById('x');
 const profileInfo = document.getElementById('profile-info');
 const userInfo = document.getElementById('user-info'); // Felhasználói info a nav-ban
+const userCoinContainer = document.querySelector('.user-coin-container');
+const usernameSpan = document.querySelector('.username');
+const coinCountSpan = document.querySelector('.coin-count');
 
 // Felhasználói adatok a localStorage-ból
 let userData = { user_ID: 0, token: '', username: '', password: '' };
@@ -17,18 +20,24 @@ if (localStorage.getItem('userData') !== null) {
 const apiUrl = 'http://localhost/todo_app/api/';
 
 // Autentikáció ellenőrzése és felhasználó nevének megjelenítése a nav-ban
+
+
 const check = async () => {
     if (userData.token.length > 0) {
         try {
             const response = await fetch(`${apiUrl}authentication/login.php?token=${userData.token}&user_id=${userData.user_ID}`);
             const data = await response.json();
-            console.log('Autentikáció API válasz:', data); // Debug
+            console.log('Autentikáció API válasz:', data);
 
             if (data.success === true) {
-                // Felhasználói név megjelenítése a nav-ban
-                if (userInfo) {
-                    const username = data.username || userData.username || 'Ismeretlen felhasználó';
-                    userInfo.textContent = username;
+                const username = data.username || userData.username || 'Ismeretlen felhasználó';
+                const coins = userData.coins !== undefined ? userData.coins : (data.coins || 0);
+                userData.username = username;
+                userData.coins = coins;
+                localStorage.setItem('userData', JSON.stringify(userData));
+                if (usernameSpan && coinCountSpan) {
+                    usernameSpan.textContent = username;
+                    coinCountSpan.textContent = coins;
                 }
             } else {
                 console.log('Autentikáció sikertelen:', data);
@@ -37,13 +46,15 @@ const check = async () => {
             }
         } catch (error) {
             console.error('Hiba az autentikáció során:', error);
+            localStorage.removeItem('userData');
+            window.location.href = 'index.html';
         }
     } else {
         console.log('Nincs token, átirányítás...');
+        localStorage.removeItem('userData');
         window.location.href = 'index.html';
     }
 };
-
 // Profil adatok lekérése
 const fetchProfile = async () => {
     if (!userData.token || userData.token.length === 0) {

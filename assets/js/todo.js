@@ -15,31 +15,44 @@ const aside = document.querySelector('aside');
 const nav = document.querySelector('nav');
 const todoInputContainer = document.querySelector('#todo-input-container');
 const userInfo = document.querySelector('#user-info');
-let userData = { user_ID: 0, token: '-' };
+const usernameSpan = document.querySelector('#username');
+const coinCountSpan = document.querySelector('#coin-count');
+if (!coinCountSpan) {
+    console.error('A coinCountSpan elem nem található a DOM-ban!');
+}
+let userData = { user_ID: 0, token: '-', username: 'Ismeretlen felhasználó', coins: 0 };
 if (localStorage.getItem('userData') !== null) userData = JSON.parse(localStorage.getItem('userData'));
-
 const check = async () => {
-    if (userData.token.length > 0) {
-        fetch(`${apiUrl}authentication/login.php?token=${userData.token}&user_id=${userData.user_ID}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.success === true) {
-                    aside.innerHTML = '';
-                    aside.remove();
-                    if (userInfo) {
-                        const username = userData.username || data.username || 'Ismeretlen felhasználó';
-                        userInfo.textContent = username;
-                    }
+    if (userData.token.length > 0 && userData.user_ID > 0) {
+        try {
+            const response = await fetch(`${apiUrl}authentication/login.php?token=${userData.token}&user_id=${userData.user_ID}`);
+            const data = await response.json();
+            if (data.success === true) {
+                aside.innerHTML = '';
+                aside.remove();
+                if (userInfo) {
+                    userData.username = data.username || 'Ismeretlen felhasználó';
+                    userData.coins = data.coins || 0;
+                    usernameSpan.textContent = userData.username;
+                    coinCountSpan.textContent = userData.coins;
+                    localStorage.setItem('userData', JSON.stringify(userData));
+                    await renderTable();
                 } else {
-                    main.innerHTML = '';
-                    main.remove();
-                    nav.innerHTML = '';
-                    nav.remove();
+                    console.error('A userInfo elem nem található a DOM-ban!');
                 }
-            })
-            .catch(error => {
-                console.error('Hiba az autentikáció során:', error);
-            });
+            } else {
+                console.error('Autentikációs hiba:', data.message);
+                localStorage.removeItem('userData');
+                window.location.href = 'login.html';
+            }
+        } catch (error) {
+            console.error('Hiba az autentikáció során:', error);
+            localStorage.removeItem('userData');
+            window.location.href = 'login.html';
+        }
+    } else {
+        console.warn('Nincs érvényes token vagy user_ID, átirányítás a bejelentkező oldalra.');
+        window.location.href = 'login.html';
     }
 };
 check();
@@ -107,7 +120,31 @@ const createTableRow = (todo, index) => {
                 </td>
             </tr>`;
 };
+async function completeTodo(todoId) {
+    try {
+        const response = await fetch(`${apiUrl}todo/update.php`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ todo_id: todoId, completed: true })
+        });
+        const data = await response.json();
 
+        if (data.success) {
+            userData.coins = (userData.coins || 0) + 1;
+            localStorage.setItem('userData', JSON.stringify(userData));
+            if (coinCountSpan) {
+                coinCountSpan.textContent = userData.coins;
+            } else {
+                console.error('A coinCountSpan elem nem található a DOM-ban a completeTodo-ban!');
+            }
+            await renderTable();
+        } else {
+            console.error('Hiba a teendő frissítésekor:', data.message);
+        }
+    } catch (error) {
+        console.error('Hiba a teendő frissítésekor:', error);
+    }
+}
 todoInput.addEventListener('keydown', (event) => {
     if (event.key === 'Enter') {
         event.preventDefault();
@@ -160,13 +197,11 @@ async function saveTodo() {
         return;
     }
 
-    // Objektum készítése a kéréshez
     const todoData = {
         title,
         date
     };
 
-    // Ha van időpont megadva, akkor hozzáadjuk az start_time-ot
     if (start_hour && start_minute && start_hour !== '' && start_minute !== '') {
         todoData.start_time = `${start_hour}:${start_minute}`;
     }
@@ -194,14 +229,16 @@ async function saveTodo() {
 }
 
 async function renderTable() {
-    const get_apiUrl = `${apiUrl}?token=${userData.token}&userid=${userData.user_ID}&entity=todos`;
+    const get_apiUrl = `${apiUrl}?token=${userData.token}&userid=${userData.user_ID}&entity=todos&nocache=${Date.now()}`;
+    console.log('GET kérés URL:', get_apiUrl); // Naplózás a hibakereséshez
     try {
-        const res = await fetch(get_apiUrl);
+        const res = await fetch(get_apiUrl, { cache: 'no-store' });
         const resjson = await res.json();
+        console.log('GET válasz:', resjson); // Naplózás a hibakereséshez
         let todos = [];
         if (resjson.type === 'result') {
             todos = resjson.body;
-            console.log('Todos:', todos);
+            console.log('Frissített teendők:', todos);
         } else {
             console.error('Hiba a teendők lekérdezésekor:', resjson.message);
             if (resjson.message === 'Sikertelen autentikáció.') {
@@ -223,55 +260,83 @@ async function renderTable() {
             todosToRender = todos;
             header.textContent = 'Összes teendőim';
             todoCountValue = todos.length;
-            todoInputContainer.style.display = 'none'; // Elrejtés sima nézetben
+            todoInputContainer.style.display = 'none';
             saveButton.style.display = 'none';
         } else if (dateObject.date === 'today') {
             todosToRender = todos.filter(todo => todo.date.substring(0, 10) === today);
             header.textContent = 'Mai teendőim';
             todoCountValue = todosToRender.length;
-            todoInputContainer.style.display = 'flex'; // Megjelenítés csak date=today esetén
+            todoInputContainer.style.display = 'flex';
             saveButton.style.display = 'block';
             todoInput.placeholder = 'Mi lesz a mai teendő?';
         } else {
             todosToRender = todos.filter(todo => todo.date.substring(0, 10) === dateObject.date);
             header.textContent = `Teendőim (${dateObject.date})`;
             todoCountValue = todosToRender.length;
-            todoInputContainer.style.display = 'none'; // Elrejtés egyéb dátumoknál
+            todoInputContainer.style.display = 'none';
             saveButton.style.display = 'none';
         }
 
         if (todayTodoCount) {
             todayTodoCount.textContent = `Teendőid száma: ${todoCountValue}`;
-            todayTodoCount.style.display = 'block'; // Mindig látható
+            todayTodoCount.style.display = 'block';
         }
 
         let tableContent = '';
         if (todosToRender.length === 0) {
             tableContent = '<tr><td colspan="5" style="text-align: center; color: #c0c0c0;">Nincs teendő</td></tr>';
         } else {
-            todosToRender.forEach((todo, index) => tableContent += createTableRow(todo, index));
+            todosToRender.forEach((todo, index) => {
+                tableContent += createTableRow(todo, index);
+            });
         }
-        todoTable.innerHTML = tableContent;
+        console.log('Új táblázat tartalom:', tableContent); // Naplózás a hibakereséshez
+        todoTable.innerHTML = tableContent; // Biztosítjuk, hogy a táblázat frissüljön
     } catch (error) {
         console.error('Hiba az API hívás során:', error);
         localStorage.removeItem('userData');
-        window.location.href = 'index.html';
-        if (todayTodoCount) {
-            todayTodoCount.textContent = 'Teendőid száma: 0';
-        }
-        todoTable.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #c0c0c0;">Nincs teendő</td></tr>';
+        window.location.href = 'login.html';
     }
 }
-
 async function todoState(id, completed) {
-    await fetch(`${apiUrl}?token=${userData.token}&userid=${userData.user_ID}&entity=todos&entityid=${id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ completed })
-    });
-    renderTable();
-}
+    try {
+        console.log(`PATCH kérés indítása: id=${id}, completed=${completed}`);
+        const res = await fetch(`${apiUrl}?token=${userData.token}&userid=${userData.user_ID}&entity=todos&entityid=${id}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ completed })
+        });
 
+        const rawResponse = await res.text();
+        console.log('PATCH nyers válasz:', rawResponse);
+
+        let data;
+        try {
+            data = JSON.parse(rawResponse);
+        } catch (jsonError) {
+            console.error('Hiba a JSON parse-olás során:', jsonError);
+            console.error('Nyers válasz:', rawResponse);
+            return;
+        }
+
+        console.log('PATCH válasz (JSON):', data);
+        if (data.success === true) {
+            userData.coins = data.coins || userData.coins;
+            console.log(`Coinok frissítése: ${userData.coins}`);
+            if (coinCountSpan) {
+                coinCountSpan.textContent = userData.coins;
+            } else {
+                console.error('A coinCountSpan elem nem található a DOM-ban a todoState-ben!');
+            }
+            localStorage.setItem('userData', JSON.stringify(userData));
+            await renderTable();
+        } else {
+            console.error('Hiba a teendő állapotának frissítésekor:', data.message);
+        }
+    } catch (error) {
+        console.error('Hiba a PATCH kérés során:', error);
+    }
+}
 renderTable();
 
 saveButton.addEventListener('click', saveTodo);

@@ -1,3 +1,5 @@
+// diagram.js
+
 document.addEventListener('DOMContentLoaded', function () {
     const apiUrl = 'http://localhost/todo_app/api/';
     let userData = { user_ID: 0, token: '-', username: '' };
@@ -9,14 +11,23 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Felhasználónév megjelenítése
     async function displayUserInfo() {
+        const userCoinContainer = document.querySelector('.user-coin-container');
+        const usernameSpan = document.querySelector('.username');
+        const coinCountSpan = document.querySelector('.coin-count');
+    
         if (userData.token.length > 0) {
             try {
                 const response = await fetch(`${apiUrl}authentication/login.php?token=${userData.token}&user_id=${userData.user_ID}`);
                 const data = await response.json();
                 if (data.success === true) {
-                    const username = userData.username || data.username || 'Ismeretlen felhasználó';
-                    if (userInfo) {
-                        userInfo.textContent = username;
+                    const username = data.username || userData.username || 'Ismeretlen felhasználó';
+                    const coins = data.coins || 0; // Mindig az API-tól kérjük a coin-okat
+                    userData.username = username;
+                    userData.coins = coins;
+                    localStorage.setItem('userData', JSON.stringify(userData));
+                    if (usernameSpan && coinCountSpan) {
+                        usernameSpan.textContent = username;
+                        coinCountSpan.textContent = coins;
                     }
                 } else {
                     console.error('Autentikációs hiba:', data.message);
@@ -25,7 +36,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             } catch (error) {
                 console.error('Hiba az autentikáció során:', error);
+                localStorage.removeItem('userData');
+                window.location.href = 'login.html';
             }
+        } else {
+            console.log('Nincs token, átirányítás...');
+            localStorage.removeItem('userData');
+            window.location.href = 'login.html';
         }
     }
 
@@ -49,7 +66,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 return;
             }
 
-            // Teendők állapotának kiszámítása (csak Kész és Nincs kész)
             let completed = 0;
             let pending = 0;
 
@@ -80,7 +96,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    // "Nincs teendő" üzenet renderelése
     function renderNoTodosMessage() {
         chartContainer.innerHTML = '<p style="color: #c0c0c0; font-size: 1.2rem; text-align: center;">Nincs teendő</p>';
         const legendContent = document.getElementById('legend-content');
@@ -89,7 +104,6 @@ document.addEventListener('DOMContentLoaded', function () {
         totalCount.textContent = '0 teendő';
     }
 
-    // Diagram renderelése Chart.js-vel (csak Kész és Nincs kész)
     function renderChart(todoData) {
         const ctx = document.getElementById('todoChart').getContext('2d');
         const total = todoData.completed + todoData.pending;
@@ -101,8 +115,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 datasets: [{
                     data: [todoData.pending, todoData.completed],
                     backgroundColor: [
-                        '#aa3910', // Sötétpiros - Nincs kész
-                        '#068148'  // Sötétzöld - Kész
+                        '#aa3910',
+                        '#068148'
                     ],
                     borderColor: '#ffffff',
                     borderWidth: 2
@@ -135,7 +149,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Táblázat renderelése a diagram alatt (csak Kész és Nincs kész)
     function renderLegend(todoData) {
         const legendContent = document.getElementById('legend-content');
         const totalCount = document.getElementById('total-count');
@@ -162,7 +175,6 @@ document.addEventListener('DOMContentLoaded', function () {
         totalCount.textContent = `${total} teendő`;
     }
 
-    // Inicializálás
     displayUserInfo();
     fetchAndRenderChart();
 });
