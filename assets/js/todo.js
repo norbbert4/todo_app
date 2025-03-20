@@ -94,11 +94,12 @@ saveButton.style.display = 'none';
 
 // Segédfüggvények
 const createTableRow = (todo, index) => {
+    const startTimeDisplay = (!todo.start_time || todo.start_time === '00:00:00') ? '-' : todo.start_time;
     return `<tr data-id="${todo.id}">
                 <td class="state-${todo.completed}">${index + 1}</td>
                 <td class="state-${todo.completed}">${todo.title}</td>
                 <td class="state-${todo.completed}">${todo.date.substring(0, 10)}</td>
-                <td class="state-${todo.completed}">${todo.start_time || '-'}</td>
+                <td class="state-${todo.completed}">${startTimeDisplay}</td>
                 <td>
                     <button type="button" class="state-button-k state-k-button_${todo.completed}" data-action="complete" data-id="${todo.id}">•</button>
                     <button type="button" class="state-button-m state-m-button_${todo.completed}" data-action="uncomplete" data-id="${todo.id}">«</button>
@@ -151,17 +152,34 @@ async function saveTodo() {
     const title = todoInput.value.trim();
     const start_hour = startHourSelect.value;
     const start_minute = startMinuteSelect.value;
-    const start_time = start_hour && start_minute ? `${start_hour}:${start_minute}` : null;
     const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
     const date = dateObject.date === 'today' ? today : (dateObject.date || today);
 
-    if (title.length > 0) {
-        console.log("Mentés dátuma:", date);
+    if (title.length === 0) {
+        console.error("A teendő címe nem lehet üres!");
+        return;
+    }
+
+    // Objektum készítése a kéréshez
+    const todoData = {
+        title,
+        date
+    };
+
+    // Ha van időpont megadva, akkor hozzáadjuk az start_time-ot
+    if (start_hour && start_minute && start_hour !== '' && start_minute !== '') {
+        todoData.start_time = `${start_hour}:${start_minute}`;
+    }
+
+    console.log("Mentés adatai:", todoData);
+
+    try {
         const res = await fetch(`${apiUrl}?token=${userData.token}&userid=${userData.user_ID}&entity=todos`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ title, date, start_time })
+            body: JSON.stringify(todoData)
         });
+
         if (res.ok) {
             todoInput.value = '';
             startHourSelect.value = '';
@@ -170,6 +188,8 @@ async function saveTodo() {
         } else {
             console.error('Mentés sikertelen:', await res.json());
         }
+    } catch (error) {
+        console.error('Hiba a mentés során:', error);
     }
 }
 
