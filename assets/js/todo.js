@@ -22,6 +22,7 @@ if (!coinCountSpan) {
 }
 let userData = { user_ID: 0, token: '-', username: 'Ismeretlen felhasználó', coins: 0 };
 if (localStorage.getItem('userData') !== null) userData = JSON.parse(localStorage.getItem('userData'));
+
 const check = async () => {
     if (userData.token.length > 0 && userData.user_ID > 0) {
         try {
@@ -55,7 +56,11 @@ const check = async () => {
         window.location.href = 'login.html';
     }
 };
-check();
+
+// Várjuk meg, amíg a DOM betöltődik
+document.addEventListener('DOMContentLoaded', () => {
+    check();
+});
 
 // Időválasztó inicializálása
 function initializeTimePicker() {

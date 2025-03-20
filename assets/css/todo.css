@@ -249,36 +249,6 @@ main header input {
     text-align: center;
     margin-right: 0.5rem; /* Kis margó jobbra */
 }
-.coin-info {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    margin-top: 5px;
-    font-size: 1rem;
-}
-
-.coin-icon {
-    font-size: 1.2rem;
-}
-
-#coin-count {
-    font-weight: 600;
-    color: #ffd700;
-}
-
-@media (max-width: 768px) {
-    .user-info {
-        position: absolute;
-        top: 70px;
-        right: 20px;
-        font-size: 1rem;
-        padding: 5px 10px;
-    }
-
-    .coin-info {
-        font-size: 0.9rem;
-    }
-}
 .user-info {
     display: flex;
     flex-direction: column;
@@ -297,6 +267,24 @@ main header input {
     transform: scale(1.05);
 }
 
+.coin-info {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 5px;
+    font-size: 1rem;
+}
+
+.coin-icon {
+    font-size: 1.2rem;
+}
+
+#coin-count {
+    font-weight: 600;
+    color: #ffd700;
+}
+
+/* Reszponzív kezelés */
 @media (max-width: 768px) {
     .user-info {
         position: absolute;
@@ -304,6 +292,10 @@ main header input {
         right: 20px;
         font-size: 1rem;
         padding: 5px 10px;
+    }
+
+    .coin-info {
+        font-size: 0.9rem;
     }
 }
 

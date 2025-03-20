@@ -30,11 +30,11 @@
                 <li><a href="./account.html">Fiók</a></li>
                 <li><a href="./logout.html">Kijelentkezés</a></li>
             </ul>
-            <div class="user-info">
-                <span>Sándor</span>
+            <div class="user-info" id="user-info">
+                <span class="username" id="username">Sándor</span>
                 <div class="coin-info">
                     <span class="coin-icon">🪙</span>
-                    <span id="coin-count"></span>
+                    <span class="coin-count" id="coin-count"></span>
                 </div>
             </div>
         </div>
@@ -57,7 +57,7 @@
                     </div>
                     <div class="mb-3">
                         <p>Felhasználónév:</p>
-                        <input type="text" class="form-control" id="username" readonly>
+                        <input type="text" class="form-control" id="profile-username" readonly>
                     </div>
                     <div class="mb-3">
                         <p>Jelszó:</p>
