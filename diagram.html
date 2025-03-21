@@ -12,7 +12,7 @@
 <body>
     <nav class="navbar">
         <div class="nav-container">
-            <a class="logo">Todo App</a>
+            <a href="index.html" class="logo">Todo App</a>
             <button class="hamburger" aria-label="Toggle menu">
                 <span></span>
                 <span></span>
@@ -64,5 +64,12 @@
             </table>
         </section>
     </main>
+    <script>
+        // Hamburger menü toggle
+        document.querySelector('.hamburger').addEventListener('click', function() {
+            this.classList.toggle('active');
+            document.querySelector('.nav-links').classList.toggle('active');
+        });
+    </script>
 </body>
 </html>
