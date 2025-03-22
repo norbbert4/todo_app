@@ -7,12 +7,12 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./assets/css/diagram.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="assets/js/diagram.js"></script>
+    <script src="assets/js/diagram.js?ver=2" defer></script> <!-- Hozzáadva a defer attribútum -->
 </head>
 <body>
     <nav class="navbar">
         <div class="nav-container">
-            <a class="logo">Todo App</a>
+            <a href="index.html" class="logo">Todo App</a>
             <button class="hamburger" aria-label="Toggle menu">
                 <span></span>
                 <span></span>
@@ -27,11 +27,11 @@
                 <li><a href="./logout.html">Kijelentkezés</a></li>
             </ul>
             <!-- Felhasználói információ div -->
-            <div class="user-info">
-                <span>Sándor</span>
+            <div class="user-info" id="user-info">
+                <span class="username" id="username">Sándor</span>
                 <div class="coin-info">
                     <span class="coin-icon">🪙</span>
-                    <span id="coin-count"></span>
+                    <span class="coin-count" id="coin-count"></span>
                 </div>
             </div>
         </div>
@@ -64,5 +64,12 @@
             </table>
         </section>
     </main>
+    <script>
+        // Hamburger menü toggle
+        document.querySelector('.hamburger').addEventListener('click', function() {
+            this.classList.toggle('active');
+            document.querySelector('.nav-links').classList.toggle('active');
+        });
+    </script>
 </body>
 </html>

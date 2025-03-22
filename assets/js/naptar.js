@@ -11,10 +11,10 @@ const goToTodosButton = document.querySelector('#go-to_todos');
 const todoInput = document.querySelector('#title');
 const userInfo = document.querySelector('#user-info');
 const userCoinContainer = document.querySelector('.user-coin-container');
-const usernameSpan = document.querySelector('.username');
-const coinCountSpan = document.querySelector('.coin-count');
+const usernameSpan = document.querySelector('#username');
+const coinCountSpan = document.querySelector('#coin-count');
 
-let userData = { user_ID: 0, token: '-' };
+let userData = { user_ID: 0, token: '-', username: 'Ismeretlen felhasználó', coins: 0 };
 if (localStorage.getItem('userData') !== null) userData = JSON.parse(localStorage.getItem('userData'));
 
 const months = [
@@ -26,38 +26,43 @@ const apiUrl = 'http://localhost/todo_app/api/';
 
 const check = async () => {
     if (userData.token.length > 0) {
-        fetch(`${apiUrl}authentication/login.php?token=${userData.token}&user_id=${userData.user_ID}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.success === true) {
-                    const username = data.username || userData.username || 'Ismeretlen felhasználó';
-                    const coins = data.coins || 0; // Mindig az API-tól kérjük a coin-okat
-                    userData.username = username;
-                    userData.coins = coins;
-                    localStorage.setItem('userData', JSON.stringify(userData));
-                    if (usernameSpan && coinCountSpan) {
-                        usernameSpan.textContent = username;
-                        coinCountSpan.textContent = coins;
-                    }
-                    console.log('Autentikáció sikeres:', data);
+        try {
+            const response = await fetch(`${apiUrl}authentication/login.php?token=${userData.token}&user_id=${userData.user_ID}`);
+            const data = await response.json();
+            if (data.success === true) {
+                const username = data.username || userData.username || 'Ismeretlen felhasználó';
+                const coins = userData.coins !== undefined ? userData.coins : (data.coins || 0);
+                userData.username = username;
+                userData.coins = coins;
+                localStorage.setItem('userData', JSON.stringify(userData));
+                if (userInfo && usernameSpan && coinCountSpan) {
+                    usernameSpan.textContent = username;
+                    coinCountSpan.textContent = coins;
                 } else {
-                    console.log('Autentikáció sikertelen:', data);
-                    localStorage.removeItem('userData');
-                    window.location.href = 'login.html';
+                    console.error('A userInfo, usernameSpan vagy coinCountSpan elem nem található a DOM-ban!');
                 }
-            })
-            .catch(error => {
-                console.error('Hiba az autentikáció során:', error);
+                console.log('Autentikáció sikeres:', data);
+            } else {
+                console.log('Autentikáció sikertelen:', data);
                 localStorage.removeItem('userData');
                 window.location.href = 'login.html';
-            });
+            }
+        } catch (error) {
+            console.error('Hiba az autentikáció során:', error);
+            localStorage.removeItem('userData');
+            window.location.href = 'login.html';
+        }
     } else {
         console.log('Nincs token, átirányítás...');
         localStorage.removeItem('userData');
         window.location.href = 'login.html';
     }
 };
-check();
+
+// Várjuk meg, amíg a DOM betöltődik
+document.addEventListener('DOMContentLoaded', () => {
+    check();
+});
 
 // Időválasztó inicializálása
 function initializeTimePicker() {

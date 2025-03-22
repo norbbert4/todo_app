@@ -22,6 +22,7 @@ if (!coinCountSpan) {
 }
 let userData = { user_ID: 0, token: '-', username: 'Ismeretlen felhasználó', coins: 0 };
 if (localStorage.getItem('userData') !== null) userData = JSON.parse(localStorage.getItem('userData'));
+
 const check = async () => {
     if (userData.token.length > 0 && userData.user_ID > 0) {
         try {
@@ -55,7 +56,11 @@ const check = async () => {
         window.location.href = 'login.html';
     }
 };
-check();
+
+// Várjuk meg, amíg a DOM betöltődik
+document.addEventListener('DOMContentLoaded', () => {
+    check();
+});
 
 // Időválasztó inicializálása
 function initializeTimePicker() {
@@ -105,6 +110,52 @@ const startMinuteSelect = document.querySelector('select[name="start_minute"]');
 todoInputContainer.style.display = 'none';
 saveButton.style.display = 'none';
 
+// Segédfüggvény a mentés üzenet megjelenítéséhez
+function showSaveMessage(message, isSuccess) {
+    const saveMessageDiv = document.querySelector('#save-message');
+    
+    // Előző üzenet eltávolítása, ha van
+    saveMessageDiv.classList.remove('bg-green', 'bg-red');
+    saveMessageDiv.style.display = 'none';
+    
+    // Üzenet beállítása
+    saveMessageDiv.textContent = message;
+    saveMessageDiv.classList.add(isSuccess ? 'bg-green' : 'bg-red');
+    
+    // Animáció újraindítása
+    saveMessageDiv.style.animation = 'none'; // Animáció resetelése
+    setTimeout(() => {
+        saveMessageDiv.style.display = 'block';
+        saveMessageDiv.style.animation = 'fadeInOut 3s forwards'; // Animáció újraindítása
+    }, 10); // Kis késleltetés az animáció újraindításához
+}
+
+// Segédfüggvény az üzenet megjelenítéséhez
+function showMessage(button, message) {
+    // Az üzenetet a "Teendő" oszlop (második oszlop) fölé helyezzük
+    const row = button.closest('tr'); // A gombot tartalmazó sor
+    const todoCell = row.querySelector('td:nth-child(2)'); // A második oszlop (Teendő oszlop)
+
+    // Ellenőrizzük, hogy van-e már üzenet, ha igen, eltávolítjuk
+    const existingMessage = todoCell.querySelector('.error-message');
+    if (existingMessage) {
+        existingMessage.remove();
+    }
+
+    // Új üzenet elem létrehozása
+    const messageElement = document.createElement('span');
+    messageElement.classList.add('error-message');
+    messageElement.textContent = message;
+
+    // Üzenet hozzáadása a "Teendő" oszlophoz
+    todoCell.appendChild(messageElement);
+
+    // 3 másodperc után eltűnik az üzenet
+    setTimeout(() => {
+        messageElement.remove();
+    }, 3000);
+}
+
 // Segédfüggvények
 const createTableRow = (todo, index) => {
     const startTimeDisplay = (!todo.start_time || todo.start_time === '00:00:00') ? '-' : todo.start_time;
@@ -113,38 +164,14 @@ const createTableRow = (todo, index) => {
                 <td class="state-${todo.completed}">${todo.title}</td>
                 <td class="state-${todo.completed}">${todo.date.substring(0, 10)}</td>
                 <td class="state-${todo.completed}">${startTimeDisplay}</td>
-                <td>
+                <td class="action-cell">
                     <button type="button" class="state-button-k state-k-button_${todo.completed}" data-action="complete" data-id="${todo.id}">•</button>
                     <button type="button" class="state-button-m state-m-button_${todo.completed}" data-action="uncomplete" data-id="${todo.id}">«</button>
                     <button type="button" class="delete-button" data-action="delete" data-id="${todo.id}">Ø</button>
                 </td>
             </tr>`;
 };
-async function completeTodo(todoId) {
-    try {
-        const response = await fetch(`${apiUrl}todo/update.php`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ todo_id: todoId, completed: true })
-        });
-        const data = await response.json();
 
-        if (data.success) {
-            userData.coins = (userData.coins || 0) + 1;
-            localStorage.setItem('userData', JSON.stringify(userData));
-            if (coinCountSpan) {
-                coinCountSpan.textContent = userData.coins;
-            } else {
-                console.error('A coinCountSpan elem nem található a DOM-ban a completeTodo-ban!');
-            }
-            await renderTable();
-        } else {
-            console.error('Hiba a teendő frissítésekor:', data.message);
-        }
-    } catch (error) {
-        console.error('Hiba a teendő frissítésekor:', error);
-    }
-}
 todoInput.addEventListener('keydown', (event) => {
     if (event.key === 'Enter') {
         event.preventDefault();
@@ -162,9 +189,9 @@ todoTable.addEventListener('click', async (event) => {
     if (action === 'delete') {
         await deleteTodo(id);
     } else if (action === 'complete') {
-        await todoState(id, 1);
+        await todoState(id, 1, button);
     } else if (action === 'uncomplete') {
-        await todoState(id, 0);
+        await todoState(id, 0, button);
     }
 });
 
@@ -192,8 +219,9 @@ async function saveTodo() {
     const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
     const date = dateObject.date === 'today' ? today : (dateObject.date || today);
 
+    // Ellenőrizzük, hogy üres-e az input
     if (title.length === 0) {
-        console.error("A teendő címe nem lehet üres!");
+        showSaveMessage('Sikertelen mentés!', false);
         return;
     }
 
@@ -220,11 +248,17 @@ async function saveTodo() {
             startHourSelect.value = '';
             startMinuteSelect.value = '';
             await renderTable();
+            // Sikeres mentés üzenet
+            showSaveMessage('Sikeresen elmentve!', true);
         } else {
             console.error('Mentés sikertelen:', await res.json());
+            // Sikertelen mentés üzenet (API hiba esetén)
+            showSaveMessage('Sikertelen mentés!', false);
         }
     } catch (error) {
         console.error('Hiba a mentés során:', error);
+        // Sikertelen mentés üzenet (hálózati hiba esetén)
+        showSaveMessage('Sikertelen mentés!', false);
     }
 }
 
@@ -249,7 +283,6 @@ async function renderTable() {
                 todayTodoCount.textContent = 'Teendőid száma: 0';
             }
             todoTable.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #c0c0c0;">Nincs teendő</td></tr>';
-            
         }
 
         let todosToRender = [];
@@ -298,45 +331,103 @@ async function renderTable() {
         window.location.href = 'login.html';
     }
 }
-async function todoState(id, completed) {
+
+async function todoState(id, completed, button) {
     try {
         console.log(`PATCH kérés indítása: id=${id}, completed=${completed}`);
+
+        // Ha kipipálni szeretnénk (completed = 1), ellenőrizzük az időt
+        if (completed === 1) {
+            // Lekérjük a teendő adatait az idő ellenőrzéséhez
+            const resTodo = await fetch(`${apiUrl}?token=${userData.token}&userid=${userData.user_ID}&entity=todos&entityid=${id}`);
+            const todoData = await resTodo.json();
+
+            if (todoData.type === 'result' && todoData.body) {
+                const todo = todoData.body[0]; // Az API egy tömböt ad vissza
+                const { date, start_time, completed: currentCompleted } = todo;
+
+                // Ha már kipipálták, nem kell időellenőrzés, mert az API nem ad újabb coint
+                if (currentCompleted === 1 || currentCompleted === "1") {
+                    console.log(`A teendő (${id}) már ki van pipálva.`);
+                } else {
+                    // Aktuális idő
+                    const currentDateTime = new Date();
+                    const today = new Date().toISOString().split('T')[0]; // Pl. "2025-03-21"
+
+                    // Időellenőrzés a dateObject.date alapján
+                    if (dateObject.date === 'today') {
+                        // Csak a start_time-ot nézzük az aktuális napra
+                        if (start_time && start_time !== '00:00:00') {
+                            const currentTime = currentDateTime.toTimeString().split(' ')[0]; // Pl. "17:50:00"
+                            if (currentTime < start_time) {
+                                console.error(`A teendő (${id}) még nem pipálható ki, mert a mai kezdési idő (${start_time}) még nem érkezett el! Aktuális idő: ${currentTime}`);
+                                showMessage(button, `Nem pipálható ki ${start_time}-ig!`);
+                                return;
+                            }
+                        }
+                    } else if (dateObject.date) {
+                        // Konkrét nap (pl. "2025-03-22") esetén a date és start_time együtt
+                        const todoDateTime = new Date(`${date}T${start_time || '00:00:00'}`);
+                        if (currentDateTime < todoDateTime) {
+                            console.error(`A teendő (${id}) még nem pipálható ki, mert a kezdési idő (${date} ${start_time || '00:00'}) még nem érkezett el! Aktuális idő: ${currentDateTime}`);
+                            // Rövidebb üzenet: csak a dátum és idő, de a dátumot formázzuk
+                            const formattedDate = date; // Pl. "2025-03-22"
+                            showMessage(button, `Nem pipálható ki ${formattedDate} ${start_time || '00:00'}-ig!`);
+                            return;
+                        }
+                    } else {
+                        // Ha nincs konkrét dátum (összes teendő), akkor a date és start_time alapján ellenőrizünk
+                        const todoDateTime = new Date(`${date}T${start_time || '00:00:00'}`);
+                        if (currentDateTime < todoDateTime) {
+                            console.error(`A teendő (${id}) még nem pipálható ki, mert a kezdési idő (${date} ${start_time || '00:00'}) még nem érkezett el! Aktuális idő: ${currentDateTime}`);
+                            // Rövidebb üzenet: csak a dátum és idő
+                            const formattedDate = date; // Pl. "2025-03-22"
+                            showMessage(button, `Nem pipálható ki ${formattedDate} ${start_time || '00:00'}-ig!`);
+                            return;
+                        }
+                    }
+                }
+            } else {
+                console.error('Hiba a teendő adatainak lekérdezésekor:', todoData);
+                showMessage(button, 'Hiba történt, próbáld újra később!');
+                return;
+            }
+        }
+
+        // PATCH kérés az állapot frissítésére
         const res = await fetch(`${apiUrl}?token=${userData.token}&userid=${userData.user_ID}&entity=todos&entityid=${id}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ completed })
         });
 
-        const rawResponse = await res.text();
-        console.log('PATCH nyers válasz:', rawResponse);
-
-        let data;
-        try {
-            data = JSON.parse(rawResponse);
-        } catch (jsonError) {
-            console.error('Hiba a JSON parse-olás során:', jsonError);
-            console.error('Nyers válasz:', rawResponse);
-            return;
-        }
-
-        console.log('PATCH válasz (JSON):', data);
+        const data = await res.json();
+        console.log('PATCH válasz:', data);
         if (data.success === true) {
-            userData.coins = data.coins || userData.coins;
-            console.log(`Coinok frissítése: ${userData.coins}`);
-            if (coinCountSpan) {
-                coinCountSpan.textContent = userData.coins;
+            // Coin frissítése az API-ból
+            if (data.coins !== undefined) {
+                userData.coins = data.coins;
+                console.log(`Coinok frissítése az API-ból: ${userData.coins}`);
+                if (coinCountSpan) {
+                    coinCountSpan.textContent = userData.coins;
+                } else {
+                    console.error('A coinCountSpan elem nem található a DOM-ban a todoState-ben!');
+                }
+                localStorage.setItem('userData', JSON.stringify(userData));
             } else {
-                console.error('A coinCountSpan elem nem található a DOM-ban a todoState-ben!');
+                console.warn('Az API nem küldött vissza coins értéket.');
             }
-            localStorage.setItem('userData', JSON.stringify(userData));
             await renderTable();
         } else {
             console.error('Hiba a teendő állapotának frissítésekor:', data.message);
+            showMessage(button, 'Hiba történt: ' + data.message);
         }
     } catch (error) {
         console.error('Hiba a PATCH kérés során:', error);
+        showMessage(button, 'Hiba történt, próbáld újra később!');
     }
 }
+
 renderTable();
 
 saveButton.addEventListener('click', saveTodo);
