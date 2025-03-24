@@ -9,6 +9,8 @@ body {
     overflow-y: auto;
     padding: 20px;
 }
+
+/* Felhasználói információk (navigációs sáv jobb felső sarka) */
 .user-info {
     display: flex;
     flex-direction: column;
@@ -44,49 +46,34 @@ body {
     color: #ffd700;
 }
 
-/* Reszponzív kezelés */
-@media (max-width: 768px) {
-    .user-info {
-        position: absolute;
-        top: 70px;
-        right: 20px;
-        font-size: 1rem;
-        padding: 5px 10px;
-    }
-
-    .coin-info {
-        font-size: 0.9rem;
-    }
-}
 /* Navigációs sáv - Üveg effektus és 3D-s árnyék */
 .navbar {
     position: fixed;
     top: 0;
     width: 100%;
-    background: rgba(255, 255, 255, 0.1); /* Átlátszó üveg effektus */
+    background: rgba(255, 255, 255, 0.1);
     color: #ffffff;
-    padding: 9px 20px;
+    padding: 15px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3), 0 1px 6px rgba(0, 0, 0, 0.1); /* 3D-s árnyék */
-    backdrop-filter: blur(10px); /* Erősebb üveg effektus */
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3), 0 1px 6px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
     z-index: 100;
     border-radius: 0 0 15px 15px;
-    transition: transform 0.3s ease-out; /* Sima mozgás */
+    transition: transform 0.3s ease-out;
 }
 
 .navbar:hover {
-    transform: translateY(-2px); /* Kissebb felugrás hoverre */
+    transform: translateY(-2px);
 }
-
 
 .nav-container {
     display: flex;
     justify-content: space-between;
     width: 100%;
     max-width: 1200px;
-    margin: auto;
+    margin: 0 auto;
     align-items: center;
 }
 
@@ -97,12 +84,12 @@ body {
     color: #ffffff;
     text-decoration: none;
     padding: 5px;
-    transition: color 0.3s ease, transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1); /* Spring animáció */
+    transition: color 0.3s ease, transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .logo:hover {
-    color: #00ffcc; /* Neonos cián szín */
-    transform: scale(1.1) rotate(2deg); /* Kissebb forgás és nagyítás */
+    color: #00ffcc;
+    transform: scale(1.1) rotate(2deg);
 }
 
 .nav-links {
@@ -124,7 +111,7 @@ body {
     text-decoration: none;
     font-size: 1.2rem;
     font-weight: 500;
-    transition: color 0.3s ease, transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1); /* Spring animáció */
+    transition: color 0.3s ease, transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
     position: relative;
 }
 
@@ -141,7 +128,7 @@ body {
 
 .nav-links a:hover {
     color: #00ffcc;
-    transform: translateY(-3px) scale(1.05); /* 3D-s felugrás és nagyítás */
+    transform: translateY(-3px) scale(1.05);
 }
 
 .nav-links a:hover::after {
@@ -167,8 +154,165 @@ body {
     transition: all 0.3s ease;
 }
 
-/* Reszponzív hamburger menü 768px alatt */
+/* Fő tartalom (Todo kártya) - Üveg effektus és dinamikus keret */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 70vh;
+    margin-top: 60px;
+    width: 90%;
+    max-width: 1200px;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Bal oldali üdvözlő szöveg - Üveg effektusú kártya */
+.col-md-5 {
+    flex: 1;
+    max-width: 500px;
+    margin: 20px;
+}
+
+.text-card-left {
+    background: rgba(20, 20, 20, 0.8);
+    border-radius: 20px;
+    padding: 3rem;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4), 0 5px 15px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(15px);
+    border: 2px solid #000000;
+    transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 0.4s ease;
+    color: #e6fffb;
+    text-align: center;
+}
+
+.text-card-left:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.login_bal_text {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.login_bal_text_kis {
+    font-size: 1.1rem;
+    color: #e6fffb;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Jobb oldali profil adatok - Üveg effektusú kártya */
+.profile-card {
+    flex: 1;
+    max-width: 500px;
+    margin: 20px;
+}
+
+form {
+    background: rgba(20, 20, 20, 0.8);
+    border-radius: 20px;
+    padding: 3rem;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4), 0 5px 15px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(15px);
+    border: 2px solid #000000;
+    transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 0.4s ease;
+}
+
+form:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.login_bejel_text_cim {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #e6fffb;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+p {
+    font-size: 1rem;
+    color: #e6fffb;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    margin-bottom: 0.5rem;
+}
+
+/* Beviteli mezők */
+.form-control {
+    width: 100%;
+    padding: 14px;
+    font-size: 1.1rem;
+    color: #e6fffb;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    transition: border-color 0.3s ease, background-color 0.3s ease, transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.form-control:hover,
+.form-control:focus {
+    border-color: #00ffcc;
+    background-color: rgba(255, 255, 255, 0.15);
+    transform: scale(1.02);
+    outline: none;
+}
+
+.form-control::placeholder {
+    color: rgba(230, 255, 251, 0.7);
+}
+
+/* Gombok - 3D-s effektus */
+.btn-primary {
+    background: rgba(26, 115, 232, 0.6);
+    border: none;
+    padding: 12px 24px;
+    font-size: 1.1rem;
+    color: #ffffff;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), background 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0, 255, 204, 0.4), 0 2px 5px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+.btn-primary:hover {
+    background: rgba(26, 115, 232, 0.8);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 20px rgba(0, 255, 204, 0.5), 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.btn-primary:active {
+    transform: translateY(1px) scale(0.98);
+    box-shadow: 0 2px 5px rgba(0, 255, 204, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Profil információk */
+#profile-info {
+    font-size: 1rem;
+    color: #e6fffb;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    margin-top: 1rem;
+    text-align: center;
+}
+
+/* Reszponzív kezelés - Mobilnézet */
 @media (max-width: 768px) {
+    /* Navigációs sáv */
     .hamburger {
         display: block;
     }
@@ -209,159 +353,86 @@ body {
     .hamburger.active span:nth-child(3) {
         transform: rotate(-45deg) translate(7px, -7px);
     }
-}
 
-/* Fő tartalom (Todo kártya) - Üveg effektus és dinamikus keret */
-.container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 70vh; /* Kissebb magasság, hogy ne érjen a navbarhez */
-    margin-top: 60px; /* Navbar elkerülése */
-    width: 90%;
-    max-width: 1200px;
-}
+    /* Felhasználói információk (jobb felső sarok) */
+    .user-info {
+        position: absolute;
+        top: 7px;
+        right: 80px;
+        font-size: 1rem;
+        padding: 5px 10px;
+    }
 
-.row {
-    display: flex;
-    flex-wrap: wrap;
-    width: 100%;
-    justify-content: center;
-    align-items: center;
-}
+    .coin-info {
+        font-size: 0.9rem;
+    }
 
-/* Bal oldali üdvözlő szöveg - Üveg effektusú kártya */
-.col-md-5 {
-    flex: 1;
-    max-width: 500px;
-    margin: 20px;
-}
+    /* Konténer és elrendezés */
+    .container {
+        height: auto;
+        margin-top: 80px;
+        width: 100%;
+        padding: 0 15px;
+    }
 
-.text-card-left {
-    background: rgba(20, 20, 20, 0.8); /* Sötétebb üveg effektus */
-    border-radius: 20px;
-    padding: 3rem;
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4), 0 5px 15px rgba(0, 0, 0, 0.2); /* Mélyebb 3D-s árnyék */
-    backdrop-filter: blur(15px); /* Erősebb üveg effektus */
-    border: 2px solid #000000; /* Fekete keret */
-    transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 0.4s ease; /* Spring animáció */
-    color: #e6fffb; /* Világosabb, jobban látható szín */
-    text-align: center;
-}
+    .row {
+        flex-direction: column;
+        align-items: center;
+    }
 
-.text-card-left:hover {
-    transform: translateY(-5px); /* Kissebb felugrás hoverre */
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 10px 20px rgba(0, 0, 0, 0.3); /* Mélyebb árnyék hoverre */
-}
+    /* Bal oldali üdvözlő szöveg elrejtése */
+    .welcome-text {
+        display: none;
+    }
 
-.login_bal_text {
-    font-size: 2.5rem;
-    font-weight: 700;
-    margin-bottom: 1.5rem;
-    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* Finom árnyék a jobb láthatóságért */
-}
+    /* Profil kártya */
+    .profile-card {
+        max-width: 350px;
+        margin: 10px;
+    }
 
-.login_bal_text_kis {
-    font-size: 1.1rem;
-    color: #e6fffb;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); /* Finom árnyék */
-}
+    form {
+        padding: 2rem;
+        border-radius: 15px;
+        background: rgba(20, 20, 20, 0.9);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+        border: none;
+    }
 
-/* Jobb oldali profil adatok - Üveg effektusú kártya */
-.col-md-7 {
-    flex: 1;
-    max-width: 500px;
-    margin: 20px;
-}
-form {
-    background: rgba(20, 20, 20, 0.8); /* Sötétebb üveg effektus */
-    border-radius: 20px;
-    padding: 3rem;
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4), 0 5px 15px rgba(0, 0, 0, 0.2); /* Mélyebb 3D-s árnyék */
-    backdrop-filter: blur(15px); /* Erősebb üveg effektus */
-    border: 2px solid #000000; /* Fekete keret */
-    transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 0.4s ease; /* Spring animáció */
-}
+    .login_bejel_text_cim {
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
 
-form:hover {
-    transform: translateY(-5px); /* Kissebb felugrás hoverre */
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 10px 20px rgba(0, 0, 0, 0.3); /* Mélyebb árnyék hoverre */
-}
+    p {
+        font-size: 0.9rem;
+    }
 
-.login_bejel_text_cim {
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: #e6fffb; /* Világosabb, jobban látható szín */
-    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* Finom árnyék */
-    margin-bottom: 2rem;
-    text-align: center;
-}
+    .form-control {
+        padding: 10px;
+        font-size: 1rem;
+        margin-bottom: 1rem;
+        border-radius: 8px;
+    }
 
-p {
-    font-size: 1rem;
-    color: #e6fffb; /* Világosabb, jobban látható szín */
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); /* Finom árnyék */
-    margin-bottom: 0.5rem;
-}
+    /* Gombok */
+    .btn-primary {
+        padding: 10px 20px;
+        font-size: 1rem;
+        border-radius: 8px;
+    }
 
-/* Beviteli mezők */
-.form-control {
-    width: 100%;
-    padding: 14px;
-    font-size: 1.1rem;
-    color: #e6fffb; /* Világosabb, jobban látható szín */
-    background-color: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 12px;
-    margin-bottom: 1.5rem;
-    text-align: center;
-    transition: border-color 0.3s ease, background-color 0.3s ease, transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2); /* 3D-s beviteli mező */
-}
+    .toggle-password {
+        margin-top: 0.5rem;
+        width: 100%;
+    }
 
-.form-control:hover,
-.form-control:focus {
-    border-color: #00ffcc; /* Neonos cián keret */
-    background-color: rgba(255, 255, 255, 0.15);
-    transform: scale(1.02); /* Kissebb nagyítás */
-    outline: none;
-}
+    .password-change-text {
+        font-size: 0.9rem;
+        margin-top: 0.5rem;
+    }
 
-.form-control::placeholder {
-    color: rgba(230, 255, 251, 0.7); /* Világosabb placeholder szín */
-}
-
-/* Gombok - 3D-s effektus */
-.btn-primary {
-    background: rgba(26, 115, 232, 0.6); /* Neonos gradient gomb */
-    border: none;
-    padding: 12px 24px;
-    font-size: 1.1rem;
-    color: #ffffff; /* Gomb szövege marad fehér, de kontrasztos */
-    border-radius: 12px;
-    cursor: pointer;
-    transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), background 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 5px 15px rgba(0, 255, 204, 0.4), 0 2px 5px rgba(0, 0, 0, 0.2); /* 3D-s árnyék */
-    width: 100%;
-    margin-top: 0.5rem;
-}
-
-.btn-primary:hover {
-    background: rgba(26, 115, 232, 0.6); /* Sötétebb gradient hoverre */
-    transform: translateY(-3px) scale(1.05); /* 3D-s felugrás és nagyítás */
-    box-shadow: 0 8px 20px rgba(0, 255, 204, 0.5), 0 4px 10px rgba(0, 0, 0, 0.3); /* Mélyebb árnyék */
-}
-
-.btn-primary:active {
-    transform: translateY(1px) scale(0.98); /* Kissebb lenyomás */
-    box-shadow: 0 2px 5px rgba(0, 255, 204, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
-}
-
-/* Profil információk */
-#profile-info {
-    font-size: 1rem;
-    color: #e6fffb; /* Világosabb, jobban látható szín */
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); /* Finom árnyék */
-    margin-top: 1rem;
-    text-align: center;
+    .password-reset {
+        width: 100%;
+    }
 }

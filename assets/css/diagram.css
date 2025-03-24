@@ -368,3 +368,17 @@ header h1 {
         font-size: 0.9rem;
     }
 }
+
+@media (max-width: 768px) {
+    .user-info {
+        position: absolute;
+        top: 7px;
+        right: 80px;
+        font-size: 1rem;
+        padding: 5px 10px;
+    }
+
+    .coin-info {
+        font-size: 0.9rem;
+    }
+}

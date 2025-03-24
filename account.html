@@ -31,7 +31,7 @@
                 <li><a href="./logout.html">Kijelentkezés</a></li>
             </ul>
             <div class="user-info" id="user-info">
-                <span class="username" id="username">Sándor</span>
+                <span class="username" id="username"></span>
                 <div class="coin-info">
                     <span class="coin-icon">🪙</span>
                     <span class="coin-count" id="coin-count"></span>
@@ -43,12 +43,12 @@
     <div class="container">
         <div class="row justify-content-center align-items-center">
             <!-- Bal oldali üdvözlő szöveg -->
-            <div class="col-md-5 text-center text-white">
+            <div class="col-md-5 text-center text-white welcome-text">
                 <h1 class="login_bal_text">Fiókod</h1>
                 <p class="login_bal_text_kis">Itt láthatod az adataidat.</p>
             </div>
             <!-- Jobb oldali profil adatok -->
-            <div class="col-md-7">
+            <div class="col-md-7 profile-card">
                 <form autocomplete="off" class="p-4">
                     <h2 class="login_bejel_text_cim">Profil adatok</h2>
                     <div class="mb-3">
@@ -62,9 +62,9 @@
                     <div class="mb-3">
                         <p>Jelszó:</p>
                         <input type="password" class="form-control" id="password" readonly>
-                        <button type="button" class="btn btn-primary col-0 offset-0" id="toggle-password">Jelszó mutatása</button><br><br>
-                        <p>Jelszót szeretnél változtatni?</p>
-                        <a href="forgotpassword.html" class="btn btn-primary col-0 offset-0" id="x">Jelszó visszaállítása</a>
+                        <button type="button" class="btn btn-primary toggle-password" id="toggle-password">Jelszó mutatása</button>
+                        <p class="password-change-text">Jelszót szeretnél változtatni?</p>
+                        <a href="forgotpassword.html" class="btn btn-primary password-reset" id="password-reset">Jelszó visszaállítása</a>
                     </div>
                     <div id="profile-info" class="text-center"></div>
                 </form>

@@ -64,6 +64,21 @@ document.addEventListener('DOMContentLoaded', () => {
     check();
 });
 
+document.addEventListener('click', (event) => {
+    // Ellenőrizzük, hogy a task-form látható-e
+    if (taskForm && taskForm.style.display === 'block') {
+        // Ha a kattintás a task-form-on kívül történt, elrejtjük
+        const isClickInsideForm = taskForm.contains(event.target);
+        const isClickOnDay = event.target.closest('.day'); // Ellenőrizzük, hogy a kattintás egy nap elemre történt-e
+
+        // Ha a kattintás nem a formon belül történt, és nem egy nap elemre (ami megnyitja a formot), akkor elrejtjük a formot
+        if (!isClickInsideForm && !isClickOnDay) {
+            closeForm();
+            console.log('Kattintás a task-form-on kívül, elrejtve');
+        }
+    }
+});
+
 // Időválasztó inicializálása
 function initializeTimePicker() {
     const timePicker = document.getElementById('time-picker');
@@ -144,6 +159,59 @@ async function getTodoCount(dateStr) {
     return resjson;
 }
 
+// Segédfüggvény a helyes "-ra/-re" ragozás meghatározására
+function getCaseSuffix(day) {
+    // Különleges esetek
+    if (day === 1) {
+        return '-jére';
+    } else if (day === 2) {
+        return '-ára';
+    } else if (day === 3) {
+        return '-ára';
+    } else if (day === 10 || day === 20 || day === 30) {
+        return '-ra';
+    }
+
+    // Az utolsó számjegy alapján döntünk
+    const lastDigit = day % 10;
+    const lastTwoDigits = day % 100;
+
+    // Ha a szám 10, 20, 30, akkor már kezeltük
+    if (lastTwoDigits === 10 || lastTwoDigits === 20 || lastTwoDigits === 30) {
+        return '-ra';
+    }
+
+    // A szám szöveges alakja alapján döntünk a magánhangzó-harmóniáról
+    const numberStr = day.toString();
+    const lastChar = numberStr[numberStr.length - 1];
+
+    // A magyar számok kiejtése alapján döntünk a magánhangzó-harmóniáról
+    if (lastDigit === 0) {
+        return '-re'; // pl. 10-re, 20-ra (már kezeltük)
+    } else if (lastDigit === 1) {
+        return '-re'; // pl. 11-re, 21-re
+    } else if (lastDigit === 2) {
+        return '-ra'; // pl. 12-re, 22-re (de 2-ára már kezeltük)
+    } else if (lastDigit === 3) {
+        return '-ra'; // pl. 13-ra, 23-ra (de 3-ára már kezeltük)
+    } else if (lastDigit === 4) {
+        return '-re'; // pl. 14-re, 24-re
+    } else if (lastDigit === 5) {
+        return '-re'; // pl. 5-re, 15-re
+    } else if (lastDigit === 6) {
+        return '-ra'; // pl. 6-ra, 16-ra
+    } else if (lastDigit === 7) {
+        return '-re'; // pl. 7-re, 17-re
+    } else if (lastDigit === 8) {
+        return '-ra'; // pl. 8-ra, 18-ra
+    } else if (lastDigit === 9) {
+        return '-re'; // pl. 9-re, 19-re
+    }
+
+    // Alapértelmezett eset (nem kellene ide eljutni)
+    return '-ra';
+}
+
 async function renderCalendar() {
     if (!calendarGrid) {
         console.error('Naptár rács (calendar-grid) nem található!');
@@ -200,20 +268,80 @@ async function renderCalendar() {
             console.log(`Kattintás a ${day}. napra, dátum: ${dateStr}`);
             if (taskForm) {
                 selectedDateInput.value = dateStr;
+                taskForm.style.display = 'block'; // Láthatóság beállítása
+        
+                // Üzenet elrejtése a form megnyitásakor
+                const saveMessage = document.getElementById('save-message');
+                saveMessage.style.display = 'none';
+                saveMessage.classList.remove('success', 'error');
+                saveMessage.textContent = '';
+        
+                // A task-form címének frissítése a hónap nevével és a helyes ragozással
+                const formTitle = taskForm.querySelector('h3');
+                if (formTitle) {
+                    const monthName = months[month]; // Hónap neve (pl. "Március")
+                    const suffix = getCaseSuffix(day); // Helyes ragozás (pl. "-re", "-ra")
+                    formTitle.textContent = `Mi lesz a teendő ${monthName} ${day}.${suffix}?`;
+                } else {
+                    console.error('A task-form h3 eleme nem található!');
+                }
+        
+                // A nap elem pozíciójának lekérése
                 const rect = dayElement.getBoundingClientRect();
                 const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
                 const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
-                taskForm.style.position = 'absolute';
-                taskForm.style.top = `${rect.bottom + scrollTop + 5}px`;
-                taskForm.style.left = `${rect.left + scrollLeft}px`;
-                taskForm.style.width = '320px';
-                taskForm.style.display = 'block';
-                console.log('Teendő űrlap megjelenítve:', dateStr, 'Pozíció:', { top: rect.bottom + scrollTop + 5, left: rect.left + scrollLeft });
+        
+                // Képernyő méretei
+                const windowHeight = window.innerHeight;
+                const windowWidth = window.innerWidth;
+        
+                // A task-form méretei
+                const formHeight = taskForm.offsetHeight;
+                const formWidth = taskForm.offsetWidth;
+        
+                // Navbar magassága (mobilon 80px a CSS szerint)
+                const navbarHeight = 80;
+        
+                // Minimum és maximum top/left értékek, hogy a form ne lógjon ki
+                const minTop = navbarHeight + 10; // A navbar alatt + némi padding
+                const maxTop = windowHeight - formHeight - 10; // Hogy a form alja ne lógjon ki
+                const minLeft = 10; // Hogy a form bal oldala ne lógjon ki
+                const maxLeft = windowWidth - formWidth - 10; // Hogy a form jobb oldala ne lógjon ki
+        
+                // Alapértelmezett pozíció: a nap alatt, középen igazítva
+                let topPosition = rect.bottom + scrollTop + 5; // A nap alatt 5px-re
+                let leftPosition = rect.left + scrollLeft + (rect.width / 2) - (formWidth / 2); // A nap közepéhez igazítva
+        
+                // Ha a form alja kilógna a képernyőből, feljebb toljuk (a nap fölé)
+                if (topPosition + formHeight > windowHeight - 10) {
+                    topPosition = rect.top + scrollTop - formHeight - 5; // A nap fölé 5px-re
+                }
+        
+                // Ha a form teteje a navbar alá kerülne, lejjebb toljuk
+                if (topPosition < minTop) {
+                    topPosition = minTop;
+                }
+        
+                // Ha a form bal oldala kilógna, jobbra toljuk
+                if (leftPosition < minLeft) {
+                    leftPosition = minLeft;
+                }
+        
+                // Ha a form jobb oldala kilógna, balra toljuk
+                if (leftPosition > maxLeft) {
+                    leftPosition = maxLeft;
+                }
+        
+                // A pozíció beállítása
+                taskForm.style.top = `${topPosition}px`;
+                taskForm.style.left = `${leftPosition}px`;
+                taskForm.style.transform = 'none'; // Nem használunk transformot, mert a left/top pontosan pozícionál
+        
+                console.log('Teendő űrlap megjelenítve:', dateStr, 'Pozíció:', { top: topPosition, left: leftPosition });
             } else {
                 console.error('Teendő űrlap (task-form) nem található!');
             }
         };
-
         calendarGrid.appendChild(dayElement);
         console.log(`Nap hozzáadva: ${day}, Teendők száma: ${count}`);
     });
@@ -224,6 +352,11 @@ function closeForm() {
         taskForm.style.display = 'none';
         startHourSelect.value = '';
         startMinuteSelect.value = '';
+        todoInput.value = ''; // Input mező ürítése
+        const saveMessage = document.getElementById('save-message');
+        saveMessage.style.display = 'none'; // Üzenet elrejtése
+        saveMessage.classList.remove('success', 'error'); // Osztályok eltávolítása
+        saveMessage.textContent = ''; // Üzenet szövegének törlése
         console.log('Teendő űrlap elrejtve');
     } else {
         console.error('Teendő űrlap (task-form) nem található!');
@@ -237,17 +370,86 @@ async function saveTodo() {
     const start_minute = startMinuteSelect.value;
     const start_time = start_hour && start_minute ? `${start_hour}:${start_minute}` : null;
 
-    if (title.length > 0) {
+    // Üzenet elem lekérése
+    const saveMessage = document.getElementById('save-message');
+
+    // Üzenet alaphelyzetbe állítása (elrejtés és osztályok eltávolítása)
+    saveMessage.style.display = 'none';
+    saveMessage.classList.remove('success', 'error');
+    saveMessage.textContent = '';
+
+    // Ellenőrizzük, hogy üres-e az input
+    if (title.length === 0) {
+        saveMessage.textContent = 'A teendő neve nem lehet üres!';
+        saveMessage.classList.add('error');
+        saveMessage.style.display = 'block';
+        return;
+    }
+
+    const todoData = {
+        title,
+        date
+    };
+
+    if (start_time) {
+        todoData.start_time = start_time;
+    }
+
+    console.log("Mentés adatai:", todoData);
+
+    try {
         const res = await fetch(`${apiUrl}?token=${userData.token}&userid=${userData.user_ID}&entity=todos`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ title, date, start_time })
+            body: JSON.stringify(todoData)
         });
-        todoInput.value = '';
-        startHourSelect.value = '';
-        startMinuteSelect.value = '';
-        closeForm();
-        await renderCalendar();
+
+        console.log('API válasz státusza:', res.status, res.statusText);
+
+        // Próbáljuk meg JSON-ként értelmezni a választ
+        let data;
+        const contentType = res.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+            data = await res.json();
+            console.log('API válasz tartalma (JSON):', data);
+        } else {
+            const text = await res.text();
+            console.log('API válasz tartalma (szöveg):', text);
+            throw new Error(`A szerver válasza nem JSON formátumú! Válasz: ${text}`);
+        }
+
+        if (res.ok) {
+            // Sikeres mentés
+            saveMessage.textContent = 'Sikeres mentés!';
+            saveMessage.classList.add('success');
+            saveMessage.style.display = 'block';
+
+            // Input mezők ürítése
+            todoInput.value = '';
+            startHourSelect.value = '';
+            startMinuteSelect.value = '';
+
+            // Naptár frissítése
+            await renderCalendar();
+
+            // Üzenet eltüntetése 2 másodperc után
+            setTimeout(() => {
+                saveMessage.style.display = 'none';
+                saveMessage.classList.remove('success', 'error');
+                saveMessage.textContent = '';
+                closeForm();
+            }, 2000);
+        } else {
+            // Sikertelen mentés
+            saveMessage.textContent = data.message || 'Sikertelen mentés!';
+            saveMessage.classList.add('error');
+            saveMessage.style.display = 'block';
+        }
+    } catch (error) {
+        console.error('Hiba a mentés során:', error);
+        saveMessage.textContent = 'Hiba történt a mentés során: ' + error.message;
+        saveMessage.classList.add('error');
+        saveMessage.style.display = 'block';
     }
 }
 

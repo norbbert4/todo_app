@@ -2,7 +2,7 @@
 <html lang="hu">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Naptár - ToDo App</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
@@ -27,7 +27,7 @@
                 <li><a href="./logout.html">Kijelentkezés</a></li>
             </ul>
             <div class="user-info" id="user-info">
-                <span class="username" id="username">Sándor</span>
+                <span class="username" id="username"></span>
                 <div class="coin-info">
                     <span class="coin-icon">🪙</span>
                     <span class="coin-count" id="coin-count"></span>
@@ -52,7 +52,17 @@
             <div class="day-name">Szo</div>
             <div class="day-name">V</div>
         </div>
-        <div class="calendar-grid p-sm-1 p-md-2 p-lg-3" id="calendar-grid"></div>
+        <div class="calendar-grid p-sm-1 p-md-2 p-lg-3" id="calendar-grid">
+            <!-- A napok dinamikusan generálódnak a JS-ben, de példaként: -->
+            <div class="day">
+                <span class="day-number">1</span>
+            </div>
+            <!-- Ha van teendő, akkor a todos-for-day megjelenik -->
+            <div class="day">
+                <span class="day-number">21</span>
+                <span class="todos-for-day">1</span>
+            </div>
+        </div>
     </div>
 
     <div class="task-form" id="task-form" style="display: none;">
@@ -61,6 +71,7 @@
             <input type="hidden" name="date" id="selected-date">
             <input type="hidden" name="user_id" id="user-id" value="1"> 
             <input type="text" name="title" id="title" placeholder="Teendő neve" required>
+            <div id="save-message" class="save-message"></div> <!-- Új div az üzenet számára -->
             <div class="time-picker" id="time-picker"></div>
             <button type="button" id="save-button">Mentés</button>
             <button type="button" onclick="closeForm()">Mégse</button>

@@ -304,8 +304,8 @@ main header input {
 @media (max-width: 768px) {
     .user-info {
         position: absolute;
-        top: 70px;
-        right: 20px;
+        top: 7px;
+        right: 80px;
         font-size: 1rem;
         padding: 5px 10px;
     }
@@ -604,6 +604,7 @@ footer table tbody tr td:last-child {
 }
 
 /* Reszponzív táblázat: kártyákká alakítás 768px alatt */
+/* Reszponzív táblázat: kártyákká alakítás 768px alatt */
 @media (max-width: 768px) {
     main footer {
         overflow-x: hidden;
@@ -635,7 +636,7 @@ footer table tbody tr td:last-child {
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
         padding: 1.2rem;
         position: relative;
-        min-height: 150px; /* Biztosítjuk, hogy a kártya elég magas legyen */
+        min-height: 180px; /* Növeljük a magasságot, hogy a sortörés után is elférjen a tartalom */
     }
 
     footer table tbody tr:hover {
@@ -657,7 +658,16 @@ footer table tbody tr td:last-child {
     footer table tbody tr td:nth-child(2) {
         white-space: normal;
         word-wrap: break-word;
+        word-break: break-all; /* Hosszú, szóköz nélküli szövegek törése */
         max-width: 100%;
+        flex-direction: column; /* A ::before és a szöveg külön sorba kerül */
+        align-items: flex-start; /* Balra igazítjuk a tartalmat */
+    }
+
+    footer table tbody tr td:nth-child(2)::before {
+        display: block;
+        width: 100%;
+        margin-bottom: 0.2rem; /* Kis hely a címke és a szöveg között */
     }
 
     footer table tbody tr td:nth-child(1)::before {
@@ -699,7 +709,6 @@ footer table tbody tr td:last-child {
         font-size: 1.2rem;
     }
 }
-
 /* Állapotok */
 .state-0 {
     opacity: 1;
