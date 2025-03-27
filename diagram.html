@@ -5,9 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Todo Pie Chart</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="./assets/css/diagram.css">
+    <script>
+        const pageCSS = 'diagram.css';
+    </script>
+    <link id="skinlink" rel="stylesheet" href="./assets/css/default/diagram.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="assets/js/diagram.js?ver=2" defer></script> <!-- Hozzáadva a defer attribútum -->
+
+    <!-- Kiválasztott skin beállítása ----------------->
+    <script src="./assets/js/setskin.js" defer></script>
+    <!------------------------------------------------->
+
 </head>
 <body>
     <nav class="navbar">
@@ -23,6 +31,7 @@
                 <li><a href="./todo.html">Összes teendők</a></li>
                 <li><a href="./calendar.html">Naptár</a></li>
                 <li><a href="./diagram.html">Statisztika</a></li>
+                <li><a href="./skins.html">Kinézet</a></li>
                 <li><a href="./account.html">Fiók</a></li>
                 <li><a href="./logout.html">Kijelentkezés</a></li>
             </ul>

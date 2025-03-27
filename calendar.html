@@ -6,7 +6,16 @@
     <title>Naptár - ToDo App</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <link rel="stylesheet" href="assets/css/naptar.css?ver=2">
+    <script>
+        const pageCSS = 'naptar.css';
+    </script>
+    <link id="skinlink" rel="stylesheet" href="assets/css/default/naptar.css?ver=2">
+    <script src="assets/js/naptar.js" defer></script>
+
+    <!-- Kiválasztott skin beállítása ----------------->
+    <script src="./assets/js/setskin.js" defer></script>
+    <!------------------------------------------------->
+
     <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 </head>
 <body>
@@ -23,6 +32,7 @@
                 <li><a href="./todo.html">Összes teendők</a></li>
                 <li><a href="./calendar.html">Naptár</a></li>
                 <li><a href="./diagram.html">Statisztika</a></li>
+                <li><a href="./skins.html">Kinézet</a></li>
                 <li><a href="./account.html">Fiók</a></li>
                 <li><a href="./logout.html">Kijelentkezés</a></li>
             </ul>
@@ -79,7 +89,6 @@
         </form>
     </div>
 
-    <script src="assets/js/naptar.js"></script>
     <script>
         // Hamburger menü toggle
         document.querySelector('.hamburger').addEventListener('click', function() {
