@@ -44,16 +44,16 @@ const check = async () => {
             } else {
                 console.error('Autentikációs hiba:', data.message);
                 localStorage.removeItem('userData');
-                window.location.href = 'login.html';
+                window.location.href = 'index.html';
             }
         } catch (error) {
             console.error('Hiba az autentikáció során:', error);
             localStorage.removeItem('userData');
-            window.location.href = 'login.html';
+            window.location.href = 'index.html';
         }
     } else {
         console.warn('Nincs érvényes token vagy user_ID, átirányítás a bejelentkező oldalra.');
-        window.location.href = 'login.html';
+        window.location.href = 'index.html';
     }
 };
 
@@ -277,7 +277,7 @@ async function renderTable() {
             console.error('Hiba a teendők lekérdezésekor:', resjson.message);
             if (resjson.message === 'Sikertelen autentikáció.') {
                 localStorage.removeItem('userData');
-                window.location.href = 'login.html';
+                window.location.href = 'index.html';
             }
             if (todayTodoCount) {
                 todayTodoCount.textContent = 'Teendőid száma: 0';
@@ -328,7 +328,7 @@ async function renderTable() {
     } catch (error) {
         console.error('Hiba az API hívás során:', error);
         localStorage.removeItem('userData');
-        window.location.href = 'login.html';
+        window.location.href = 'index.html';
     }
 }
 

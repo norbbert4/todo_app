@@ -36,17 +36,17 @@ const check = async () => {
             } else {
                 console.error('Autentikációs hiba:', data.message);
                 localStorage.removeItem('userData');
-                window.location.href = 'login.html';
+                window.location.href = 'index.html';
             }
         } catch (error) {
             console.error('Hiba az autentikáció során:', error);
             localStorage.removeItem('userData');
-            window.location.href = 'login.html';
+            window.location.href = 'index.html';
         }
     } else {
         console.log('Nincs token, átirányítás...');
         localStorage.removeItem('userData');
-        window.location.href = 'login.html';
+        window.location.href = 'index.html';
     }
 };
 

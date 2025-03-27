@@ -40,17 +40,17 @@ const check = async () => {
             } else {
                 console.log('Autentikáció sikertelen:', data);
                 localStorage.removeItem('userData');
-                window.location.href = 'login.html';
+                window.location.href = 'index.html';
             }
         } catch (error) {
             console.error('Hiba az autentikáció során:', error);
             localStorage.removeItem('userData');
-            window.location.href = 'login.html';
+            window.location.href = 'index.html';
         }
     } else {
         console.log('Nincs token, átirányítás...');
         localStorage.removeItem('userData');
-        window.location.href = 'login.html';
+        window.location.href = 'index.html';
     }
 };
 

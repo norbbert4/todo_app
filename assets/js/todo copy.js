@@ -190,7 +190,7 @@ async function renderTable(date = '') {
             console.error('Hiba a teendők lekérdezésekor:', resjson.message);
             if (resjson.message === 'Sikertelen autentikáció.') {
                 localStorage.removeItem('userData');
-                window.location.href = 'login.html';
+                window.location.href = 'index.html';
             }
             if (todayTodoCount) {
                 todayTodoCount.textContent = 'Teendőid száma: 0';
@@ -243,7 +243,7 @@ async function renderTable(date = '') {
     } catch (error) {
         console.error('Hiba az API hívás során:', error);
         localStorage.removeItem('userData');
-        window.location.href = 'login.html';
+        window.location.href = 'index.html';
         if (todayTodoCount) {
             todayTodoCount.textContent = 'Teendőid száma: 0';
         }
