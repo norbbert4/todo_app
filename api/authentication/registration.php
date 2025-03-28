@@ -1,43 +1,148 @@
 <?php
-include '../modules/_db.php';
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
+include '../../api/modules/_db.php'; // Adatbázis kapcsolat
+require_once '../../vendor/autoload.php'; // PHPMailer betöltése
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+session_start();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // JSON adatok fogadása
     $data = json_decode(file_get_contents("php://input"));
 
-    $email = $data->email;
-    $username = $data->username;
+    $email = filter_var($data->email, FILTER_VALIDATE_EMAIL);
+    $username = htmlspecialchars($data->username);
     $password = $data->password;
 
-    // Jelszó hash-elése a password_hash függvénnyel
-    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+    if (!$email) {
+        $response = array(
+            'success' => false,
+            'error' => array(
+                'message' => 'Érvénytelen e-mail cím'
+            )
+        );
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode($response);
+        exit;
+    }
 
-    $sql = "SELECT * FROM users WHERE user_name = '$username'";
-    $result = $conn->query($sql);
+    // Ellenőrizzük, hogy a felhasználónév vagy e-mail már létezik-e
+    $sql = "SELECT * FROM users WHERE user_name = ? OR user_email = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param('ss', $username, $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
         $response = array(
             'success' => false,
             'error' => array(
-                'message' => 'Foglalt username',
+                'message' => 'A felhasználónév vagy e-mail már foglalt'
             )
         );
     } else {
-        $sql2 = "INSERT INTO users (user_email, user_name, user_pw, user_state) VALUES ('$email', '$username', '$hashedPassword', 1)";
-        $conn->query($sql2);
-        
-        $response = array(
-                    'success' => true,
-                    'message' => 'sikeres regisztráció'
-                );
-        
+        // Random 4-5 karakteres kód generálása
+        $verificationCode = substr(str_shuffle("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, rand(4, 5));
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+        // Adatok mentése a session-be, nem az adatbázisba
+        $_SESSION['pending_user'] = [
+            'email' => $email,
+            'username' => $username,
+            'password' => $hashedPassword
+        ];
+        $_SESSION['verification_code'] = $verificationCode;
+
+        // E-mail küldése a kóddal
+        $mail = new PHPMailer(true);
+        try {
+            // Szerver beállítások
+            $mail->isSMTP();
+            $mail->Host = 'mail.nethely.hu';
+            $mail->SMTPAuth = true;
+            $mail->Username = 'todoapp@norbbert4.hu';
+            $mail->Password = 'T0d0A@ppP@ssw0rd2025'; // Add meg a helyes jelszót!
+            $mail->SMTPSecure = 'ssl';
+            $mail->Port = 465;
+
+            // Feladó és címzett
+            $mail->setFrom('todoapp@norbbert4.hu', 'Todo App');
+            $mail->addAddress($email);
+
+            // E-mail tartalom
+            $mail->isHTML(true);
+            $mail->Subject = 'Kedves Felhasználó! Regisztráció ellenőrző kód';
+            $currentDateTime = date('Y-m-d H:i:s'); // Aktuális dátum és idő
+
+            // Az e-mail HTML tartalma a megadott design alapján
+            $mail->Body = '<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App - Regisztráció ellenőrző kód</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #4A43C4; background: linear-gradient(135deg, #6a11cb, #2575fc);">
+    <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;">
+        <tr>
+            <td align="center" style="padding: 40px 0;">
+                <table role="presentation" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse; background-color: #1C2526; border: 2px solid #00C4FF; border-radius: 10px; color: #ffffff;">
+                    <!-- Üzenet -->
+                    <tr>
+                        <td style="padding: 30px; text-align: center;">
+                            <h2 style="margin: 0 0 20px; font-size: 24px; color: #00C4FF;">Kedves ' . htmlspecialchars($username) . '!</h2>
+                            <p style="margin: 0 0 10px; font-size: 16px; color: #FF6666;">Ez egy automatikusan elküldött üzenet, kérjük ne válaszoljon rá!</p>
+                            <p style="margin: 0 0 20px; font-size: 16px; color: #ffffff;">Kaptunk egy kérést a regisztrációd véglegesítésére a Todo App fiókodhoz. Az alábbi kódot használd a regisztrációd befejezéséhez:</p>
+                            <!-- Kód -->
+                            <div style="display: inline-block; padding: 10px 20px; background-color: #333; color: #ffffff; border-radius: 5px; font-size: 16px; margin: 20px 0;">
+                                ' . htmlspecialchars($verificationCode) . '
+                            </div>
+                        </td>
+                    </tr>
+                    <!-- Lábjegyzet -->
+                    <tr>
+                        <td style="padding: 0 30px 30px; text-align: center;">
+                            <p style="margin: 20px 0 10px; font-size: 14px; color: #ffffff;">Ha nem te kezdeményezted a regisztrációt, kérjük, hagyd figyelmen kívül ezt az e-mailt. Ha bármilyen kérdésed van, lépj kapcsolatba velünk.</p>
+                            <p style="margin: 0 0 10px; font-size: 14px; color: #ffffff;">' . $currentDateTime . '</p>
+                            <p style="margin: 0; font-size: 14px; color: #00C4FF;">Üdvözlettel,<br>Todo App csapata</p>
+                            <p style="margin: 10px 0 0; font-size: 14px; color: #00C4FF;"><a href="mailto:todoapp@norbbert4.hu" style="color: #00C4FF; text-decoration: none;">todoapp@norbbert4.hu</a></p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>';
+
+            // Szöveges verzió (AltBody)
+            $mail->AltBody = "Kedves $username!\n\nEz egy automatikusan elküldött üzenet, kérjük ne válaszoljon rá!\n\nKaptunk egy kérést a regisztrációd véglegesítésére a Todo App fiókodhoz. Az alábbi kódot használd a regisztrációd befejezéséhez:\n\n$verificationCode\n\nHa nem te kezdeményezted a regisztrációt, kérjük, hagyd figyelmen kívül ezt az e-mailt. Ha bármilyen kérdésed van, lépj kapcsolatba velünk: todoapp@norbert4.hu\n\n$currentDateTime\n\nÜdvözlettel,\nTodo App csapata";
+
+            $mail->send();
+
+            $response = array(
+                'success' => true,
+                'message' => 'Ellenőrző kód elküldve az e-mail címedre',
+                'step' => 'verify_code'
+            );
+        } catch (Exception $e) {
+            $response = array(
+                'success' => false,
+                'error' => array(
+                    'message' => 'Hiba az e-mail küldése közben: ' . $mail->ErrorInfo
+                )
+            );
+        }
     }
 
+    $stmt->close();
     header('Content-Type: application/json; charset=utf-8');
     echo json_encode($response);
 }
-
 
 $conn->close();
 ?>

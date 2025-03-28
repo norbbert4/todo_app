@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skin list</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script>
+        const pageCSS = 'todo.css';
+    </script>
+    <link id="skinlink" rel="stylesheet" href="./assets/css/default/todo.css?ver=2">
+    <script src="./assets/js/skins.js?ver=2" defer></script>
+    
+    <!-- Kiválasztott skin beállítása ----------------->
+    <script src="./assets/js/setskin.js" defer></script>
+    <!------------------------------------------------->
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" defer></script>
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+</head>
+<body>
+
+    <style>
+        .unlocked {
+            cursor: pointer;
+            display: inline-block;
+            width: 150px;
+            height: 150px;
+            padding: 10px;
+            background-color: rgba(16, 84, 23, .8);
+            color: white;
+            text-align: center;
+            margin: 20px;
+        }
+
+        .unlocked:hover {
+            background-color: rgba(16, 84, 23, 1);
+            transform: scale(1.1);
+        }
+
+        .locked {
+            cursor: pointer;
+            display: inline-block;
+            width: 150px;
+            height: 150px;
+            padding: 10px;
+            background-color: rgba(45, 45, 45, .8);
+            color: white;
+            text-align: center;
+            margin: 20px;
+        }
+
+        .locked:hover {
+            background-color: rgba(45, 45, 45, .6);
+            transform: scale(.9);
+        }
+    </style>
+
+    <!-- Felső navigációs sáv -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">Todo App</a>
+            <button class="hamburger" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-links">
+                <li><a href="./todo.html?date=today">Mai teendők</a></li>
+                <li><a href="./todo.html">Összes teendők</a></li>
+                <li><a href="./calendar.html">Naptár</a></li>
+                <li><a href="./diagram.html">Statisztika</a></li>
+                <li><a href="./skins.html">Skin-ek</a></li>
+                <li><a href="./account.html">Fiók</a></li>
+                <li><a href="./logout.html">Kijelentkezés</a></li>
+            </ul>
+            <div class="user-info" id="user-info">
+                <span class="username" id="username"></span>
+                <div class="coin-info">
+                    <span class="coin-icon">🪙</span>
+                    <span class="coin-count" id="coin-count"></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container-fluid p-3 p-md-4 d-flex">
+        
+    </main>
+
+    <aside style="color: white;">Nincs jogosultságod az alkalmazás használatához. Kérlek jelentkezz be!</aside>
+
+    <script>
+        // Hamburger menü toggle
+        document.querySelector('.hamburger').addEventListener('click', function() {
+            this.classList.toggle('active');
+            document.querySelector('.nav-links').classList.toggle('active');
+        });
+    </script>
+    
+</body>
+</html>

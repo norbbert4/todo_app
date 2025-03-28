@@ -8,28 +8,10 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="./assets/css/style.css?ver=2">
     <script src="./assets/js/reg.js" defer></script>
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 </head>
 
 <body class="d-flex align-items-center justify-content-center vh-100">
-
-    <!-- Navigációs sáv 
-    <nav class="navbar">
-        <div class="nav-container">
-            <a class="logo">Todo App</a>
-            <button class="hamburger" aria-label="Toggle menu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-            <ul class="nav-links">
-                <li><a href="./todo.html?date=today">Mai teendők</a></li>
-                <li><a href="./todo.html">Összes teendők</a></li>
-                <li><a href="./calendar.html">Naptár</a></li>
-                <li><a href="./account.html">Fiók</a></li>
-                <li><a href="./logout.html">Kijelentkezés</a></li>
-            </ul>
-        </div>
-    </nav>-->
 
     <div class="container">
         <div class="row justify-content-center align-items-center">
@@ -62,13 +44,24 @@
                     <p>Elfelejtetted a jelszavad?</p>
                     <a href="./forgotpassword.html"><div class="btn btn-primary col-0 offset-0">Elfelejtett jelszó</div></a>
                 </form>
+                <!-- Kódbeviteli mező -->
+                <div id="codeInput" style="display: none;">
+                    <h3 class="login_bejel_text_cim">Add meg az e-mailben kapott kódot</h3>
+                    <div class="mb-3">
+                        <input type="text" class="form-control" id="codeField" placeholder="Ellenőrző kód" required>
+                    </div>
+                    <div class="mb-3">
+                        <button type="button" class="btn btn-primary col-12" onclick="verifyCode()">Kód ellenőrzése</button>
+                    </div>
+                    <div id="code-info"></div>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Hamburger menü toggle
-        document.querySelector('.hamburger').addEventListener('click', function() {
+        // Hamburger menü toggle (ha később szükséged lesz rá)
+        document.querySelector('.hamburger')?.addEventListener('click', function() {
             this.classList.toggle('active');
             document.querySelector('.nav-links').classList.toggle('active');
         });

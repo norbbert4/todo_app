@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo Pie Chart</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        const pageCSS = 'diagram.css';
+    </script>
+    <link id="skinlink" rel="stylesheet" href="./assets/css/default/diagram.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="assets/js/diagram.js?ver=2" defer></script> <!-- Hozzáadva a defer attribútum -->
+
+    <!-- Kiválasztott skin beállítása ----------------->
+    <script src="./assets/js/setskin.js" defer></script>
+    <!------------------------------------------------->
+
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">Todo App</a>
+            <button class="hamburger" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-links">
+                <li><a href="./todo.html?date=today">Mai teendők</a></li>
+                <li><a href="./todo.html">Összes teendők</a></li>
+                <li><a href="./calendar.html">Naptár</a></li>
+                <li><a href="./diagram.html">Statisztika</a></li>
+                <li><a href="./skins.html">Kinézet</a></li>
+                <li><a href="./account.html">Fiók</a></li>
+                <li><a href="./logout.html">Kijelentkezés</a></li>
+            </ul>
+            <!-- Felhasználói információ div -->
+            <div class="user-info" id="user-info">
+                <span class="username" id="username"></span>
+                <div class="coin-info">
+                    <span class="coin-icon">🪙</span>
+                    <span class="coin-count" id="coin-count"></span>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <main>
+        <header>
+            <h1>Teendők Statisztikája</h1>
+        </header>
+        <section class="chart-container">
+            <canvas id="todoChart"></canvas>
+        </section>
+        <section class="chart-legend">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Állapot</th>
+                        <th>Darabszám</th>
+                        <th>Százalék</th>
+                    </tr>
+                </thead>
+                <tbody id="legend-content">
+                    <!-- Dinamikusan töltjük fel JS-szel -->
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="2">Összesen</td>
+                        <td id="total-count"></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </section>
+    </main>
+    <script>
+        // Hamburger menü toggle
+        document.querySelector('.hamburger').addEventListener('click', function() {
+            this.classList.toggle('active');
+            document.querySelector('.nav-links').classList.toggle('active');
+        });
+    </script>
+</body>
+</html>

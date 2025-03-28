@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.0.4
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Feb 19, 2025 at 09:17 PM
--- Server version: 10.11.10-MariaDB
--- PHP Version: 8.2.20
+-- Gép: localhost
+-- Létrehozás ideje: 2025. Már 27. 15:41
+-- Kiszolgáló verziója: 10.3.39-MariaDB-0+deb10u2
+-- PHP verzió: 7.3.31-1~deb10u7
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `todo_app`
+-- Adatbázis: `todo_app`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `logins`
+-- Tábla szerkezet ehhez a táblához `logins`
 --
 
 CREATE TABLE `logins` (
@@ -38,40 +38,127 @@ CREATE TABLE `logins` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `logins`
+-- A tábla adatainak kiíratása `logins`
 --
 
 INSERT INTO `logins` (`login_id`, `login_user_id`, `login_date`, `action_date`, `logout_date`, `login_token`, `login_state`) VALUES
-(1, 1, '2025-02-19 21:15:38', '2025-02-19 21:16:08', '2025-02-19 21:16:10', '3f77ebe04ced9da128e4d2567858a414', 0),
-(2, 2, '2025-02-19 21:16:31', '2025-02-19 21:16:54', '2025-02-19 21:16:57', '90089b2116e784467a95cb2199f0601c', 0);
+(36, 9, '2025-03-23 15:50:25', '2025-03-23 16:28:48', '2025-03-23 16:28:50', 'c8cbf6071ee1e91169027e9d248ab4e8', 0),
+(37, 9, '2025-03-23 16:29:33', '2025-03-23 16:29:50', '2025-03-23 16:29:51', 'fb7c8cc348906111a3dfb8169d2d3da2', 0),
+(43, 4, '2025-03-26 19:50:30', '2025-03-26 22:48:10', '2025-03-26 22:48:13', '3611a819518779986f3dca2bacdd05e1', 0),
+(44, 4, '2025-03-26 22:48:15', '2025-03-26 23:15:36', '2025-03-26 23:15:40', '9b2ab9e51ea5b2e8b84a42921ba1e01f', 0),
+(45, 4, '2025-03-26 23:15:42', '2025-03-26 23:18:03', '2025-03-26 23:18:03', '675e294edd3138088c4c04900df9e85b', 0),
+(46, 4, '2025-03-26 23:18:04', '2025-03-26 23:35:20', '2025-03-26 23:35:22', '85ccc36f0cbd36da8e8ede83084107d1', 0),
+(47, 4, '2025-03-26 23:35:23', '2025-03-26 23:35:49', '0000-00-00 00:00:00', '65b563274a5b2107fa0c48c9f55b4f88', 1);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `todos`
+-- Tábla szerkezet ehhez a táblához `password_resets`
+--
+
+CREATE TABLE `password_resets` (
+  `email` varchar(255) NOT NULL,
+  `token` varchar(255) NOT NULL,
+  `created_at` timestamp NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet ehhez a táblához `selected_skins`
+--
+
+CREATE TABLE `selected_skins` (
+  `id` int(11) NOT NULL,
+  `userID` int(11) NOT NULL,
+  `skinID` int(11) NOT NULL,
+  `select_date` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- A tábla adatainak kiíratása `selected_skins`
+--
+
+INSERT INTO `selected_skins` (`id`, `userID`, `skinID`, `select_date`) VALUES
+(52, 4, 2, '2025-03-27 00:35:20');
+
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet ehhez a táblához `skins`
+--
+
+CREATE TABLE `skins` (
+  `id` int(11) NOT NULL,
+  `skin_name` varchar(255) NOT NULL,
+  `css_file` varchar(255) NOT NULL,
+  `price` int(11) NOT NULL,
+  `listable` tinyint(1) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- A tábla adatainak kiíratása `skins`
+--
+
+INSERT INTO `skins` (`id`, `skin_name`, `css_file`, `price`, `listable`) VALUES
+(0, 'Default', 'default', 10, 0),
+(1, 'Dark', 'dark', 5, 1),
+(2, 'Arc Dark', 'arcdark', 10, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet ehhez a táblához `todos`
 --
 
 CREATE TABLE `todos` (
   `id` int(11) NOT NULL,
   `user_id` int(11) NOT NULL,
-  `title` varchar(255) NOT NULL,
-  `completed` tinyint(1) NOT NULL DEFAULT 0
+  `title` varchar(40) NOT NULL,
+  `date` date NOT NULL,
+  `start_time` time DEFAULT NULL,
+  `completed` tinyint(1) NOT NULL DEFAULT 0,
+  `rewarded` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `todos`
+-- A tábla adatainak kiíratása `todos`
 --
 
-INSERT INTO `todos` (`id`, `user_id`, `title`, `completed`) VALUES
-(1, 1, 'Ez egy feladat user számára', 0),
-(2, 1, 'Ez egy másik feladat user számára', 0),
-(3, 2, 'Ez egy feladat admin számára', 0),
-(4, 2, 'Ez egy másik feladat admin számára', 1);
+INSERT INTO `todos` (`id`, `user_id`, `title`, `date`, `start_time`, `completed`, `rewarded`) VALUES
+(1, 2, 'dsad', '2025-03-20', '03:10:00', 1, 1),
+(2, 2, 'dsad', '2025-03-20', NULL, 0, 0),
+(59, 2, 'dsadsa', '2025-03-21', '21:30:00', 0, 0),
+(593, 9, 'Ballagás', '2025-04-30', '10:00:00', 0, 0),
+(605, 4, 'Ez egy teendő', '2025-03-26', '03:25:00', 1, 1),
+(607, 4, 'asdasd', '2025-03-26', NULL, 1, 1),
+(608, 4, 'asdasdasd', '2025-03-26', NULL, 1, 1);
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `users`
+-- Tábla szerkezet ehhez a táblához `unlocked_skins`
+--
+
+CREATE TABLE `unlocked_skins` (
+  `id` int(11) NOT NULL,
+  `userID` int(11) NOT NULL,
+  `skinID` int(11) NOT NULL,
+  `unlock_date` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- A tábla adatainak kiíratása `unlocked_skins`
+--
+
+INSERT INTO `unlocked_skins` (`id`, `userID`, `skinID`, `unlock_date`) VALUES
+(1, 4, 1, '2025-03-26 19:18:46'),
+(2, 4, 2, '2025-03-26 19:18:46');
+
+-- --------------------------------------------------------
+
+--
+-- Tábla szerkezet ehhez a táblához `users`
 --
 
 CREATE TABLE `users` (
@@ -79,75 +166,144 @@ CREATE TABLE `users` (
   `user_email` varchar(255) NOT NULL,
   `user_name` varchar(255) NOT NULL,
   `user_pw` varchar(255) NOT NULL,
-  `user_state` int(11) NOT NULL
+  `user_state` int(11) NOT NULL,
+  `coins` int(11) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `users`
+-- A tábla adatainak kiíratása `users`
 --
 
-INSERT INTO `users` (`user_ID`, `user_email`, `user_name`, `user_pw`, `user_state`) VALUES
-(1, 'user@domain.hu', 'user', '$2y$10$rx6C1ib2CDx/SqnpZW9BQ.kTPzOFM.l97nDUh1y8V7lQtu.a1cRuK', 1),
-(2, 'admin@domain.hu', 'admin', '$2y$10$kjrUKUPP/nbYWkSB7oJ27O6Y9cEaAPuDQ9h9R1ydULVFBFLWL6mWu', 1);
+INSERT INTO `users` (`user_ID`, `user_email`, `user_name`, `user_pw`, `user_state`, `coins`) VALUES
+(1, 'user@domain.hu', 'user', '$2y$10$2w.S4PT/s0WPmTPvHSf9SuPO6cfVh5qJ8Z7Zz2QPsv4k5HjriGE2W', 1, 0),
+(2, 'admin@domain.hu', 'admin', '$2y$10$kjrUKUPP/nbYWkSB7oJ27O6Y9cEaAPuDQ9h9R1ydULVFBFLWL6mWu', 1, 0),
+(3, 'teszt@valami.hu', 'teszt', '$2y$10$IVVW6XOjmq.1HS5lBbq3h.W0Cn8bqWAQuXsrRYuX3WnmGQvF0PaB6', 1, 0),
+(4, 'valami@valami.hu', 'bobby1', '$2y$10$eFW/lUJvvl8iAwjAyZnpgOgmI9NimXhNzkuQZFkmP0iUfr.w44Vce', 1, 3),
+(9, 'pucheleandras@gmail.com', 'Andris', '$2y$10$abqYCLxHSdVRG7NpjZn8RuH0pnVTKF1qaB0rUkEluIbCzsZxUL2.C', 1, 0);
 
 --
--- Indexes for dumped tables
+-- Indexek a kiírt táblákhoz
 --
 
 --
--- Indexes for table `logins`
+-- A tábla indexei `logins`
 --
 ALTER TABLE `logins`
   ADD PRIMARY KEY (`login_id`),
   ADD KEY `login_user_id` (`login_user_id`);
 
 --
--- Indexes for table `todos`
+-- A tábla indexei `password_resets`
 --
-ALTER TABLE `todos`
+ALTER TABLE `password_resets`
+  ADD PRIMARY KEY (`token`);
+
+--
+-- A tábla indexei `selected_skins`
+--
+ALTER TABLE `selected_skins`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `sskinID` (`skinID`),
+  ADD KEY `suserID` (`userID`);
+
+--
+-- A tábla indexei `skins`
+--
+ALTER TABLE `skins`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `users`
+-- A tábla indexei `todos`
+--
+ALTER TABLE `todos`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `tuser_id` (`user_id`);
+
+--
+-- A tábla indexei `unlocked_skins`
+--
+ALTER TABLE `unlocked_skins`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `uskinID` (`skinID`),
+  ADD KEY `uuserID` (`userID`);
+
+--
+-- A tábla indexei `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`user_ID`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- A kiírt táblák AUTO_INCREMENT értéke
 --
 
 --
--- AUTO_INCREMENT for table `logins`
+-- AUTO_INCREMENT a táblához `logins`
 --
 ALTER TABLE `logins`
-  MODIFY `login_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `login_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 
 --
--- AUTO_INCREMENT for table `todos`
+-- AUTO_INCREMENT a táblához `selected_skins`
+--
+ALTER TABLE `selected_skins`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+
+--
+-- AUTO_INCREMENT a táblához `skins`
+--
+ALTER TABLE `skins`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT a táblához `todos`
 --
 ALTER TABLE `todos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=609;
 
 --
--- AUTO_INCREMENT for table `users`
+-- AUTO_INCREMENT a táblához `unlocked_skins`
+--
+ALTER TABLE `unlocked_skins`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT a táblához `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `user_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 
 --
--- Constraints for dumped tables
+-- Megkötések a kiírt táblákhoz
 --
 
 --
--- Constraints for table `logins`
+-- Megkötések a táblához `logins`
 --
 ALTER TABLE `logins`
-  ADD CONSTRAINT `logins_ibfk_1` FOREIGN KEY (`login_user_id`) REFERENCES `users` (`user_ID`);
+  ADD CONSTRAINT `fk_logins_users` FOREIGN KEY (`login_user_id`) REFERENCES `users` (`user_ID`) ON DELETE CASCADE;
+
+--
+-- Megkötések a táblához `selected_skins`
+--
+ALTER TABLE `selected_skins`
+  ADD CONSTRAINT `fk_selectedskins_skins` FOREIGN KEY (`skinID`) REFERENCES `skins` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_selectedskins_users` FOREIGN KEY (`userID`) REFERENCES `users` (`user_ID`) ON DELETE CASCADE;
+
+--
+-- Megkötések a táblához `todos`
+--
+ALTER TABLE `todos`
+  ADD CONSTRAINT `fk_todos_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_ID`) ON DELETE CASCADE;
+
+--
+-- Megkötések a táblához `unlocked_skins`
+--
+ALTER TABLE `unlocked_skins`
+  ADD CONSTRAINT `fk_unlockedskins_skins` FOREIGN KEY (`skinID`) REFERENCES `skins` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `fk_unlockedskins_users` FOREIGN KEY (`userID`) REFERENCES `users` (`user_ID`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-
-ALTER TABLE `todos` ADD COLUMN date DATE NOT NULL DEFAULT '2025-03-15';

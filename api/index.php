@@ -90,6 +90,11 @@ function getAll() {
     global $entity;
     global $userID;
     global $entityName;
+    
+    // Cache kikapcsolása
+    header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+    header('Pragma: no-cache');
+    
     include './entities/'.$entity.'/getall.php';
     $result = $conn->query($sql);       
     if ($result->num_rows > 0) {
@@ -102,7 +107,6 @@ function getAll() {
         setMessage("error", "Nincs elérhető ".$entityName[0].".", false);
     }
 }
-
 // --- GET ONE --------------------------------------------------------------
 function getOneByID($entityID) {
     global $conn;

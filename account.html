@@ -7,15 +7,25 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="./assets/img/favicon.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <link rel="stylesheet" href="./assets/css/account.css">
+    <script>
+        const pageCSS = 'account.css';
+    </script>
+    <link id="skinlink" rel="stylesheet" href="./assets/css/default/account.css">
     <script src="./assets/js/account.js" defer></script>
+
+    <!-- Kiválasztott skin beállítása ----------------->
+    <script src="./assets/js/setskin.js" defer></script>
+    <!------------------------------------------------->
+
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 </head>
+
 <body class="d-flex align-items-center justify-content-center vh-100">
 
     <!-- Navigációs sáv -->
     <nav class="navbar">
         <div class="nav-container">
-            <a class="logo">Todo App</a>
+            <a href="index.html" class="logo">Todo App</a>
             <button class="hamburger" aria-label="Toggle menu">
                 <span></span>
                 <span></span>
@@ -25,21 +35,30 @@
                 <li><a href="./todo.html?date=today">Mai teendők</a></li>
                 <li><a href="./todo.html">Összes teendők</a></li>
                 <li><a href="./calendar.html">Naptár</a></li>
+                <li><a href="./diagram.html">Statisztika</a></li>
+                <li><a href="./skins.html">Kinézet</a></li>
                 <li><a href="./account.html">Fiók</a></li>
                 <li><a href="./logout.html">Kijelentkezés</a></li>
             </ul>
+            <div class="user-info" id="user-info">
+                <span class="username" id="username"></span>
+                <div class="coin-info">
+                    <span class="coin-icon">🪙</span>
+                    <span class="coin-count" id="coin-count"></span>
+                </div>
+            </div>
         </div>
     </nav>
 
     <div class="container">
         <div class="row justify-content-center align-items-center">
             <!-- Bal oldali üdvözlő szöveg -->
-            <div class="col-md-5 text-center text-white">
+            <div class="col-md-5 text-center text-white welcome-text">
                 <h1 class="login_bal_text">Fiókod</h1>
                 <p class="login_bal_text_kis">Itt láthatod az adataidat.</p>
             </div>
             <!-- Jobb oldali profil adatok -->
-            <div class="col-md-7">
+            <div class="col-md-7 profile-card">
                 <form autocomplete="off" class="p-4">
                     <h2 class="login_bejel_text_cim">Profil adatok</h2>
                     <div class="mb-3">
@@ -48,14 +67,14 @@
                     </div>
                     <div class="mb-3">
                         <p>Felhasználónév:</p>
-                        <input type="text" class="form-control" id="username" readonly>
+                        <input type="text" class="form-control" id="profile-username" readonly>
                     </div>
                     <div class="mb-3">
                         <p>Jelszó:</p>
                         <input type="password" class="form-control" id="password" readonly>
-                        <button type="button" class="btn btn-primary col-0 offset-0" id="toggle-password">Jelszó mutatása</button><br><br>
-                        <p>Jelszót szeretnél változtatni?</p>
-                        <a href="forgotpassword.html" class="btn btn-primary col-0 offset-0" id="x">Jelszó visszaállítása</a>
+                        <button type="button" class="btn btn-primary toggle-password" id="toggle-password">Jelszó mutatása</button>
+                        <p class="password-change-text">Jelszót szeretnél változtatni?</p>
+                        <a href="forgotpassword.html" class="btn btn-primary password-reset" id="password-reset">Jelszó visszaállítása</a>
                     </div>
                     <div id="profile-info" class="text-center"></div>
                 </form>
