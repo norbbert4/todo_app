@@ -109,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <p style="margin: 20px 0 10px; font-size: 14px; color: #ffffff;">Ha nem te kezdeményezted a regisztrációt, kérjük, hagyd figyelmen kívül ezt az e-mailt. Ha bármilyen kérdésed van, lépj kapcsolatba velünk.</p>
                             <p style="margin: 0 0 10px; font-size: 14px; color: #ffffff;">' . $currentDateTime . '</p>
                             <p style="margin: 0; font-size: 14px; color: #00C4FF;">Üdvözlettel,<br>Todo App csapata</p>
-                            <p style="margin: 10px 0 0; font-size: 14px; color: #00C4FF;"><a href="mailto:todoapp@norbbert4.hu" style="color: #00C4FF; text-decoration: none;">todoapp@norbbert4.hu</a></p>
+                            <p style="margin: 10px 0 0; font-size: 14px; color: #00C4FF;"><a href="mailto:todoapp@norbert4.hu" style="color: #00C4FF; text-decoration: none;">todoapp@norbert4.hu</a></p>
                         </td>
                     </tr>
                 </table>

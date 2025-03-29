@@ -1,49 +1,34 @@
 <?php
-// Helyes elérési út a vendor/autoload.php-hez
-require_once 'C:/xampp/htdocs/todo_app/vendor/autoload.php'; // Abszolút elérési út
-
-// Adatbázis kapcsolat betöltése
-require_once 'C:/xampp/htdocs/todo_app/api/modules/_db.php'; // Abszolút elérési út a helyes mappához (api/modules)
+require_once 'C:/xampp/htdocs/todo_app/vendor/autoload.php';
+require_once 'C:/xampp/htdocs/todo_app/api/modules/_db.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-// Ellenőrizzük, hogy a $conn létezik-e
-if (!isset($conn) || $conn->connect_error) {
-    die("Adatbázis kapcsolódási hiba: " . ($conn ? $conn->connect_error : "A kapcsolat nem jött létre."));
+// Naplófájl mappa és fájl elérési útja
+$logDir = 'C:/xampp/htdocs/todo_app/logs';
+$logFile = $logDir . '/email_log.txt';
+
+// Ellenőrizzük, hogy a logs mappa létezik-e, ha nem, létrehozzuk
+if (!file_exists($logDir)) {
+    mkdir($logDir, 0777, true);
 }
 
-// Időzóna beállítása
+// Naplóírás függvény
+function logMessage($message, $file) {
+    $timestamp = date('Y-m-d H:i:s');
+    file_put_contents($file, "[$timestamp] $message\n", FILE_APPEND);
+}
+
+if (!isset($conn) || $conn->connect_error) {
+    logMessage("Adatbázis kapcsolódási hiba: " . ($conn ? $conn->connect_error : "A kapcsolat nem jött létre."), $logFile);
+    die();
+}
+
 date_default_timezone_set('Europe/Budapest');
 
-// Hibakeresés: Nézzük meg az összes felhasználót az adatbázisban
-$allUsersQuery = "SELECT user_ID, user_email, user_name FROM users";
-$allUsersResult = $conn->query($allUsersQuery);
-$allUsers = $allUsersResult->fetch_all(MYSQLI_ASSOC);
-echo "Összes felhasználó az adatbázisban:\n";
-var_dump($allUsers);
-
-// Holnap dátumának meghatározása
 $tomorrow = date('Y-m-d', strtotime('+1 day'));
 
-// Hibakeresés: Nézzük meg az összes holnapi teendőt
-$allTodosQuery = "
-    SELECT t.id, t.title, t.date, t.start_time, t.user_id, u.user_email, u.user_name
-    FROM todos t
-    INNER JOIN users u ON t.user_id = u.user_ID
-    WHERE DATE(t.date) = ?
-    AND t.completed = 0
-";
-$allTodosStmt = $conn->prepare($allTodosQuery);
-$allTodosStmt->bind_param('s', $tomorrow);
-$allTodosStmt->execute();
-$allTodosResult = $allTodosStmt->get_result();
-$allTodos = $allTodosResult->fetch_all(MYSQLI_ASSOC);
-$allTodosStmt->close();
-echo "Holnapi teendők az adatbázisban:\n";
-var_dump($allTodos);
-
-// Lekérdezzük azokat a felhasználókat, akiknek holnapra van teendőjük (még nem teljesített teendők)
 $query = "
     SELECT DISTINCT u.user_ID, u.user_email, u.user_name 
     FROM users u
@@ -53,7 +38,8 @@ $query = "
 ";
 $stmt = $conn->prepare($query);
 if (!$stmt) {
-    die("Lekérdezési hiba: " . $conn->error);
+    logMessage("Lekérdezési hiba: " . $conn->error, $logFile);
+    die();
 }
 $stmt->bind_param('s', $tomorrow);
 $stmt->execute();
@@ -61,31 +47,22 @@ $result = $stmt->get_result();
 $usersWithTodos = $result->fetch_all(MYSQLI_ASSOC);
 $stmt->close();
 
-// Hibakeresés: Nézzük meg, mit tartalmaz a $usersWithTodos
-echo "Lekérdezett felhasználók (akiknek holnapra van teendőjük):\n";
-var_dump($usersWithTodos);
-
-// Ha vannak felhasználók holnapi teendőkkel, küldünk e-mailt
 if (!empty($usersWithTodos)) {
     foreach ($usersWithTodos as $user) {
         $userID = $user['user_ID'];
         $userEmail = $user['user_email'];
         $userName = $user['user_name'];
 
-        // Hibakeresés: Nézzük meg, mit tartalmaz a $userEmail
-        echo "Felhasználó: $userName (ID: $userID), E-mail: $userEmail\n";
-
-        // Ellenőrizzük, hogy az e-mail cím érvényes-e
         if (empty($userEmail) || !filter_var($userEmail, FILTER_VALIDATE_EMAIL)) {
-            echo "Érvénytelen e-mail cím a következő felhasználónál: $userName (ID: $userID). E-mail: $userEmail\n";
-            continue; // Ugrunk a következő felhasználóra
+            logMessage("Érvénytelen e-mail cím: $userName (ID: $userID) - $userEmail", $logFile);
+            continue;
         }
 
-        // Az adott felhasználó holnapi teendőinek lekérdezése
         $sql = "SELECT * FROM todos WHERE user_id = ? AND DATE(date) = ? AND completed = 0 ORDER BY date, start_time, id ASC";
         $stmt = $conn->prepare($sql);
         if (!$stmt) {
-            die("Lekérdezési hiba: " . $conn->error);
+            logMessage("Lekérdezési hiba: " . $conn->error, $logFile);
+            continue;
         }
         $stmt->bind_param('is', $userID, $tomorrow);
         $stmt->execute();
@@ -93,8 +70,10 @@ if (!empty($usersWithTodos)) {
         $todos = $result->fetch_all(MYSQLI_ASSOC);
         $stmt->close();
 
+        // Aktuális dátum és idő definiálása
+        $currentDateTime = date("Y-m-d H:i:s");
+
         // HTML e-mail tartalom összeállítása
-        $currentDateTime = date("Y-m-d H:i:s"); // Aktuális dátum és idő
         $todoListHtml = '';
         foreach ($todos as $todo) {
             $startTime = $todo['start_time'] ? $todo['start_time'] : 'Nincs megadva időpont';
@@ -144,7 +123,7 @@ if (!empty($usersWithTodos)) {
 </body>
 </html>';
 
-        // Szöveges verzió (ha a HTML nem jelenik meg)
+        // Szöveges verzió
         $emailAltBody = "Kedves $userName,\n\nHolnapra a következő teendőid vannak:\n\n";
         foreach ($todos as $todo) {
             $startTime = $todo['start_time'] ? $todo['start_time'] : 'Nincs megadva időpont';
@@ -152,39 +131,32 @@ if (!empty($usersWithTodos)) {
         }
         $emailAltBody .= "\nÜdv,\nToDo App\n\nHa bármilyen kérdésed van, lépj kapcsolatba velünk: todoapp@norbbert4.hu\n\n$currentDateTime";
 
-        // PHPMailer beállítása
         $mail = new PHPMailer(true);
         try {
-            // Szerver beállítások
             $mail->isSMTP();
             $mail->Host = 'mail.nethely.hu';
             $mail->SMTPAuth = true;
             $mail->Username = 'todoapp@norbbert4.hu';
-            $mail->Password = 'T0d0A@ppP@ssw0rd2025'; // Add meg a jelszót
-            $mail->SMTPSecure = 'ssl'; // SSL használata
-            $mail->Port = 465; // Nethely port SSL-lel
-
-            // Feladó és címzett
+            $mail->Password = 'T0d0A@ppP@ssw0rd2025';
+            $mail->SMTPSecure = 'ssl';
+            $mail->Port = 465;
+            $mail->CharSet= "UTF-8";
             $mail->setFrom('todoapp@norbbert4.hu', 'Todo App');
-            $mail->addAddress($userEmail); // A helyes változó: $userEmail
-
-            // E-mail tartalom
-            $mail->isHTML(true); // HTML formátumú e-mail
+            $mail->addAddress($userEmail);
+            $mail->isHTML(true);
             $mail->Subject = 'Holnapi teendők emlékeztető';
             $mail->Body = $emailBody;
-            $mail->AltBody = $emailAltBody; // Szöveges verzió
+            $mail->AltBody = $emailAltBody;
 
-            // E-mail küldése
             $mail->send();
-            echo "E-mail sikeresen elküldve a következőnek: $userEmail\n";
+            logMessage("E-mail sikeresen elküldve: $userEmail", $logFile);
         } catch (Exception $e) {
-            echo "Hiba történt az e-mail küldése közben a következőnek: $userEmail. Hiba: {$mail->ErrorInfo}\n";
+            logMessage("E-mail küldési hiba: $userEmail - {$mail->ErrorInfo}", $logFile);
         }
     }
 } else {
-    echo "Nincsenek holnapi teendők egyetlen felhasználónak sem.\n";
+    logMessage("Nincsenek holnapi teendők egyetlen felhasználónak sem.", $logFile);
 }
 
-// Kapcsolat bezárása
 $conn->close();
 ?>
