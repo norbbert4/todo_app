@@ -3,8 +3,8 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-include '../../api/modules/_db.php'; // Adatbázis kapcsolat
-require_once '../../vendor/autoload.php'; // PHPMailer betöltése
+require 'C:/xampp/htdocs/todo_app/vendor/autoload.php';
+include '../modules/_db.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -17,20 +17,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = filter_var($data->email, FILTER_VALIDATE_EMAIL);
     $username = htmlspecialchars($data->username);
     $password = $data->password;
+    $enable_2fa = isset($data->enable_2fa) ? (bool)$data->enable_2fa : false;
 
     if (!$email) {
-        $response = array(
-            'success' => false,
-            'error' => array(
-                'message' => 'Érvénytelen e-mail cím'
-            )
-        );
+        $response = array('success' => false, 'error' => array('message' => 'Érvénytelen e-mail cím'));
         header('Content-Type: application/json; charset=utf-8');
         echo json_encode($response);
         exit;
     }
 
-    // Ellenőrizzük, hogy a felhasználónév vagy e-mail már létezik-e
     $sql = "SELECT * FROM users WHERE user_name = ? OR user_email = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('ss', $username, $email);
@@ -38,48 +33,38 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
-        $response = array(
-            'success' => false,
-            'error' => array(
-                'message' => 'A felhasználónév vagy e-mail már foglalt'
-            )
-        );
+        $response = array('success' => false, 'error' => array('message' => 'A felhasználónév vagy e-mail már foglalt'));
     } else {
-        // Random 4-5 karakteres kód generálása
         $verificationCode = substr(str_shuffle("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, rand(4, 5));
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+        $two_factor_enabled = $enable_2fa ? 1 : 0;
 
-        // Adatok mentése a session-be, nem az adatbázisba
         $_SESSION['pending_user'] = [
             'email' => $email,
             'username' => $username,
-            'password' => $hashedPassword
+            'password' => $hashedPassword,
+            'two_factor_enabled' => $two_factor_enabled
         ];
         $_SESSION['verification_code'] = $verificationCode;
 
-        // E-mail küldése a kóddal
         $mail = new PHPMailer(true);
         try {
-            // Szerver beállítások
             $mail->isSMTP();
             $mail->Host = 'mail.nethely.hu';
             $mail->SMTPAuth = true;
             $mail->Username = 'todoapp@norbbert4.hu';
-            $mail->Password = 'T0d0A@ppP@ssw0rd2025'; // Add meg a helyes jelszót!
+            $mail->Password = 'T0d0A@ppP@ssw0rd2025';
             $mail->SMTPSecure = 'ssl';
             $mail->Port = 465;
-
-            // Feladó és címzett
+            $mail->CharSet = "UTF-8";
             $mail->setFrom('todoapp@norbbert4.hu', 'Todo App');
             $mail->addAddress($email);
 
-            // E-mail tartalom
             $mail->isHTML(true);
             $mail->Subject = 'Kedves Felhasználó! Regisztráció ellenőrző kód';
-            $currentDateTime = date('Y-m-d H:i:s'); // Aktuális dátum és idő
+            $currentDateTime = date('Y-m-d H:i:s');
 
-            // Az e-mail HTML tartalma a megadott design alapján
-            $mail->Body = '<!DOCTYPE html>
+            $mailBody = '<!DOCTYPE html>
 <html lang="hu">
 <head>
     <meta charset="UTF-8">
@@ -91,19 +76,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <tr>
             <td align="center" style="padding: 40px 0;">
                 <table role="presentation" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse; background-color: #1C2526; border: 2px solid #00C4FF; border-radius: 10px; color: #ffffff;">
-                    <!-- Üzenet -->
                     <tr>
                         <td style="padding: 30px; text-align: center;">
                             <h2 style="margin: 0 0 20px; font-size: 24px; color: #00C4FF;">Kedves ' . htmlspecialchars($username) . '!</h2>
                             <p style="margin: 0 0 10px; font-size: 16px; color: #FF6666;">Ez egy automatikusan elküldött üzenet, kérjük ne válaszoljon rá!</p>
                             <p style="margin: 0 0 20px; font-size: 16px; color: #ffffff;">Kaptunk egy kérést a regisztrációd véglegesítésére a Todo App fiókodhoz. Az alábbi kódot használd a regisztrációd befejezéséhez:</p>
-                            <!-- Kód -->
                             <div style="display: inline-block; padding: 10px 20px; background-color: #333; color: #ffffff; border-radius: 5px; font-size: 16px; margin: 20px 0;">
                                 ' . htmlspecialchars($verificationCode) . '
                             </div>
                         </td>
                     </tr>
-                    <!-- Lábjegyzet -->
                     <tr>
                         <td style="padding: 0 30px 30px; text-align: center;">
                             <p style="margin: 20px 0 10px; font-size: 14px; color: #ffffff;">Ha nem te kezdeményezted a regisztrációt, kérjük, hagyd figyelmen kívül ezt az e-mailt. Ha bármilyen kérdésed van, lépj kapcsolatba velünk.</p>
@@ -119,23 +101,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </body>
 </html>';
 
-            // Szöveges verzió (AltBody)
+            $mail->Body = $mailBody;
             $mail->AltBody = "Kedves $username!\n\nEz egy automatikusan elküldött üzenet, kérjük ne válaszoljon rá!\n\nKaptunk egy kérést a regisztrációd véglegesítésére a Todo App fiókodhoz. Az alábbi kódot használd a regisztrációd befejezéséhez:\n\n$verificationCode\n\nHa nem te kezdeményezted a regisztrációt, kérjük, hagyd figyelmen kívül ezt az e-mailt. Ha bármilyen kérdésed van, lépj kapcsolatba velünk: todoapp@norbert4.hu\n\n$currentDateTime\n\nÜdvözlettel,\nTodo App csapata";
 
             $mail->send();
 
-            $response = array(
-                'success' => true,
-                'message' => 'Ellenőrző kód elküldve az e-mail címedre',
-                'step' => 'verify_code'
-            );
+            $response = array('success' => true, 'message' => 'Ellenőrző kód elküldve az e-mail címedre', 'step' => 'verify_code');
         } catch (Exception $e) {
-            $response = array(
-                'success' => false,
-                'error' => array(
-                    'message' => 'Hiba az e-mail küldése közben: ' . $mail->ErrorInfo
-                )
-            );
+            $response = array('success' => false, 'error' => array('message' => 'Hiba az e-mail küldése közben: ' . $mail->ErrorInfo));
         }
     }
 

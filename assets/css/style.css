@@ -207,6 +207,16 @@ form {
     border: 2px solid #000000; /* Fekete keret */
     transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 0.4s ease; /* Spring animáció */
 }
+.form-check-label {
+    color: white; /* Ensure the text is visible against the dark background */
+    font-size: 1rem; /* Adjust font size for readability */
+    margin-left: 0.5rem; /* Add some spacing between the checkbox and the label */
+}
+.form-check {
+    display: flex;
+    align-items: center; /* Vertically center the checkbox and label */
+    margin-bottom: 1.5rem; /* Match the spacing of other form elements */
+}
 
 /* Beviteli mezők */
 .form-control {

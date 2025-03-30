@@ -3,6 +3,7 @@ const verifyApiUrl = 'api/authentication/verify_code.php';
 const emailInput = document.getElementById('email');
 const usernameInput = document.getElementById('username');
 const passwordInput = document.getElementById('password');
+const enable2FAInput = document.getElementById('enable_2fa');
 const regButton = document.getElementById('reg-button');
 const regInfo = document.getElementById('reg-info');
 const regForm = document.getElementById('reg-form');
@@ -14,6 +15,7 @@ const registration = async () => {
     const email = emailInput.value;
     const username = usernameInput.value;
     const password = passwordInput.value;
+    const enable_2fa = enable2FAInput.checked; // 2FA választás
 
     // Ellenőrizzük, hogy az e-mail cím tartalmaz-e "@" jelet
     if (!email.includes('@')) {
@@ -27,7 +29,7 @@ const registration = async () => {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, username, password }),
+        body: JSON.stringify({ email, username, password, enable_2fa }),
     })
     .then(response => {
         if (!response.ok) {

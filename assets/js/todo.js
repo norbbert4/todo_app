@@ -20,39 +20,46 @@ const coinCountSpan = document.querySelector('#coin-count');
 if (!coinCountSpan) {
     console.error('A coinCountSpan elem nem található a DOM-ban!');
 }
-let userData = { user_ID: 0, token: '-', username: 'Ismeretlen felhasználó', coins: 0 };
-if (localStorage.getItem('userData') !== null) userData = JSON.parse(localStorage.getItem('userData'));
+
+let userData = { user_ID: 0, token: '', username: 'Ismeretlen felhasználó', coins: 0 };
+if (localStorage.getItem('userData') !== null) {
+    userData = JSON.parse(localStorage.getItem('userData'));
+}
 
 const check = async () => {
-    if (userData.token.length > 0 && userData.user_ID > 0) {
-        try {
-            const response = await fetch(`${apiUrl}authentication/login.php?token=${userData.token}&user_id=${userData.user_ID}`);
-            const data = await response.json();
-            if (data.success === true) {
-                aside.innerHTML = '';
-                aside.remove();
-                if (userInfo) {
-                    userData.username = data.username || 'Ismeretlen felhasználó';
-                    userData.coins = data.coins || 0;
-                    usernameSpan.textContent = userData.username;
-                    coinCountSpan.textContent = userData.coins;
-                    localStorage.setItem('userData', JSON.stringify(userData));
-                    await renderTable();
-                } else {
-                    console.error('A userInfo elem nem található a DOM-ban!');
-                }
+    console.log('Ellenőrzés indul: ', userData);
+    if (!userData || !userData.token || userData.token.length === 0 || !userData.user_ID || userData.user_ID <= 0) {
+        console.warn('Nincs érvényes token vagy user_ID, átirányítás a bejelentkező oldalra.');
+        localStorage.removeItem('userData');
+        window.location.href = 'index.html';
+        return;
+    }
+
+    try {
+        const response = await fetch(`${apiUrl}authentication/login.php?token=${userData.token}&user_id=${userData.user_ID}`);
+        const data = await response.json();
+        console.log('login.php válasza:', data);
+        if (data.success === true) {
+            aside.innerHTML = '';
+            aside.remove();
+            if (userInfo) {
+                userData.username = data.username || 'Ismeretlen felhasználó';
+                userData.coins = data.coins || 0;
+                usernameSpan.textContent = userData.username;
+                coinCountSpan.textContent = userData.coins;
+                localStorage.setItem('userData', JSON.stringify(userData));
+                await renderTable();
             } else {
-                console.error('Autentikációs hiba:', data.message);
-                localStorage.removeItem('userData');
-                window.location.href = 'index.html';
+                console.error('A userInfo elem nem található a DOM-ban!');
             }
-        } catch (error) {
-            console.error('Hiba az autentikáció során:', error);
+        } else {
+            console.error('Autentikációs hiba:', data.message);
             localStorage.removeItem('userData');
             window.location.href = 'index.html';
         }
-    } else {
-        console.warn('Nincs érvényes token vagy user_ID, átirányítás a bejelentkező oldalra.');
+    } catch (error) {
+        console.error('Hiba az autentikáció során:', error);
+        localStorage.removeItem('userData');
         window.location.href = 'index.html';
     }
 };
@@ -114,49 +121,39 @@ saveButton.style.display = 'none';
 function showSaveMessage(message, isSuccess) {
     const saveMessageDiv = document.querySelector('#save-message');
     
-    // Előző üzenet eltávolítása, ha van
     saveMessageDiv.classList.remove('bg-green', 'bg-red');
     saveMessageDiv.style.display = 'none';
     
-    // Üzenet beállítása
     saveMessageDiv.textContent = message;
     saveMessageDiv.classList.add(isSuccess ? 'bg-green' : 'bg-red');
     
-    // Animáció újraindítása
-    saveMessageDiv.style.animation = 'none'; // Animáció resetelése
+    saveMessageDiv.style.animation = 'none';
     setTimeout(() => {
         saveMessageDiv.style.display = 'block';
-        saveMessageDiv.style.animation = 'fadeInOut 3s forwards'; // Animáció újraindítása
-    }, 10); // Kis késleltetés az animáció újraindításához
+        saveMessageDiv.style.animation = 'fadeInOut 3s forwards';
+    }, 10);
 }
 
 // Segédfüggvény az üzenet megjelenítéséhez
 function showMessage(button, message) {
-    // Az üzenetet a "Teendő" oszlop (második oszlop) fölé helyezzük
-    const row = button.closest('tr'); // A gombot tartalmazó sor
-    const todoCell = row.querySelector('td:nth-child(2)'); // A második oszlop (Teendő oszlop)
+    const row = button.closest('tr');
+    const todoCell = row.querySelector('td:nth-child(2)');
 
-    // Ellenőrizzük, hogy van-e már üzenet, ha igen, eltávolítjuk
     const existingMessage = todoCell.querySelector('.error-message');
     if (existingMessage) {
         existingMessage.remove();
     }
 
-    // Új üzenet elem létrehozása
     const messageElement = document.createElement('span');
     messageElement.classList.add('error-message');
     messageElement.textContent = message;
-
-    // Üzenet hozzáadása a "Teendő" oszlophoz
     todoCell.appendChild(messageElement);
 
-    // 3 másodperc után eltűnik az üzenet
     setTimeout(() => {
         messageElement.remove();
     }, 3000);
 }
 
-// Segédfüggvények
 const createTableRow = (todo, index) => {
     const startTimeDisplay = (!todo.start_time || todo.start_time === '00:00:00') ? '-' : todo.start_time;
     return `<tr data-id="${todo.id}">
@@ -211,15 +208,13 @@ async function deleteTodo(dID) {
     }
 }
 
-// Fő függvények
 async function saveTodo() {
     const title = todoInput.value.trim();
     const start_hour = startHourSelect.value;
     const start_minute = startMinuteSelect.value;
-    const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+    const today = new Date().toISOString().split('T')[0];
     const date = dateObject.date === 'today' ? today : (dateObject.date || today);
 
-    // Ellenőrizzük, hogy üres-e az input
     if (title.length === 0) {
         showSaveMessage('Sikertelen mentés!', false);
         return;
@@ -234,8 +229,6 @@ async function saveTodo() {
         todoData.start_time = `${start_hour}:${start_minute}`;
     }
 
-    console.log("Mentés adatai:", todoData);
-
     try {
         const res = await fetch(`${apiUrl}?token=${userData.token}&userid=${userData.user_ID}&entity=todos`, {
             method: 'POST',
@@ -248,31 +241,25 @@ async function saveTodo() {
             startHourSelect.value = '';
             startMinuteSelect.value = '';
             await renderTable();
-            // Sikeres mentés üzenet
             showSaveMessage('Sikeresen elmentve!', true);
         } else {
             console.error('Mentés sikertelen:', await res.json());
-            // Sikertelen mentés üzenet (API hiba esetén)
             showSaveMessage('Sikertelen mentés!', false);
         }
     } catch (error) {
         console.error('Hiba a mentés során:', error);
-        // Sikertelen mentés üzenet (hálózati hiba esetén)
         showSaveMessage('Sikertelen mentés!', false);
     }
 }
 
 async function renderTable() {
     const get_apiUrl = `${apiUrl}?token=${userData.token}&userid=${userData.user_ID}&entity=todos&nocache=${Date.now()}`;
-    console.log('GET kérés URL:', get_apiUrl); // Naplózás a hibakereséshez
     try {
         const res = await fetch(get_apiUrl, { cache: 'no-store' });
         const resjson = await res.json();
-        console.log('GET válasz:', resjson); // Naplózás a hibakereséshez
         let todos = [];
         if (resjson.type === 'result') {
             todos = resjson.body;
-            console.log('Frissített teendők:', todos);
         } else {
             console.error('Hiba a teendők lekérdezésekor:', resjson.message);
             if (resjson.message === 'Sikertelen autentikáció.') {
@@ -283,6 +270,7 @@ async function renderTable() {
                 todayTodoCount.textContent = 'Teendőid száma: 0';
             }
             todoTable.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #c0c0c0;">Nincs teendő</td></tr>';
+           
         }
 
         let todosToRender = [];
@@ -323,8 +311,7 @@ async function renderTable() {
                 tableContent += createTableRow(todo, index);
             });
         }
-        console.log('Új táblázat tartalom:', tableContent); // Naplózás a hibakereséshez
-        todoTable.innerHTML = tableContent; // Biztosítjuk, hogy a táblázat frissüljön
+        todoTable.innerHTML = tableContent;
     } catch (error) {
         console.error('Hiba az API hívás során:', error);
         localStorage.removeItem('userData');
@@ -334,67 +321,50 @@ async function renderTable() {
 
 async function todoState(id, completed, button) {
     try {
-        console.log(`PATCH kérés indítása: id=${id}, completed=${completed}`);
-
-        // Ha kipipálni szeretnénk (completed = 1), ellenőrizzük az időt
         if (completed === 1) {
-            // Lekérjük a teendő adatait az idő ellenőrzéséhez
             const resTodo = await fetch(`${apiUrl}?token=${userData.token}&userid=${userData.user_ID}&entity=todos&entityid=${id}`);
             const todoData = await resTodo.json();
 
             if (todoData.type === 'result' && todoData.body) {
-                const todo = todoData.body[0]; // Az API egy tömböt ad vissza
+                const todo = todoData.body[0];
                 const { date, start_time, completed: currentCompleted } = todo;
 
-                // Ha már kipipálták, nem kell időellenőrzés, mert az API nem ad újabb coint
                 if (currentCompleted === 1 || currentCompleted === "1") {
                     console.log(`A teendő (${id}) már ki van pipálva.`);
                 } else {
-                    // Aktuális idő
                     const currentDateTime = new Date();
-                    const today = new Date().toISOString().split('T')[0]; // Pl. "2025-03-21"
+                    const today = new Date().toISOString().split('T')[0];
 
-                    // Időellenőrzés a dateObject.date alapján
                     if (dateObject.date === 'today') {
-                        // Csak a start_time-ot nézzük az aktuális napra
                         if (start_time && start_time !== '00:00:00') {
-                            const currentTime = currentDateTime.toTimeString().split(' ')[0]; // Pl. "17:50:00"
+                            const currentTime = currentDateTime.toTimeString().split(' ')[0];
                             if (currentTime < start_time) {
-                                console.error(`A teendő (${id}) még nem pipálható ki, mert a mai kezdési idő (${start_time}) még nem érkezett el! Aktuális idő: ${currentTime}`);
                                 showMessage(button, `Nem pipálható ki ${start_time}-ig!`);
                                 return;
                             }
                         }
                     } else if (dateObject.date) {
-                        // Konkrét nap (pl. "2025-03-22") esetén a date és start_time együtt
                         const todoDateTime = new Date(`${date}T${start_time || '00:00:00'}`);
                         if (currentDateTime < todoDateTime) {
-                            console.error(`A teendő (${id}) még nem pipálható ki, mert a kezdési idő (${date} ${start_time || '00:00'}) még nem érkezett el! Aktuális idő: ${currentDateTime}`);
-                            // Rövidebb üzenet: csak a dátum és idő, de a dátumot formázzuk
-                            const formattedDate = date; // Pl. "2025-03-22"
+                            const formattedDate = date;
                             showMessage(button, `Nem pipálható ki ${formattedDate} ${start_time || '00:00'}-ig!`);
                             return;
                         }
                     } else {
-                        // Ha nincs konkrét dátum (összes teendő), akkor a date és start_time alapján ellenőrizünk
                         const todoDateTime = new Date(`${date}T${start_time || '00:00:00'}`);
                         if (currentDateTime < todoDateTime) {
-                            console.error(`A teendő (${id}) még nem pipálható ki, mert a kezdési idő (${date} ${start_time || '00:00'}) még nem érkezett el! Aktuális idő: ${currentDateTime}`);
-                            // Rövidebb üzenet: csak a dátum és idő
-                            const formattedDate = date; // Pl. "2025-03-22"
+                            const formattedDate = date;
                             showMessage(button, `Nem pipálható ki ${formattedDate} ${start_time || '00:00'}-ig!`);
                             return;
                         }
                     }
                 }
             } else {
-                console.error('Hiba a teendő adatainak lekérdezésekor:', todoData);
                 showMessage(button, 'Hiba történt, próbáld újra később!');
                 return;
             }
         }
 
-        // PATCH kérés az állapot frissítésére
         const res = await fetch(`${apiUrl}?token=${userData.token}&userid=${userData.user_ID}&entity=todos&entityid=${id}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
@@ -402,32 +372,19 @@ async function todoState(id, completed, button) {
         });
 
         const data = await res.json();
-        console.log('PATCH válasz:', data);
         if (data.success === true) {
-            // Coin frissítése az API-ból
             if (data.coins !== undefined) {
                 userData.coins = data.coins;
-                console.log(`Coinok frissítése az API-ból: ${userData.coins}`);
-                if (coinCountSpan) {
-                    coinCountSpan.textContent = userData.coins;
-                } else {
-                    console.error('A coinCountSpan elem nem található a DOM-ban a todoState-ben!');
-                }
+                coinCountSpan.textContent = userData.coins;
                 localStorage.setItem('userData', JSON.stringify(userData));
-            } else {
-                console.warn('Az API nem küldött vissza coins értéket.');
             }
             await renderTable();
         } else {
-            console.error('Hiba a teendő állapotának frissítésekor:', data.message);
             showMessage(button, 'Hiba történt: ' + data.message);
         }
     } catch (error) {
-        console.error('Hiba a PATCH kérés során:', error);
         showMessage(button, 'Hiba történt, próbáld újra később!');
     }
 }
-
-renderTable();
 
 saveButton.addEventListener('click', saveTodo);
