@@ -1,0 +1,696 @@
+/* Alapvető reset és testreszabás */
+html, body {
+    touch-action: manipulation;
+    -webkit-text-size-adjust: 100%;
+    -webkit-overflow-scrolling: touch;
+}
+
+* {
+    border: none;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+body {
+    font-family: 'Roboto', Arial, sans-serif;
+    width: 100vw;
+    height: 100vh;
+    background: url('https://www.transparenttextures.com/patterns/wood-pattern.png') repeat, #d2b48c; /* Fa textúra */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    margin: 0;
+}
+
+/* Navbar */
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: #f5f5dc; /* Bézs, papírhatású háttér */
+    color: #4a3728; /* Sötétbarna szöveg */
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    z-index: 100;
+    border-radius: 0 0 15px 15px;
+    transition: transform 0.3s ease-out;
+}
+
+.navbar:hover {
+    transform: translateY(-2px);
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    align-items: center;
+}
+
+.logo {
+    font-family: 'Inter', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #4a3728; /* Sötétbarna */
+    text-decoration: none;
+    padding: 5px;
+    transition: color 0.3s ease, transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.logo:hover {
+    color: #c19b76; /* Világosabb barna hoverkor */
+    transform: scale(1.1) rotate(2deg);
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 35px;
+    margin: 0;
+    padding: 0;
+    margin-top: 10px;
+    transition: all 0.3s ease;
+}
+
+.nav-links li {
+    display: inline;
+}
+
+.nav-links a {
+    color: #4a3728; /* Sötétbarna */
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-weight: 500;
+    transition: color 0.3s ease, transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+    position: relative;
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -5px;
+    left: 0;
+    background-color: #c19b76; /* Világosabb barna */
+    transition: width 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: #c19b76;
+    transform: translateY(-3px) scale(1.05);
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+/* Hamburger gomb */
+.hamburger {
+    display: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 10px;
+    z-index: 101;
+}
+
+.hamburger span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background: #4a3728; /* Sötétbarna */
+    margin: 5px 0;
+    transition: all 0.3s ease;
+}
+
+/* Felhasználói információ */
+.user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #4a3728; /* Sötétbarna */
+    font-size: 1.2rem;
+    font-weight: 500;
+    padding: 5px 15px;
+    border-radius: 10px;
+    background: #d2b48c; /* Bézs */
+    transition: all 0.3s ease;
+}
+
+.user-info:hover {
+    background: #c19b76; /* Világosabb barna */
+    transform: scale(1.05);
+}
+
+.coin-info {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 5px;
+    font-size: 1rem;
+}
+
+.coin-icon {
+    font-size: 1.2rem;
+}
+
+#coin-count {
+    font-weight: 600;
+    color: #8b6f47; /* Világosabb barna */
+}
+
+/* Naptár konténer */
+.calendar-container {
+    width: 100%;
+    max-width: 1200px;
+    background: url('https://www.transparenttextures.com/patterns/lined-paper.png') repeat; /* Vonalas papír háttér */
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+    color: #4a3728; /* Sötétbarna szöveg */
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Naptár fejléc */
+.calendar-header {
+    background: #d2b48c; /* Bézs */
+    color: #4a3728;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    font-size: 24px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.calendar-header select {
+    background-color: #f5f5dc; /* Bézs */
+    color: #4a3728;
+    border: 1px solid #d2b48c;
+    border-radius: 6px;
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    max-width: 130px;
+    outline: none;
+}
+
+.calendar-header select:focus {
+    border-color: #c19b76; /* Világosabb barna */
+    box-shadow: 0 0 8px rgba(193, 155, 118, 0.4);
+}
+
+.calendar-header select:hover {
+    border-color: #c19b76;
+}
+
+.calendar-header button {
+    background: none;
+    color: #4a3728;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 10px 15px;
+    border-radius: 6px;
+}
+
+.calendar-header button:hover {
+    background-color: #c19b76;
+    transform: scale(1.05);
+}
+
+/* Naptár napok */
+.calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    background: #f5f5dc; /* Bézs */
+    color: #4a3728;
+    text-align: center;
+    font-weight: 500;
+    font-size: 16px;
+    width: 100%;
+    border-bottom: 1px solid #d2b48c;
+}
+
+.day-name {
+    padding: 10px;
+    border-right: 1px solid #d2b48c;
+}
+
+.day-name:last-child {
+    border-right: none;
+}
+
+.day-name:hover {
+    color: #c19b76;
+}
+
+/* Naptár grid */
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    flex-grow: 1;
+    background: url('https://www.transparenttextures.com/patterns/lined-paper.png') repeat; /* Vonalas papír */
+    width: 100%;
+    min-height: 0;
+    overflow: auto;
+}
+
+.day {
+    background: #f5f5dc; /* Bézs */
+    text-align: center;
+    border: 1px solid #d2b48c;
+    cursor: pointer;
+    min-height: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: #4a3728;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+    padding-top: 20px;
+}
+
+.day-number {
+    font-size: 18px;
+    color: #4a3728;
+    position: relative;
+    z-index: 1;
+}
+
+.day.empty {
+    background-color: transparent;
+    border-color: transparent;
+    box-shadow: none;
+}
+
+.day:hover {
+    background-color: #c19b76;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.today {
+    background: #d2b48c;
+    color: #4a3728;
+    font-weight: 600;
+    border-color: #c19b76;
+    box-shadow: 0 4px 12px rgba(193, 155, 118, 0.4);
+}
+
+.day .todo-indicator {
+    margin-top: 5px;
+    font-size: 14px;
+    color: #8b6f47; /* Világosabb barna */
+    font-weight: 500;
+    display: block;
+    line-height: 1;
+}
+
+.day .todo-indicator::before {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background-color: #8b6f47;
+    border-radius: 50%;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
+.todos-for-day {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: #6a11cb;
+    color: white;
+    width: 1.3rem;
+    height: 1.3rem;
+    line-height: 1.2rem;
+    text-align: center;
+    border-radius: 0.6rem;
+    font-size: 12px;
+    z-index: 0;
+}
+
+.todos-for-day_hidden {
+    display: none;
+}
+
+/* Feladat űrlap */
+.task-form {
+    position: fixed;
+    background: rgba(39, 39, 39, 0.95);
+    padding: 20px; /* Csökkentett padding a desktop nézetben */
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    top: 0;
+    left: 0;
+    width: 300px; /* Csökkentett szélesség a desktop nézetben */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 1000;
+    display: none;
+    color: #d4d4d4;
+    opacity: 0;
+    transition: opacity 0.3s ease, top 0.3s ease, left 0.3s ease; /* Animáció a pozíció változásához */
+}
+
+/* Láthatóság esetén opacity animáció */
+.task-form[style*="display: block"] {
+    opacity: 1;
+}
+
+/* Cím stílusa */
+.task-form h3 {
+    font-size: 18px; /* Kisebb cím betűméret */
+    margin-bottom: 15px;
+    font-weight: 500;
+    color: #ffffff;
+}
+
+/* Űrlap elemek (input, select) */
+.task-form input[type="text"],
+.task-form select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    color: #d4d4d4;
+    font-size: 14px; /* Kisebb betűméret */
+    box-sizing: border-box;
+}
+
+.task-form input[type="text"]::placeholder {
+    color: #a0a0a0;
+}
+
+.task-form input:focus {
+    border-color: #1a73e8;
+    box-shadow: 0 0 8px rgba(26, 115, 232, 0.4);
+}
+
+/* Időválasztó konténer */
+.time-picker {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    margin: 15px 0;
+}
+
+.time-picker select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background: #f5f5dc;
+    border: 1px solid #d2b48c;
+    border-radius: 12px;
+    padding: 8px 25px 8px 10px;
+    font-size: 14px;
+    color: #4a3728;
+    width: 90px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    outline: none;
+}
+
+.time-picker select:focus {
+    border-color: #c19b76;
+    box-shadow: 0 0 12px rgba(193, 155, 118, 0.5);
+    transform: translateY(-2px);
+}
+
+.time-picker select:hover {
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
+    color: #4a3728;
+    transform: translateY(-2px);
+}
+
+.time-picker select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%234a3728' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 12px;
+}
+
+.time-picker select:focus,
+.time-picker select:hover {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23c19b76' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+}
+
+.time-picker span {
+    color: #4a3728;
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+/* Gombok stílusa */
+.task-form button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    margin: 5px;
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+/* Mentés gomb */
+.task-form button#save-button {
+    background: #d2b48c;
+    color: #4a3728;
+}
+
+/* Mégse gomb */
+.task-form button[onclick="closeForm()"] {
+    background: #ff7878;
+    color: #4a3728;
+}
+
+/* Teendők erre a napra gomb */
+.task-form button#go-to_todos {
+    background: #c19b76;
+    color: #4a3728;
+}
+
+.task-form button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Reszponzív kezelés */
+@media (max-width: 768px) {
+    .hamburger {
+        display: block;
+    }
+
+    .nav-links {
+        position: fixed;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        background: #f5f5dc;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 40px;
+        height: calc(100vh - 60px);
+        transform: translateX(-100%);
+        z-index: 99;
+    }
+
+    .nav-links.active {
+        transform: translateX(0);
+    }
+
+    .nav-links li {
+        display: block;
+    }
+
+    .nav-links a {
+        font-size: 1.5rem;
+    }
+
+    .hamburger.active span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+    }
+    .hamburger.active span:nth-child(2) {
+        opacity: 0;
+    }
+    .hamburger.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(7px, -7px);
+    }
+
+    .user-info {
+        position: absolute;
+        top: 7px;
+        right: 80px;
+        font-size: 1rem;
+        padding: 5px 10px;
+    }
+
+    .coin-info {
+        font-size: 0.9rem;
+    }
+
+    .calendar-container {
+        width: 100%;
+        max-width: 100%;
+        border-radius: 0;
+        margin: 0;
+        padding: 0.5rem;
+    }
+
+    .calendar-header {
+        flex-wrap: wrap;
+        gap: 5px;
+    }
+
+    .calendar-header select {
+        max-width: 80px;
+        font-size: 12px;
+        padding: 6px 8px;
+    }
+
+    .calendar-header button {
+        padding: 6px 8px;
+        font-size: 14px;
+    }
+
+    .calendar-days {
+        font-size: 12px;
+    }
+
+    .day-name {
+        padding: 6px;
+    }
+
+    .day {
+        min-height: 50px;
+        padding-top: 12px;
+    }
+
+    .day-number {
+        font-size: 14px;
+    }
+
+    .todos-for-day {
+        width: 0.9rem;
+        height: 0.9rem;
+        line-height: 0.9rem;
+        font-size: 9px;
+        top: 2px;
+        right: 2px;
+    }
+
+    .task-form {
+        width: 60%;
+        max-width: 180px;
+        padding: 15px;
+        top: 0;
+        left: 0;
+    }
+
+    .task-form h3 {
+        font-size: 16px;
+    }
+
+    .task-form input[type="text"],
+    .task-form select {
+        font-size: 12px;
+    }
+
+    .task-form button {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+
+    .time-picker {
+        gap: 5px;
+    }
+
+    .time-picker select {
+        padding: 8px 25px 8px 10px;
+        font-size: 1rem;
+        width: 90px;
+    }
+
+    .time-picker span {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 768px) {
+    body {
+        display: block;
+        overflow: auto;
+    }
+
+    .navbar {
+        padding: 10px 15px;
+        height: 60px;
+        box-sizing: border-box;
+    }
+
+    .calendar-container {
+        width: 100%;
+        max-width: 100%;
+        border-radius: 0;
+        margin: 0;
+        padding: 0.5rem;
+        position: fixed;
+        top: 60px;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    .calendar-grid {
+        flex-grow: 1;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .day {
+        min-height: 60px;
+        font-size: 16px;
+        padding-top: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .navbar {
+        padding: 8px 10px;
+        height: 80px;
+    }
+
+    .calendar-container {
+        top: 80px;
+        gap: 1rem;
+    }
+
+    .day {
+        min-height: 70px;
+        padding-top: 10px;
+    }
+}

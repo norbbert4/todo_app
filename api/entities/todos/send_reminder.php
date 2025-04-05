@@ -1,12 +1,15 @@
 <?php
-require_once 'C:/xampp/htdocs/todo_app/vendor/autoload.php';
-require_once 'C:/xampp/htdocs/todo_app/api/modules/_db.php';
+//require_once 'C:/xampp/htdocs/todo_app/vendor/autoload.php';
+//require_once 'C:/xampp/htdocs/todo_app/api/modules/_db.php';
+require_once '../../../vendor/autoload.php';
+require_once '../../modules/_db.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 // Naplófájl mappa és fájl elérési útja
-$logDir = 'C:/xampp/htdocs/todo_app/logs';
+//$logDir = 'C:/xampp/htdocs/todo_app/logs';
+$logDir = '../../../logs';
 $logFile = $logDir . '/email_log.txt';
 
 // Ellenőrizzük, hogy a logs mappa létezik-e, ha nem, létrehozzuk

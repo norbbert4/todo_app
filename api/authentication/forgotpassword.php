@@ -2,7 +2,8 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require 'C:/xampp/htdocs/todo_app/vendor/autoload.php';
+//require 'C:/xampp/htdocs/todo_app/vendor/autoload.php';
+require '../../vendor/autoload.php';
 include '../modules/_db.php';
 
 header('Content-Type: application/json; charset=utf-8');

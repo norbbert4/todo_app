@@ -54,43 +54,37 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function getSkins() {
     const get_apiUrl = `${apiUrl}?token=${userData.token}&userid=${userData.user_ID}&entity=skins`;
-    console.log('GET kérés URL:', get_apiUrl); // Naplózás a hibakereséshez
+    console.log('GET kérés URL:', get_apiUrl);
     try {
         const res = await fetch(get_apiUrl);
         const resjson = await res.json();
-        //console.log('GET válasz:', resjson); // Naplózás a hibakereséshez
         let skins = [];
         if (resjson.type === 'result') {
             skins = resjson.body;
         } else {
             console.error('Hiba a skinek lekérdezésekor:', resjson.message);
-            console.log(resjson.message);
-            /*if (resjson.message === 'Sikertelen autentikáció.') {
-                localStorage.removeItem('userData');
-                window.location.href = 'index.html';
-            }*/
         }
 
-        // default skin box
+        // Default skin box
         let skinsContent = `
-                <div onclick="changeSkin('default', '0')" title="alapértelmezett" class="unlocked">
-                    <h3>Default</h3>
-                    <h5>default</h5>
-                </div>`;
+            <div onclick="changeSkin('default', '0')" title="alapértelmezett" class="skin-card unlocked">
+                <h3>Default</h3>
+                <h5>default</h5>
+            </div>`;
 
         skins.forEach((skin, index) => {
-                skinsContent += `
-                <div ${ skin.unlock_date ? 'onclick="changeSkin(\''+skin.css_file+'\', '+skin.skinID+')" title="feloldva" class="unlocked"' : 'class="locked" title="nincs feloldva"' }>
+            console.log(skin);
+            skinsContent += `
+                <div id="skin_${skin.id}" ${ skin.unlock_date ? 'onclick="changeSkin(\''+skin.css_file+'\', '+skin.id+')" title="feloldva" class="skin-card unlocked"' : 'onclick="unlockSkin(\''+skin.css_file+'\', '+skin.id+', '+skin.price+')" class="skin-card locked" title="nincs feloldva"' }>
                     <h3>${skin.skin_name}</h3>
                     <h5>${skin.css_file}</h5>
-                    <h6>${ skin.unlock_date ? skin.unlock_date : "nincs feloldva" }</h6>
+                    ${ skin.unlock_date ? `<h6>${skin.unlock_date}</h6>` : `<h6 class="price">Ár: ${skin.price} 🪙</h6>` }
                 </div>`;
         });
        
-        main.innerHTML = skinsContent; // Biztosítjuk, hogy a skin lista frissüljön
+        main.innerHTML = skinsContent;
     } catch (error) {
         console.error('Hiba az API hívás során:', error);
-        //localStorage.removeItem('userData');
         window.location.href = 'index.html';
     }
 }
@@ -111,5 +105,58 @@ const changeSkin = async (skinDirector, skinID) => {
         // Sikertelen mentés üzenet (API hiba esetén)
     }
 }
+
+const showMessage = (message) => {
+    const popupBox = document.querySelector('#popup-box');
+    if (!popupBox) {
+        console.error('A #popup-box elem nem található a DOM-ban!');
+        return;
+    }
+    console.log('Popup üzenet megjelenítése:', message); // Hibakeresés
+    popupBox.textContent = message;
+    popupBox.classList.remove('hide');
+    setTimeout(() => {
+        popupBox.textContent = '';
+        popupBox.classList.add('hide');
+    }, 3000);
+};
+
+const unlockSkin = async (skinDirector, skinID, price) => {
+    try {
+        const res = await fetch(`${apiUrl}?token=${userData.token}&userid=${userData.user_ID}&entity=skins&entityid=${skinID}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ price })
+        });
+        const response = await res.json();
+        if (response.type == 'result') {
+            // Sikeres a feloldás, frissítjük a kártyát
+            const skinCard = document.querySelector(`#skin_${skinID}`);
+            skinCard.classList.remove('locked');
+            skinCard.classList.add('unlocked');
+            skinCard.setAttribute('onclick', `changeSkin('${skinDirector}', ${skinID})`);
+
+            // A kártya tartalmának frissítése: eltávolítjuk az árat
+            const skinName = skinCard.querySelector('h3').textContent;
+            const cssFile = skinCard.querySelector('h5').textContent;
+            skinCard.innerHTML = `
+                <h3>${skinName}</h3>
+                <h5>${cssFile}</h5>
+                <h6 class="unlocked-text">Feloldva!</h6>
+            `;
+
+            // Coin levonása és frissítése
+            userData.coins -= price;
+            localStorage.setItem('userData', JSON.stringify(userData));
+            coinCountSpan.textContent = userData.coins;
+
+            showMessage('Gratulálok, ezt a Skint feloldottad!');
+        } else {
+            showMessage('Nincs elég érméd ennek a Skinnek a feloldására.');
+        }
+    } catch {
+        showMessage('Nincs elég érméd ennek a Skinnek a feloldására.');
+    }
+};
 
 getSkins();

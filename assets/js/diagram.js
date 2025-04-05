@@ -106,7 +106,7 @@ const fetchAndRenderChart = async () => {
 
 function renderNoTodosMessage() {
     if (chartContainer) {
-        chartContainer.innerHTML = '<p style="color: #c0c0c0; font-size: 1.2rem; text-align: center;">Nincs teendő</p>';
+        chartContainer.innerHTML = '<p style="color:rgb(255, 0, 0); font-size: 1.2rem; text-align: center;">Nincs teendő</p>';
     } else {
         console.error('A chartContainer elem nem található a DOM-ban!');
     }

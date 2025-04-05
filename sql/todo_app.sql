@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Gép: 127.0.0.1
--- Létrehozás ideje: 2025. Már 30. 20:08
+-- Létrehozás ideje: 2025. Ápr 05. 18:23
 -- Kiszolgáló verziója: 10.4.32-MariaDB
 -- PHP verzió: 8.2.12
 
@@ -60,11 +60,14 @@ INSERT INTO `logins` (`login_id`, `login_user_id`, `login_date`, `action_date`, 
 (96, 9, '2025-03-30 17:54:06', '2025-03-30 17:54:08', '2025-03-30 17:54:47', 'de3910d7ad9703c94c9ea5a4444b6a25', 0),
 (97, 9, '2025-03-30 17:54:11', '2025-03-30 17:54:19', '2025-03-30 17:54:47', '09bc8c2935409ed585c4cd90b1c12fab', 0),
 (98, 9, '2025-03-30 17:55:26', '2025-03-30 17:55:33', '2025-03-30 17:55:33', '9ebe991e008450d24be9e96185c93321', 0),
-(99, 34, '2025-03-30 18:05:14', '2025-03-30 18:05:20', '2025-03-30 18:05:21', 'f531a909dc51c20ad46d25bad8abb5b9', 0),
-(100, 34, '2025-03-30 18:05:32', '2025-03-30 18:05:34', '2025-03-30 18:05:35', '766f36a06c834f27961e2d9f0aa52cde', 0),
-(101, 34, '2025-03-30 18:05:44', '2025-03-30 18:05:48', '2025-03-30 18:05:49', '68ed8272f6bba1bd20716ab91cb3012b', 0),
-(102, 34, '2025-03-30 18:05:51', '2025-03-30 18:05:53', '2025-03-30 18:06:16', '399668a683fa6d420cc9e2fc55d71002', 0),
-(103, 34, '2025-03-30 18:06:12', '2025-03-30 18:06:15', '2025-03-30 18:06:16', '220467251cea54c549e18ae9dcc52958', 0);
+(104, 9, '2025-04-05 12:24:11', '2025-04-05 13:15:02', '2025-04-05 13:15:11', '3a490ad002cfbc4da35d8eb42e11631c', 0),
+(106, 9, '2025-04-05 13:15:22', '2025-04-05 13:15:24', '2025-04-05 13:16:30', 'f61f362d3423174b79e4862867acc21e', 0),
+(108, 9, '2025-04-05 13:17:51', '2025-04-05 15:06:47', '2025-04-05 15:06:48', '07e72c8aba2d1f4ae018cf09d2be7dd9', 0),
+(110, 9, '2025-04-05 15:09:01', '2025-04-05 15:11:46', '2025-04-05 15:44:16', '985c1137244ae1585cfcee07baa30747', 0),
+(111, 9, '2025-04-05 15:11:53', '2025-04-05 15:11:58', '2025-04-05 15:44:16', '904dcfb63c9bcc307f9fce62ee77269a', 0),
+(112, 9, '2025-04-05 15:12:45', '2025-04-05 15:37:04', '2025-04-05 15:44:16', '419b2fe56a2cabda86551c44949d2786', 0),
+(113, 9, '2025-04-05 15:37:11', '2025-04-05 15:44:14', '2025-04-05 15:44:16', '9dac5152c8cda064dadf7c223bda01a1', 0),
+(115, 35, '2025-04-05 15:55:59', '2025-04-05 16:21:36', '2025-04-05 16:21:37', 'a4f85960309a3a8be914f94a98ac8ccb', 0);
 
 -- --------------------------------------------------------
 
@@ -132,7 +135,9 @@ CREATE TABLE `selected_skins` (
 --
 
 INSERT INTO `selected_skins` (`id`, `userID`, `skinID`, `select_date`) VALUES
-(63, 4, 0, '2025-03-30 19:50:39');
+(63, 4, 0, '2025-03-30 19:50:39'),
+(475, 9, 1, '2025-04-05 17:44:12'),
+(549, 35, 0, '2025-04-05 18:21:35');
 
 -- --------------------------------------------------------
 
@@ -154,8 +159,8 @@ CREATE TABLE `skins` (
 
 INSERT INTO `skins` (`id`, `skin_name`, `css_file`, `price`, `listable`) VALUES
 (0, 'Default', 'default', 10, 0),
-(1, 'Dark', 'dark', 5, 1),
-(2, 'Arc Dark', 'arcdark', 10, 1);
+(1, 'Notebook', 'Notebook', 50, 1),
+(2, 'Hive', 'Hive', 100, 1);
 
 -- --------------------------------------------------------
 
@@ -181,10 +186,10 @@ INSERT INTO `todos` (`id`, `user_id`, `title`, `date`, `start_time`, `completed`
 (1, 2, 'dsad', '2025-03-20', '03:10:00', 1, 1),
 (2, 2, 'dsad', '2025-03-20', NULL, 0, 0),
 (59, 2, 'dsadsa', '2025-03-21', '21:30:00', 0, 0),
-(593, 9, 'Ballagás', '2025-04-30', '10:00:00', 0, 0),
 (605, 4, 'Ez egy teendő', '2025-03-26', '03:25:00', 1, 1),
 (607, 4, 'asdasd', '2025-03-26', NULL, 1, 1),
-(608, 4, 'asdasdasd', '2025-03-26', NULL, 1, 1);
+(608, 4, 'asdasdasd', '2025-03-26', NULL, 1, 1),
+(641, 35, 'dsadsad', '2025-04-06', NULL, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -205,7 +210,7 @@ CREATE TABLE `trusted_devices` (
 --
 
 INSERT INTO `trusted_devices` (`id`, `user_id`, `device_token`, `created_at`, `expires_at`) VALUES
-(9, 34, '01dbe1d034b169a92fb739ddd5c0cd0973dd45ac0b0e1abb669fc7ab633794fd', '2025-03-30 18:05:44', '2025-04-29 18:05:44');
+(10, 35, '01dbe1d034b169a92fb739ddd5c0cd0973dd45ac0b0e1abb669fc7ab633794fd', '2025-04-05 15:55:59', '2025-05-05 15:55:59');
 
 -- --------------------------------------------------------
 
@@ -228,7 +233,7 @@ CREATE TABLE `two_factor_codes` (
 --
 
 INSERT INTO `two_factor_codes` (`id`, `user_id`, `temp_code`, `persistent_code`, `created_at`, `expires_at`, `persistent_expires_at`) VALUES
-(45, 34, '311879', '493181', '2025-03-30 18:06:04', '2025-03-30 18:06:12', '2025-04-29 18:06:04');
+(46, 35, '961081', '184608', '2025-04-05 15:55:51', '2025-04-05 16:05:51', '2025-05-05 15:55:51');
 
 -- --------------------------------------------------------
 
@@ -248,8 +253,8 @@ CREATE TABLE `unlocked_skins` (
 --
 
 INSERT INTO `unlocked_skins` (`id`, `userID`, `skinID`, `unlock_date`) VALUES
-(1, 4, 1, '2025-03-26 19:18:46'),
-(2, 4, 2, '2025-03-26 19:18:46');
+(15, 35, 1, '2025-04-05 18:09:38'),
+(16, 35, 2, '2025-04-05 18:09:40');
 
 -- --------------------------------------------------------
 
@@ -276,8 +281,8 @@ INSERT INTO `users` (`user_ID`, `user_email`, `user_name`, `user_pw`, `user_stat
 (2, 'admin@domain.hu', 'admin', '$2y$10$kjrUKUPP/nbYWkSB7oJ27O6Y9cEaAPuDQ9h9R1ydULVFBFLWL6mWu', 1, 0, 0),
 (3, 'teszt@valami.hu', 'teszt', '$2y$10$IVVW6XOjmq.1HS5lBbq3h.W0Cn8bqWAQuXsrRYuX3WnmGQvF0PaB6', 1, 0, 0),
 (4, 'valami@valami.hu', 'bobby1', '$2y$10$eFW/lUJvvl8iAwjAyZnpgOgmI9NimXhNzkuQZFkmP0iUfr.w44Vce', 1, 0, 3),
-(9, 'pucheleandras@gmail.com', 'Andris', '$2y$10$abqYCLxHSdVRG7NpjZn8RuH0pnVTKF1qaB0rUkEluIbCzsZxUL2.C', 1, 0, 0),
-(34, 'pistahogyvan2@gmail.com', 'aa', '$2y$10$McF3f/bQCITufTPOGKnbJesTE7Nt97z16MYym9j.5pHsXNFypGEPW', 1, 1, 0);
+(9, 'pucheleandras@gmail.com', 'Andris', '$2y$10$abqYCLxHSdVRG7NpjZn8RuH0pnVTKF1qaB0rUkEluIbCzsZxUL2.C', 1, 0, 1),
+(35, 'pistahogyvan2@gmail.com', 'aa', '$2y$10$61Sn654KBSUtulTd.5tgt.72Bs1eJcAwbvgBI9MWL9vjjlOLRvPUq', 1, 1, 0);
 
 --
 -- Indexek a kiírt táblákhoz
@@ -359,19 +364,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT a táblához `logins`
 --
 ALTER TABLE `logins`
-  MODIFY `login_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=104;
+  MODIFY `login_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=116;
 
 --
 -- AUTO_INCREMENT a táblához `login_sessions`
 --
 ALTER TABLE `login_sessions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
 
 --
 -- AUTO_INCREMENT a táblához `selected_skins`
 --
 ALTER TABLE `selected_skins`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=550;
 
 --
 -- AUTO_INCREMENT a táblához `skins`
@@ -383,31 +388,31 @@ ALTER TABLE `skins`
 -- AUTO_INCREMENT a táblához `todos`
 --
 ALTER TABLE `todos`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=613;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=642;
 
 --
 -- AUTO_INCREMENT a táblához `trusted_devices`
 --
 ALTER TABLE `trusted_devices`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT a táblához `two_factor_codes`
 --
 ALTER TABLE `two_factor_codes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- AUTO_INCREMENT a táblához `unlocked_skins`
 --
 ALTER TABLE `unlocked_skins`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT a táblához `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `user_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- Megkötések a kiírt táblákhoz

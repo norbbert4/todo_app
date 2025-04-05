@@ -1,4 +1,5 @@
-const loginApiUrl = 'api/authentication/login.php';
+//const loginApiUrl = 'api/authentication/login.php';
+const loginApiUrl = 'http://localhost/todo_app/api/authentication/login.php';
 const usernameInput = document.getElementById('username');
 const passwordInput = document.getElementById('password');
 const loginInfo = document.getElementById('login-info');

@@ -3,7 +3,8 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-require 'C:/xampp/htdocs/todo_app/vendor/autoload.php';
+//require 'C:/xampp/htdocs/todo_app/vendor/autoload.php';
+require '../../vendor/autoload.php';
 include '../modules/_db.php';
 
 use PHPMailer\PHPMailer\PHPMailer;

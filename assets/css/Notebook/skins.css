@@ -1,0 +1,305 @@
+/* ./assets/css/Notebook/skins.css */
+
+/* Bootstrap felülírások kikapcsolása */
+div {
+    background: none !important;
+    border: none !important;
+}
+
+.container-fluid {
+    padding: 0 !important;
+}
+
+/* Alapvető reset és testreszabás */
+* {
+    padding: 0;
+    margin: 0;
+    border: none;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+body {
+    font-family: 'Roboto', Arial, sans-serif;
+    width: 100%;
+    min-height: 100vh;
+    background: url('https://www.transparenttextures.com/patterns/wood-pattern.png') repeat, #d2b48c; /* Fa textúra */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+/* Navbar */
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: #f5f5dc; /* Bézs, papírhatású háttér */
+    color: #4a3728; /* Sötétbarna szöveg */
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    z-index: 100;
+    border-radius: 0 0 15px 15px;
+    transition: transform 0.3s ease-out;
+}
+
+.navbar:hover {
+    transform: translateY(-2px);
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    align-items: center;
+}
+
+.logo {
+    font-family: 'Roboto', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #4a3728;
+    text-decoration: none;
+    padding: 5px;
+}
+
+.logo:hover {
+    color: #e67e22; /* Narancssárga hover */
+    transform: scale(1.1) rotate(2deg);
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 35px;
+    margin: 0;
+    padding: 0;
+    margin-top: 10px;
+    transition: all 0.3s ease;
+}
+
+.nav-links li {
+    display: inline;
+}
+
+.nav-links a {
+    color: #4a3728; /* Sötétbarna */
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-weight: 500;
+    transition: color 0.3s ease, transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+    position: relative;
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -5px;
+    left: 0;
+    background-color: #c19b76; /* Világosabb barna */
+    transition: width 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: #c19b76;
+    transform: translateY(-3px) scale(1.05);
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+/* Hamburger gomb */
+.hamburger {
+    display: none;
+    background: none;
+    cursor: pointer;
+    padding: 10px;
+    z-index: 101;
+}
+
+.hamburger span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background: #4a3728;
+    margin: 5px 0;
+}
+
+/* User info */
+.user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #4a3728; /* Sötétbarna */
+    font-size: 1.2rem;
+    font-weight: 500;
+    padding: 5px 15px;
+    border-radius: 10px;
+    background: #d2b48c; /* Bézs */
+    transition: all 0.3s ease;
+}
+
+.user-info:hover {
+    background: #c19b76; /* Világosabb barna */
+    transform: scale(1.05);
+}
+
+
+.coin-info {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 5px;
+    font-size: 1rem;
+}
+
+.coin-icon {
+    font-size: 1.2rem;
+}
+
+#coin-count {
+    font-weight: 600;
+    color: #8b6f47; /* Világosabb barna */
+}
+
+
+/* Skin választó kártyák (default dizájn szerint) */
+main {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 80px;
+}
+
+main .skin-card {
+    background: rgba(39, 39, 39, 0.95); /* Sötét háttér */
+    border-radius: 20px;
+    padding: 1.5rem;
+    color: #000000; /* Fehér szöveg */
+    font-size: 1.5rem;
+    font-weight: 500;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+    width: 200px;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+}
+
+main .skin-card:hover {
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5);
+    transform: translateY(-5px);
+}
+
+/* Kártyákon belüli kisebb szöveg (pl. időbélyeg, ár) */
+main .skin-card h5,
+main .skin-card h6 {
+    font-size: 1rem;
+    color: #000000; /* Fekete szín az időbélyegnek és árnak */
+}
+
+/* Zárolt kártyák stílusa */
+main .skin-card.locked {
+    background: rgba(39, 39, 39, 0.5);
+    opacity: 0.7;
+}
+
+main .skin-card.locked:hover {
+    opacity: 1;
+}
+
+/* Popup üzenet */
+#popup-box {
+    position: fixed;
+    bottom: 70px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #4c566a;
+    color: #000000;
+    padding: 20px 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    /* display: none; eltávolítva, hogy a .hide osztály kezelje a láthatóságot */
+}
+
+#popup-box.hide {
+    display: none;
+}
+
+/* Reszponzív szabályok */
+@media (max-width: 768px) {
+    .hamburger {
+        display: block;
+    }
+
+    .nav-links {
+        position: fixed;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        background: #f5f5dc;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 40px;
+        height: calc(100vh - 60px);
+        transform: translateX(-100%);
+        z-index: 99;
+    }
+
+    .nav-links.active {
+        transform: translateX(0);
+    }
+
+    .nav-links li {
+        display: block;
+    }
+
+    .nav-links a {
+        font-size: 1.5rem;
+    }
+
+    .hamburger.active span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+    }
+    .hamburger.active span:nth-child(2) {
+        opacity: 0;
+    }
+    .hamburger.active span:nth-child(3) {
+        transform: rotate(-45deg) translate(7px, -7px);
+    }
+
+    .user-info {
+        position: absolute;
+        top: 7px;
+        right: 80px;
+        font-size: 1rem;
+        padding: 5px 10px;
+    }
+
+    .coin-info {
+        font-size: 0.9rem;
+    }
+
+    main .skin-card {
+        width: 100%;
+        max-width: 300px;
+        height: 150px;
+    }
+}

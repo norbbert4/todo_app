@@ -1,6 +1,7 @@
 <?php
 // Abszolút útvonal az _db.php fájlhoz
-$include_path = 'C:/xampp/htdocs/todo_app/api/modules/_db.php';
+//$include_path = 'C:/xampp/htdocs/todo_app/api/modules/_db.php';
+$include_path = '../../modules/_db.php';
 if (!file_exists($include_path)) {
     die(json_encode(['success' => false, 'error' => ['message' => 'Az _db.php fájl nem található: ' . $include_path]]));
 }
