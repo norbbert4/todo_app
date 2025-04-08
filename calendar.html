@@ -2,27 +2,52 @@
 <html lang="hu">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Naptár - ToDo App</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/naptar.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script>
+        const pageCSS = 'naptar.css';
+    </script>
+    <link id="skinlink" rel="stylesheet" href="assets/css/default/naptar.css?ver=2">
+    <script src="assets/js/naptar.js" defer></script>
+
+    <!-- Kiválasztott skin beállítása ----------------->
+    <script src="./assets/js/setskin.js" defer></script>
+    <!------------------------------------------------->
+
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
 </head>
 <body>
     <nav class="navbar">
         <div class="nav-container">
-            <a class="logo">Todo App</a>
+            <a href="index.html" class="logo">Todo App</a>
+            <button class="hamburger" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
             <ul class="nav-links">
                 <li><a href="./todo.html?date=today">Mai teendők</a></li>
                 <li><a href="./todo.html">Összes teendők</a></li>
                 <li><a href="./calendar.html">Naptár</a></li>
+                <li><a href="./diagram.html">Statisztika</a></li>
+                <li><a href="./skins.html">Kinézet</a></li>
                 <li><a href="./account.html">Fiók</a></li>
                 <li><a href="./logout.html">Kijelentkezés</a></li>
             </ul>
+            <div class="user-info" id="user-info">
+                <span class="username" id="username"></span>
+                <div class="coin-info">
+                    <span class="coin-icon">🪙</span>
+                    <span class="coin-count" id="coin-count"></span>
+                </div>
+            </div>
         </div>
     </nav>
     
-    <div class="calendar-container">
-        <div class="calendar-header">
+    <div class="calendar-container p-xs-0 p-md-2 p-lg-3">
+        <div class="calendar-header p-xs-0 p-md-2 p-lg-3">
             <button id="prev-month"><</button>
             <select id="month-select"></select>
             <select id="year-select"></select>
@@ -37,7 +62,17 @@
             <div class="day-name">Szo</div>
             <div class="day-name">V</div>
         </div>
-        <div class="calendar-grid" id="calendar-grid"></div>
+        <div class="calendar-grid p-sm-1 p-md-2 p-lg-3" id="calendar-grid">
+            <!-- A napok dinamikusan generálódnak a JS-ben, de példaként: -->
+            <div class="day">
+                <span class="day-number">1</span>
+            </div>
+            <!-- Ha van teendő, akkor a todos-for-day megjelenik -->
+            <div class="day">
+                <span class="day-number">21</span>
+                <span class="todos-for-day">1</span>
+            </div>
+        </div>
     </div>
 
     <div class="task-form" id="task-form" style="display: none;">
@@ -46,16 +81,27 @@
             <input type="hidden" name="date" id="selected-date">
             <input type="hidden" name="user_id" id="user-id" value="1"> 
             <input type="text" name="title" id="title" placeholder="Teendő neve" required>
-            <button type="button" id="save-button">Mentés</button>
-            <button type="button" onclick="closeForm()">Mégse</button>
-            <button type="button" id="go-to_todos">Teendők erre a napra</button>
+            <div id="save-message" class="save-message"></div>
+            <div class="time-picker" id="time-picker"></div>
+            <div class="button-container">
+                <button type="button" id="save-button">Mentés</button>
+                <button type="button" onclick="closeForm()">Mégse</button>
+                <button type="button" id="go-to_todos">Teendők erre a napra</button>
+            </div>
         </form>
     </div>
 
-    <footer class="calendar-footer">
-        <a href="./todo.html" class="back-link">Vissza</a>
-    </footer>
+    <script>
+        // Hamburger menü toggle
+        document.querySelector('.hamburger').addEventListener('click', function() {
+            this.classList.toggle('active');
+            document.querySelector('.nav-links').classList.toggle('active');
+        });
 
-    <script src="assets/js/naptar.js"></script>
+        // Egyszerű closeForm függvény a Mégse gombhoz
+        function closeForm() {
+            document.getElementById('task-form').style.display = 'none';
+        }
+    </script>
 </body>
 </html>

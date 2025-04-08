@@ -50,6 +50,13 @@ $method = $_SERVER['REQUEST_METHOD'];
         $empty = false;
     }
 
+// számláló kérés
+if (isset($_GET['count'])) {
+    $count = $_GET['count'];
+} else {
+    $count = false;
+}
+
 include './entities/entities.php';
 include './modules/_setmessage.php';
 include './modules/_auth.php';
@@ -83,6 +90,11 @@ function getAll() {
     global $entity;
     global $userID;
     global $entityName;
+    
+    // Cache kikapcsolása
+    header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+    header('Pragma: no-cache');
+    
     include './entities/'.$entity.'/getall.php';
     $result = $conn->query($sql);       
     if ($result->num_rows > 0) {
@@ -95,7 +107,6 @@ function getAll() {
         setMessage("error", "Nincs elérhető ".$entityName[0].".", false);
     }
 }
-
 // --- GET ONE --------------------------------------------------------------
 function getOneByID($entityID) {
     global $conn;
@@ -112,6 +123,25 @@ function getOneByID($entityID) {
         setMessage("result", $entityName[0].": #".$entityID, $entities);
     } else {
         setMessage("error", "Nincs ilyen azonosítójú ".$entityName[0].": #".$entityID, false);
+    }
+}
+
+// --- GET COUNT --------------------------------------------------------------
+function getCount($entityID) {
+    global $conn;
+    global $entity;
+    global $userID;
+    global $entityName;
+    include './entities/'.$entity.'/getcount.php';
+    $result = $conn->query($sql);       
+    if ($result->num_rows > 0) {
+        $entities = array();
+        if ($row = $result->fetch_assoc()) {
+            $count = $row;
+        }
+        setMessage("result", $entityName, $count);
+    } else {
+        setMessage("error", "Nincs elérhető ".$entityName[0].".", false);
     }
 }
 
@@ -164,10 +194,10 @@ switch ($method) {
         case 'GET':
             if (!$empty) {
                 if ($entityID !== 0) {
-                    getOneByID($entityID);
+                    if (!$count) getOneByID($entityID);
+                    else getCount($entityID);
                 } else {
-                    if (!$count) getAll();
-                    else getCount();
+                    getAll();
                 }
             } else {
                 getEmpty();

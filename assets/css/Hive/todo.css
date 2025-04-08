@@ -1,0 +1,716 @@
+/* Alapvető reset és testreszabás */
+* {
+    padding: 0;
+    margin: 0;
+    border: none;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+body {
+    font-family: 'Roboto', Arial, sans-serif;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #000000, #1f2937) no-repeat center center fixed; /* Tartalék háttér: fekete-szürke átmenet */
+    background: url('https://images.unsplash.com/photo-1618477461853-e6838c61e32c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80') no-repeat center center fixed, linear-gradient(135deg, #000000, #1f2937);
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-y: auto;
+    padding: 80px 20px 20px;
+}
+
+/* Navbar */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.9); /* Fekete, áttetsző */
+    color: #facc15; /* Citromsárga */
+    padding: 15px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+    z-index: 100;
+    border-radius: 0 0 15px 15px;
+}
+
+.navbar:hover {
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.6);
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1200px;
+    align-items: center;
+}
+
+.logo {
+    font-family: 'Inter', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #facc15;
+    text-decoration: none;
+    padding: 5px;
+}
+
+.logo:hover {
+    color: #ffffff; /* Fehér hover effekt */
+    transform: scale(1.1) rotate(2deg);
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 35px;
+    margin: 0;
+    padding: 0;
+    margin-top: 10px;
+}
+
+.nav-links a {
+    color: #facc15;
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-weight: 500;
+    position: relative;
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -5px;
+    left: 0;
+    background-color: #ffffff;
+    transition: width 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: #ffffff;
+    transform: translateY(-3px) scale(1.05);
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+/* Hamburger gomb */
+.hamburger {
+    display: none;
+    background: none;
+    cursor: pointer;
+    padding: 10px;
+    z-index: 101;
+}
+
+.hamburger span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background: #facc15;
+    margin: 5px 0;
+}
+
+/* User info */
+.user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #facc15;
+    font-size: 1.2rem;
+    font-weight: 500;
+    padding: 5px 15px;
+    border-radius: 10px;
+    background: rgba(250, 204, 21, 0.2);
+}
+
+.user-info:hover {
+    background: rgba(250, 204, 21, 0.3);
+    transform: scale(1.05);
+}
+
+.coin-info {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 5px;
+    font-size: 1rem;
+}
+
+.coin-icon {
+    font-size: 1.2rem;
+}
+
+#coin-count {
+    font-weight: 600;
+    color: #ffffff;
+}
+
+/* Main konténer */
+main {
+    width: 90%;
+    max-width: 900px;
+    max-height: 750px;
+    background: transparent;
+    border-radius: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #facc15;
+    box-shadow: none;
+    padding: 0;
+    margin: 0 auto;
+}
+
+/* Header (input terület) */
+main header {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 15px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+main header h1 {
+    padding-bottom: 1rem;
+    font-size: 2rem;
+    font-weight: 600;
+    color: #facc15;
+}
+
+main header form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    position: relative;
+}
+
+/* Input és időválasztó konténer */
+#todo-input-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+main header input {
+    width: 100%;
+    background-color: #1f2937;
+    padding: 1rem;
+    color: #facc15;
+    border: 1px solid #facc15;
+    border-radius: 8px;
+    outline: none;
+    font-size: 1rem;
+    text-align: center;
+}
+
+main header input:focus {
+    background-color: #374151;
+    border: 1px solid #ffffff;
+    color: #facc15;
+    box-shadow: 0 0 8px rgba(250, 204, 21, 0.3);
+}
+
+main header input[type="number"] {
+    width: 100px;
+}
+
+/* Todo count box */
+.todo-count-box {
+    margin: 1rem 0;
+    padding: 0.8rem 1.5rem;
+    background: linear-gradient(90deg, #facc15, #f97316); /* Citromsárga-narancs átmenet */
+    color: #000000;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 8px;
+    box-shadow: 0 5px 10px rgba(250, 204, 21, 0.2);
+    text-align: center;
+}
+
+.todo-count-box:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(250, 204, 21, 0.3);
+}
+
+/* Időválasztó */
+.time-picker {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;
+    width: 100%;
+    justify-content: center;
+}
+
+.time-picker select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background: #1f2937;
+    border: 1px solid #facc15;
+    border-radius: 8px;
+    padding: 10px 30px 10px 15px;
+    font-size: 1rem;
+    color: #facc15;
+    width: 100%;
+    max-width: 100px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    outline: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23facc15' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 12px;
+}
+
+.time-picker select:focus,
+.time-picker select:hover {
+    border-color: #ffffff;
+    box-shadow: 0 0 8px rgba(250, 204, 21, 0.3);
+    transform: translateY(-2px);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+}
+
+.time-picker span {
+    color: #facc15;
+    font-size: 1.2rem;
+    font-weight: 600;
+}
+
+/* Mentés gomb */
+main header .save-button {
+    background: linear-gradient(90deg, #facc15, #f97316);
+    padding: 1rem;
+    color: #000000;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 1rem;
+    box-shadow: 0 5px 10px rgba(250, 204, 21, 0.2);
+    width: 100%;
+    border: none;
+}
+
+main header .save-button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(250, 204, 21, 0.3);
+    background: linear-gradient(90deg, #f97316, #facc15);
+}
+
+/* Táblázat konténer (kártyákként) */
+.todo-table-container {
+    width: 100%;
+    height: 400px;
+    overflow-y: auto;
+    padding: 1rem;
+    background: transparent;
+}
+
+/* Footer és táblázat */
+main footer {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    overflow-x: auto;
+}
+
+footer table {
+    width: 100%;
+    min-width: 600px;
+    border-spacing: 0 15px; /* Térköz a kártyák között */
+    border-collapse: separate;
+    text-align: left;
+    background: transparent;
+}
+
+footer table thead {
+    display: none; /* A fejlécek nem kellenek, mert kártyák lesznek */
+}
+
+footer table tbody {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+footer table tbody tr {
+    display: flex;
+    flex-direction: row;
+    background: #1f2937; /* Sötét szürke a kártyákhoz */
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    padding: 1rem;
+    align-items: center;
+    position: relative;
+    clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%); /* Hatszög forma */
+}
+
+footer table tbody tr td {
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    color: #facc15;
+    flex: 1;
+}
+
+footer table tbody tr td:nth-child(1) { flex: 0 0 10%; }
+footer table tbody tr td:nth-child(2) { flex: 0 0 40%; }
+footer table tbody tr td:nth-child(3) { flex: 0 0 20%; }
+footer table tbody tr td:nth-child(4) { flex: 0 0 15%; text-align: center; }
+footer table tbody tr td:nth-child(5) { flex: 0 0 15%; text-align: center; }
+
+footer table tbody tr:hover td {
+    background-color: rgba(250, 204, 21, 0.1);
+}
+
+footer table tbody tr td:first-child {
+    color: #9ca3af;
+}
+
+footer table tbody tr td:last-child {
+    text-align: right;
+    min-width: 120px;
+}
+
+/* Gombok a táblázatban */
+footer button {
+    padding: 0.5rem;
+    margin: 0.1rem;
+    width: 30px;
+    height: 30px;
+    color: #000000;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+footer button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+/* Gombok színei és állapotok */
+.state-button-k { background-color: #22c55e; } /* Zöld */
+.state-button-m { background-color: #f97316; } /* Narancs */
+.delete-button { background-color: #ef4444; } /* Piros */
+.state-k-button_1 { display: none; }
+.state-k-button_0 { display: inline; }
+.state-m-button_1 { display: inline; }
+.state-m-button_0 { display: none; }
+.state-0 { opacity: 1; }
+.state-1 { text-decoration: line-through; color: #9ca3af; }
+
+/* Üzenetek */
+.save-message,
+.error-message {
+    color: #000000;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    animation: fadeInOut 3s forwards;
+    z-index: 10;
+}
+
+.save-message {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 0.3rem;
+    width: auto;
+    max-width: 200px;
+    display: none;
+}
+
+.error-message {
+    position: absolute;
+    top: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, #ef4444, #f87171);
+    max-width: 250px;
+}
+
+.error-message::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid #ef4444;
+}
+
+.save-message.bg-green { background: linear-gradient(135deg, #22c55e, #4ade80); }
+.save-message.bg-red { background: linear-gradient(135deg, #ef4444, #f87171); }
+
+/* Animációk */
+@keyframes fadeInOut {
+    0% { opacity: 0; transform: translateX(-50%) translateY(5px); }
+    10% { opacity: 1; transform: translateX(-50%) translateY(0); }
+    90% { opacity: 1; transform: translateX(-50%) translateY(0); }
+    100% { opacity: 0; transform: translateX(-50%) translateY(5px); }
+}
+
+@keyframes fadeInOutMobile {
+    0% { opacity: 0; transform: translateY(-10px); }
+    10% { opacity: 1; transform: translateY(0); }
+    90% { opacity: 1; transform: translateY(0); }
+    100% { opacity: 0; transform: translateY(-10px); }
+}
+
+/* Reszponzív szabályok */
+@media (max-width: 768px) {
+    body {
+        padding: 70px 10px 10px;
+    }
+
+    .hamburger { display: block; }
+    .nav-links {
+        position: fixed;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        background: rgba(0, 0, 0, 0.95);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 40px;
+        height: calc(100vh - 60px);
+        transform: translateX(-100%);
+        z-index: 99;
+    }
+    .nav-links.active { transform: translateX(0); }
+    .nav-links a { font-size: 1.5rem; }
+    .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .hamburger.active span:nth-child(2) { opacity: 0; }
+    .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(7px, -7px); }
+
+    .user-info {
+        position: absolute;
+        top: 7px;
+        right: 80px;
+        font-size: 1rem;
+        padding: 5px 10px;
+    }
+    .coin-info { font-size: 0.9rem; }
+
+    main {
+        width: 95%;
+        max-width: 500px;
+        max-height: 748px;
+    }
+
+    main header {
+        padding: 1rem;
+    }
+
+    main header h1 { 
+        font-size: 1.8rem; 
+        padding-bottom: 0.5rem; 
+    }
+
+    main header input { 
+        font-size: 1rem; 
+        padding: 0.8rem;
+    }
+
+    #todo-input-container { 
+        flex-direction: column; 
+        gap: 0.8rem; 
+        align-items: stretch; 
+    }
+    .time-picker { 
+        min-width: 100%; 
+        justify-content: space-between; 
+        gap: 0.3rem;
+    }
+
+    .time-picker select { 
+        max-width: 48%; 
+        font-size: 0.9rem; 
+        padding: 8px 25px 8px 10px;
+    }
+    main header .save-button { 
+        padding: 0.8rem; 
+        font-size: 1rem; 
+    }
+
+    .todo-table-container {
+        height: 400px;
+        padding: 0.5rem;
+    }
+
+    main footer { overflow-x: hidden; }
+    footer table {
+        min-width: 100%;
+    }
+    footer table tbody tr {
+        flex-direction: column;
+        padding: 1rem;
+        min-height: 180px;
+        clip-path: none;
+        border-radius: 10px;
+    }
+    footer table tbody tr td {
+        padding: 0.4rem 0;
+        font-size: 0.9rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    footer table tbody tr td:nth-child(2) {
+        white-space: normal;
+        word-wrap: break-word;
+        word-break: break-all;
+        max-width: 100%;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    footer table tbody tr td:nth-child(2)::before {
+        display: block;
+        width: 100%;
+        margin-bottom: 0.2rem;
+    }
+    footer table tbody tr td:nth-child(1)::before { content: "Számozás: "; color: #9ca3af; font-weight: 500; }
+    footer table tbody tr td:nth-child(2)::before { content: "Teendő: "; color: #9ca3af; font-weight: 500; }
+    footer table tbody tr td:nth-child(3)::before { content: "Dátum: "; color: #9ca3af; font-weight: 500; }
+    footer table tbody tr td:nth-child(4)::before { content: "Kezdés: "; color: #9ca3af; font-weight: 500; }
+    footer table tbody tr td:nth-child(5) { justify-content: flex-end; gap: 0.5rem; }
+    footer table tbody tr td:nth-child(5)::before { content: ""; }
+    footer button { width: 40px; height: 40px; font-size: 1.2rem; }
+
+    .save-message {
+        font-size: 0.8rem;
+        padding: 0.4rem 0.8rem;
+        margin-top: 0.2rem;
+        max-width: 180px;
+    }
+    .error-message {
+        position: static;
+        transform: none;
+        margin: 10px 0;
+        width: 100%;
+        max-width: none;
+        font-size: 0.85rem;
+        padding: 6px 10px;
+        border-radius: 6px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        animation: fadeInOutMobile 3s forwards;
+    }
+    .error-message::after { display: none; }
+    footer table tbody tr td:nth-child(2) { padding-bottom: 40px; flex-direction: column; align-items: flex-start; }
+}
+@media (max-width: 480px) {
+    main header h1 { 
+        font-size: 1.5rem; 
+    }
+
+    main header input { 
+        font-size: 0.9rem; 
+        padding: 0.6rem;
+    }
+
+    .time-picker select { 
+        max-width: 45%; 
+        font-size: 0.8rem; 
+        padding: 6px 20px 6px 8px;
+    }
+
+    main header .save-button { 
+        padding: 0.6rem; 
+        font-size: 0.9rem; 
+    }
+}
+@media (max-width: 400px) {
+    /* Body padding további csökkentése */
+    body {
+        padding: 50px 20px 30px; /* Növeljük a padding-top-ot 70px-re az S8+-on */
+    }
+
+    /* Main konténer */
+    main {
+        width: 100%; /* Szélesebb, hogy jobban kihasználja a képernyőt */
+        padding: 1rem; /* Kisebb padding */
+        max-height: 600px; /* Kisebb magasság az S8+ képernyőjéhez */
+        margin: 1px auto; /* Margó a navbar alatt */
+    }
+
+    /* Header */
+    main header h1 {
+        font-size: 1.5rem; /* Kisebb címsor */
+        padding-bottom: 0.8rem;
+    }
+    main header input {
+        font-size: 0.9rem; /* Kicsit kisebb betűméret */
+        padding: 0.8rem; /* Kisebb padding az input mezőben */
+    }
+    #todo-input-container {
+        gap: 0.8rem; /* Kisebb távolság az elemek között */
+    }
+    .time-picker select {
+        max-width: 48%; /* Kicsit szélesebb select mezők */
+        font-size: 0.9rem;
+        padding: 8px 25px 8px 10px; /* Kisebb padding */
+    }
+    main header .save-button {
+        padding: 0.7rem; /* Kisebb padding a gombon */
+        font-size: 0.9rem;
+    }
+
+    /* Todo count box */
+    .todo-count-box {
+        font-size: 1rem; /* Kisebb betűméret */
+        padding: 0.6rem 1rem;
+    }
+
+    /* Táblázat kártyák finomhangolása */
+    .todo-table-container {
+        height: 600px; /* Kisebb magasság az S8+ képernyőjéhez */
+        padding: 0 0.3rem;
+    }
+    footer table tbody tr {
+        min-height: 100px; /* Kisebb kártya magasság */
+        padding: 0.8rem; /* Kisebb padding a kártyákban */
+    }
+    footer table tbody tr td {
+        font-size: 0.9rem; /* Kisebb betűméret */
+        padding: 0.3rem 0;
+    }
+    footer table tbody tr td:nth-child(2) {
+        padding-bottom: 30px; /* Kisebb padding a teendő szöveg alatt */
+    }
+    footer button {
+        width: 35px; /* Kisebb gombok */
+        height: 35px;
+        font-size: 1rem;
+    }
+
+    /* Üzenetek */
+    .save-message {
+        font-size: 0.7rem;
+        padding: 0.3rem 0.6rem;
+        max-width: 150px;
+    }
+}
