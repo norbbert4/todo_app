@@ -20,7 +20,11 @@ const months = [
     "Július", "Augusztus", "Szeptember", "Október", "November", "December"
 ];
 
-const apiUrl = 'http://localhost/todo_app/api/';
+//const apiUrl = 'http://localhost/todo_app/api/';
+
+// Ellenőrizzük, hogy localhost vagy éles környezetben vagyunk
+const apiUrl = window.location.hostname === 'localhost' ? 'http://localhost/todo_app/api/' : 'https://todoapp.norbbert4.hu/api/';
+
 
 const check = async () => {
     if (userData.token.length > 0) {

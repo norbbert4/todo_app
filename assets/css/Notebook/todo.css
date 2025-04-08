@@ -134,7 +134,6 @@ body {
     transform: scale(1.05);
 }
 
-
 .coin-info {
     display: flex;
     align-items: center;
@@ -334,38 +333,55 @@ main header .save-button:hover {
 }
 
 /* Táblázat konténer (füzet jobb oldala) */
+/* Táblázat konténer (füzet jobb oldala) */
 .todo-table-container {
     width: 50%;
-    height: 400px;
-    overflow-y: hidden; /* Görgetés kikapcsolása */
+    height: 500px;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
     padding: 1rem;
-    background: url('https://www.transparenttextures.com/patterns/lined-paper.png') repeat; /* Vonalas papír háttér */
+    background: url('https://www.transparenttextures.com/patterns/lined-paper.png') repeat;
     border-left: 1px solid #d2b48c;
+    box-sizing: border-box;
 }
 
 /* Footer és táblázat */
 main footer {
     width: 100%;
-    display: flex;
-    justify-content: center;
-    overflow-x: auto;
+    max-width: 100%;
+    display: block;
+    overflow-x: hidden !important;
+    box-sizing: border-box;
 }
 
 footer table {
     width: 100%;
-    min-width: 400px;
+    max-width: 100%;
     border-spacing: 0;
-    border-collapse: separate;
+    border-collapse: collapse;
     text-align: left;
     background: transparent;
+    table-layout: auto; /* Rugalmasabb elrendezés */
+    display: table;
+    box-sizing: border-box;
+}
+
+footer table thead,
+footer table tbody {
+    width: 100%;
+    max-width: 100%;
+}
+
+footer table tbody {
+    display: table-row-group;
 }
 
 footer table thead th {
-    background: rgba(255, 245, 224, 0.8);
+    background: rgba(255, 245, 224, 0.9);
     padding: 1rem 1.5rem;
     font-size: 1rem;
     color: #4a3728;
-    font-weight: 600;
+    font-weight: 700;
     text-transform: uppercase;
     position: sticky;
     top: 0;
@@ -378,10 +394,31 @@ footer table thead th:nth-child(3) { width: 20%; }
 footer table thead th:nth-child(4) { width: 15%; }
 footer table thead th:nth-child(5) { width: 15%; }
 
+footer table tbody tr {
+    width: 100%;
+    max-width: 100%;
+}
+
+footer table tbody tr:nth-child(even) {
+    background: rgba(255, 245, 224, 0.3);
+}
+
+footer table tbody tr:hover {
+    background: rgba(255, 245, 224, 0.5);
+}
+
 footer table tbody tr td {
-    padding: 1rem 1.5rem;
+    padding: 0.8rem 1rem;
     font-size: 1rem;
     color: #4a3728;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    box-sizing: border-box;
+}
+
+footer table tbody tr td:nth-child(2) {
+    text-align: left;
 }
 
 footer table tbody tr td:nth-child(4),
@@ -389,35 +426,21 @@ footer table tbody tr td:nth-child(5) {
     text-align: center;
 }
 
-footer table tbody tr:nth-child(even) td {
-    background-color: rgba(255, 245, 224, 0.5);
+footer table tbody tr td:nth-child(5) {
+    white-space: nowrap;
+    overflow: visible;
 }
 
-footer table tbody tr:hover td {
-    background-color: rgba(255, 245, 224, 0.8);
-}
-
-footer table tbody tr td:first-child {
-    color: #a68b5e;
-}
-
-footer table tbody tr td:last-child {
-    text-align: right;
-    min-width: 120px;
-}
-
-/* Gombok a táblázatban */
 footer button {
-    padding: 0.5rem;
-    margin: 0.1rem;
-    width: 30px;
-    height: 30px;
+    padding: 0.4rem;
+    margin: 0.2rem;
+    width: 24px;
+    height: 24px;
     color: #fffef0;
     border-radius: 5px;
     cursor: pointer;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
 }
-
 footer button:hover {
     transform: scale(1.1);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
@@ -569,11 +592,11 @@ footer button:hover {
     /* Táblázat konténer (lista) */
     .todo-table-container {
         width: 100%;
-        height: 400px;
+        height: 450px;
         padding: 0 0.5rem;
         border-left: none;
         border-top: 1px solid #d2b48c;
-        overflow-y: hidden; /* Görgetés kikapcsolása telefonon is */
+        overflow-y: auto !important; /* Görgetés biztosítása */
     }
 
     /* Táblázat kártyákká alakítása */
@@ -587,17 +610,18 @@ footer button:hover {
     footer table tbody {
         display: flex;
         flex-direction: column;
-        gap: 1.2rem;
+        gap: 0.8rem;
         padding: 0;
     }
     footer table tbody tr {
-        display: flex;
+        display: flex !important; /* Biztosítjuk a láthatóságot */
         flex-direction: column;
         background: rgba(255, 245, 224, 0.95);
         border-radius: 10px;
         box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        padding: 1.2rem;
-        min-height: 180px;
+        padding: 0.8rem;
+        min-height: auto;
+        height: auto;
     }
     footer table tbody tr:hover { background: rgba(255, 245, 224, 0.8); }
     footer table tbody tr td {
@@ -652,4 +676,121 @@ footer button:hover {
     }
     .error-message::after { display: none; }
     footer table tbody tr td:nth-child(2) { padding-bottom: 40px; flex-direction: column; align-items: flex-start; }
+}
+
+/* Specifikus szabályok 400px alatt (pl. Samsung Galaxy S8+) */
+@media (max-width: 400px) {
+    /* Body padding további igazítása */
+    body {
+        padding: 90px 10px 1px; /* A navbar magasságát (60px) kompenzáljuk, plusz extra hely */
+    }
+
+    /* Main konténer */
+    main {
+        width: 100%; /* Szélesebb, hogy jobban kihasználja a képernyőt */
+        padding: 1rem; /* Kisebb padding */
+        max-height: 650px; /* Kisebb magasság az S8+ képernyőjéhez */
+        margin: 1px auto; /* Margó a navbar alatt */
+        background: url('https://www.transparenttextures.com/patterns/paper-fibers.png') repeat, #fffef0; /* Papír textúra */
+        border: 2px solid #d2b48c; /* Füzet széle */
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2); /* Kisebb árnyék */
+    }
+
+    /* Header */
+    main header {
+        padding: 1rem;
+        background: url('https://www.transparenttextures.com/patterns/lined-paper.png') repeat; /* Vonalas papír háttér */
+        border-bottom: 1px solid #d2b48c;
+    }
+
+    main header h1 {
+        font-size: 1.5rem; /* Kisebb címsor */
+        padding-bottom: 0.8rem;
+        color: #4a3728;
+    }
+
+    main header input {
+        font-size: 0.9rem; /* Kicsit kisebb betűméret */
+        padding: 0.8rem; /* Kisebb padding az input mezőben */
+        border: 1px solid #a68b5e;
+        color: #4a3728;
+    }
+
+    #todo-input-container {
+        gap: 0.8rem; /* Kisebb távolság az elemek között */
+    }
+
+    .time-picker select {
+        max-width: 48%; /* Kicsit szélesebb select mezők */
+        font-size: 0.9rem;
+        padding: 8px 25px 8px 10px; /* Kisebb padding */
+        background: rgba(255, 245, 224, 0.5);
+        border: 1px solid #a68b5e;
+        color: #4a3728;
+    }
+
+    main header .save-button {
+        padding: 0.7rem; /* Kisebb padding a gombon */
+        font-size: 0.9rem;
+        background: #e67e22;
+        color: #fffef0;
+        box-shadow: 0 3px 10px rgba(230, 126, 34, 0.3);
+    }
+
+    /* Todo count box */
+    .todo-count-box {
+        font-size: 1rem; /* Kisebb betűméret */
+        padding: 0.6rem 1rem;
+        background: rgba(255, 245, 224, 0.8);
+        color: #4a3728;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    /* Táblázat kártyák finomhangolása */
+    .todo-table-container {
+        height: 650px; /* Magasság igazítása az S8+ képernyőjéhez */
+        padding: 0 0.3rem;
+        background: url('https://www.transparenttextures.com/patterns/lined-paper.png') repeat; /* Vonalas papír háttér */
+        border-top: 1px solid #d2b48c;
+        overflow-y: auto !important; /* Görgetés biztosítása */
+    }
+
+    footer table tbody {
+        gap: 0.6rem; /* Még kisebb távolság 400px alatt */
+    }
+
+    footer table tbody tr {
+        min-height: auto; /* Dinamikus magasság */
+        height: auto;
+        padding: 0.6rem; /* Kisebb padding a kártyákban */
+        background: rgba(255, 245, 224, 0.95);
+        border-radius: 10px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    footer table tbody tr td {
+        font-size: 0.9rem; /* Kisebb betűméret */
+        padding: 0.3rem 0;
+        color: #4a3728;
+    }
+
+    footer table tbody tr td:nth-child(2) {
+        padding-bottom: 30px; /* Kisebb padding a teendő szöveg alatt */
+    }
+
+    footer button {
+        width: 35px; /* Kisebb gombok */
+        height: 35px;
+        font-size: 1rem;
+        color: #fffef0;
+    }
+
+    /* Üzenetek */
+    .save-message {
+        font-size: 0.7rem;
+        padding: 0.3rem 0.6rem;
+        max-width: 150px;
+        color: #fffef0;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
 }

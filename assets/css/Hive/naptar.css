@@ -23,7 +23,6 @@ body {
     align-items: center;
     overflow: hidden;
     margin: 0;
-    padding: 80px 20px 20px;
 }
 
 /* Navbar */
@@ -197,10 +196,9 @@ body {
     cursor: pointer;
     max-width: 130px;
     outline: none;
-    -webkit-appearance: none; /* Alapértelmezett nyíl eltávolítása */
+    -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
-    /* Új, szebb nyíl SVG */
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23facc15' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: right 10px center;
@@ -209,9 +207,8 @@ body {
 
 .calendar-header select:focus,
 .calendar-header select:hover {
-    border-color: #f97316; /* Narancssárga árnyalat a gradiensből */
-    box-shadow: 0 0 8px rgba(249, 115, 22, 0.3); /* Narancssárga árnyék */
-    /* Hover/fókusz esetén is narancssárga nyíl */
+    border-color: #f97316;
+    box-shadow: 0 0 8px rgba(249, 115, 22, 0.3);
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23f97316' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
 }
 
@@ -453,6 +450,14 @@ body {
     margin: 5px;
 }
 
+.task-form .button-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 5px;
+    width: 100%;
+}
+
 .task-form button#save-button {
     background: linear-gradient(90deg, #facc15, #f97316);
     color: #000000;
@@ -497,6 +502,112 @@ body {
 
 /* Reszponzív kezelés */
 @media (max-width: 768px) {
+    /* Felhasználói információ */
+    .user-info {
+        position: absolute;
+        top: 7px;
+        right: 80px;
+        font-size: 1rem;
+        padding: 5px 10px;
+    }
+
+    .coin-info {
+        font-size: 0.9rem;
+    }
+
+    /* Naptár konténer */
+    .calendar-container {
+        width: 100%;
+        max-width: 100%;
+        border-radius: 0;
+        margin: 0;
+        padding: 0.5rem;
+    }
+
+    /* Naptár fejléc */
+    .calendar-header {
+        flex-wrap: wrap;
+        gap: 5px;
+    }
+
+    .calendar-header select {
+        max-width: 80px;
+        font-size: 12px;
+        padding: 6px 8px;
+    }
+
+    .calendar-header button {
+        padding: 6px 8px;
+        font-size: 14px;
+    }
+
+    /* Napok nevei */
+    .calendar-days {
+        font-size: 12px;
+    }
+
+    .day-name {
+        padding: 6px;
+    }
+
+    /* Naptár grid */
+    .day {
+        min-height: 50px;
+        padding-top: 12px;
+    }
+
+    .day-number {
+        font-size: 14px;
+    }
+
+    .todos-for-day {
+        width: 0.9rem;
+        height: 0.9rem;
+        line-height: 0.9rem;
+        font-size: 9px;
+        top: 2px;
+        right: 2px;
+    }
+
+    /* Felugró ablak (task-form) */
+    .task-form {
+        width: 60%;
+        max-width: 180px;
+        padding: 15px;
+        top: 0;
+        left: 0;
+    }
+
+    .task-form h3 {
+        font-size: 16px;
+    }
+
+    .task-form input[type="text"],
+    .task-form select {
+        font-size: 12px;
+    }
+
+    .task-form button {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+
+    .time-picker {
+        gap: 5px;
+    }
+
+    .time-picker select {
+        padding: 8px 25px 8px 10px;
+        font-size: 1rem;
+        width: 90px;
+    }
+
+    .time-picker span {
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 768px) {
     .hamburger {
         display: block;
     }
@@ -506,7 +617,7 @@ body {
         top: 60px;
         left: 0;
         width: 100%;
-        background: rgba(0, 0, 0, 0.95);
+        background: rgba(39, 39, 39, 0.95);
         flex-direction: column;
         align-items: center;
         justify-content: center;
@@ -518,6 +629,10 @@ body {
 
     .nav-links.active {
         transform: translateX(0);
+    }
+
+    .nav-links li {
+        display: block;
     }
 
     .nav-links a {
@@ -533,227 +648,70 @@ body {
     .hamburger.active span:nth-child(3) {
         transform: rotate(-45deg) translate(7px, -7px);
     }
-
-    .user-info {
-        position: absolute;
-        top: 7px;
-        right: 60px;
-        font-size: 1rem;
-        padding: 5px 10px;
-    }
-
-    .coin-info {
-        font-size: 0.9rem;
-    }
-
-    .calendar-container {
-        width: 100%;
-        max-width: 100%;
-        border-radius: 0;
-        margin: 0;
-        padding: 1rem; /* Nagyobb padding a jobb kinézet érdekében */
-        position: fixed;
-        top: 60px;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-    }
-
-    .calendar-header {
-        flex-wrap: wrap;
-        gap: 10px; /* Nagyobb távolság az elemek között */
-        padding: 8px;
-    }
-
-    .calendar-header select {
-        max-width: 110px; /* Kicsit kisebb, de érinthető méret */
-        font-size: 14px;
-        padding: 8px 25px 8px 10px; /* Nagyobb padding a nyíl számára */
-        background-size: 14px; /* Nagyobb nyíl */
-    }
-
-    .calendar-header button {
-        padding: 8px 15px; /* Nagyobb érintési felület */
-        font-size: 18px;
-    }
-
-    .calendar-days {
-        font-size: 14px;
-    }
-
-    .day-name {
-        padding: 10px;
-    }
-
-    .day {
-        min-height: 70px; /* Nagyobb méret az érintéshez */
-        padding-top: 15px;
-        font-size: 16px;
-    }
-
-    .day-number {
-        font-size: 16px;
-    }
-
-    .todos-for-day {
-        width: 1.2rem;
-        height: 1.2rem;
-        line-height: 1.2rem;
-        font-size: 10px;
-        top: 5px;
-        right: 5px;
-    }
-
-    .task-form {
-        width: 90%; /* Szélesebb, hogy jobban kitöltse a képernyőt */
-        max-width: 320px;
-        padding: 15px;
-        top: 70px;
-        left: 50%;
-        transform: translateX(-50%);
-    }
-
-    .task-form h3 {
-        font-size: 16px;
-    }
-
-    .task-form input[type="text"],
-    .task-form select {
-        font-size: 12px;
-    }
-
-    .task-form button {
-        padding: 8px 14px;
-        font-size: 12px;
-    }
-
-    .time-picker {
-        gap: 8px;
-    }
-
-    .time-picker select {
-        padding: 6px 20px 6px 10px;
-        font-size: 12px;
-        width: 85px;
-    }
-
-    .time-picker span {
-        font-size: 1.2rem;
-    }
 }
 
 @media (max-width: 768px) {
+    /* Body */
     body {
-        display: block;
-        overflow: auto;
-        padding: 70px 10px 10px;
+        display: block; /* Mobilon nem kell középre igazítani */
+        overflow: auto; /* Görgetés engedélyezése, ha szükséges */
     }
 
+    /* Navbar */
     .navbar {
-        padding: 10px 15px;
-        height: 60px;
+        padding: 10px 15px; /* Kisebb padding mobilon */
+        height: 60px; /* Fix magasság a navbar számára */
         box-sizing: border-box;
     }
 
+    /* Naptár konténer */
     .calendar-container {
         width: 100%;
         max-width: 100%;
-        border-radius: 0;
+        border-radius: 0; /* Nincs lekerekítés mobilon */
         margin: 0;
-        padding: 1rem;
-        position: fixed;
-        top: 60px;
-        bottom: 0;
+        padding: 0.5rem;
+        position: fixed; /* A konténer fix pozícióban legyen */
+        top: 60px; /* A navbar magassága után kezdődik */
+        bottom: 0; /* A képernyő aljáig ér */
         left: 0;
         right: 0;
         display: flex;
         flex-direction: column;
-        overflow: hidden;
+        overflow: hidden; /* A konténeren belül ne legyen görgetés */
     }
 
+    /* Naptár grid */
     .calendar-grid {
-        flex-grow: 1;
-        overflow-y: auto;
+        flex-grow: 1; /* A grid kitölti a rendelkezésre álló helyet */
+        overflow-y: auto; /* Görgetés engedélyezése a gridben, ha szükséges */
         -webkit-overflow-scrolling: touch; /* Sima görgetés iOS-en */
-        scrollbar-width: thin; /* Vékony scrollbar Firefox-ban */
-        scrollbar-color: #facc15 #1f2937; /* Sárga scrollbar a sötét háttéren */
     }
 
-    /* Egyéni scrollbar Chrome/Safari/Edge böngészőkben */
-    .calendar-grid::-webkit-scrollbar {
-        width: 8px;
-    }
-
-    .calendar-grid::-webkit-scrollbar-track {
-        background: #1f2937;
-        border-radius: 10px;
-    }
-
-    .calendar-grid::-webkit-scrollbar-thumb {
-        background: #facc15;
-        border-radius: 10px;
-    }
-
-    .calendar-grid::-webkit-scrollbar-thumb:hover {
-        background: #f97316;
+    /* Napok */
+    .day {
+        min-height: 60px;
+        font-size: 16px;
+        padding-top: 15px;
     }
 }
 
 @media (max-width: 480px) {
+    /* Navbar */
     .navbar {
         padding: 8px 10px;
-        height: 60px;
+        height: 80px; /* Még kisebb magasság kisebb képernyőkön */
     }
 
+    /* Naptár konténer */
     .calendar-container {
-        top: 60px;
-        gap: 0.5rem;
-        padding: 0.5rem;
+        top: 80px; /* A kisebb navbar magassága után */
+        gap: 1rem;
     }
 
-    .calendar-header {
-        gap: 5px; /* Még kisebb távolság, de érinthető */
-    }
-
-    .calendar-header select {
-        max-width: 100px; /* Még kisebb méret */
-        font-size: 12px;
-        padding: 6px 20px 6px 8px;
-        background-size: 12px;
-    }
-
-    .calendar-header button {
-        padding: 6px 12px;
-        font-size: 16px;
-    }
-
-    .calendar-days {
-        font-size: 12px;
-    }
-
-    .day-name {
-        padding: 8px;
-    }
-
+    /* Napok */
     .day {
-        min-height: 60px; /* Kicsit kisebb, de érinthető méret */
-        padding-top: 12px;
-        font-size: 14px;
-    }
-
-    .day-number {
-        font-size: 14px;
-    }
-
-    .todos-for-day {
-        width: 1rem;
-        height: 1rem;
-        line-height: 1rem;
-        font-size: 8px;
-        top: 3px;
-        right: 3px;
+        min-height: 70px;
+        padding-top: 10px;
     }
 }

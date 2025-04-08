@@ -1,5 +1,5 @@
 <?php
-$path = 'C:/xampp/htdocs/todo_app/modules/_db.php';
+$path = realpath(__DIR__ . '/../modules/_db.php');
 
 if (file_exists($path)) {
     echo "A _db.php fájl létezik a megadott elérési úton: $path\n";

@@ -1,4 +1,11 @@
-const apiUrl = 'http://localhost/todo_app/api/';
+// const apiUrl = 'http://localhost/todo_app/api/';
+
+const apiUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+    ? 'http://localhost/todo_app/api/'  // Ha localhost, akkor helyi API
+    : 'https://todoapp.norbbert4.hu/api/';  // Ha éles környezet, akkor online API
+
+console.log('API URL:', apiUrl);  // Debug üzenet az API URL ellenőrzéséhez
+
 
 const dateObject = { date: '' };
 const urlSearchParams = new URLSearchParams(window.location.search);
@@ -162,9 +169,9 @@ const createTableRow = (todo, index) => {
                 <td class="state-${todo.completed}">${todo.date.substring(0, 10)}</td>
                 <td class="state-${todo.completed}">${startTimeDisplay}</td>
                 <td class="action-cell">
-                    <button type="button" class="state-button-k state-k-button_${todo.completed}" data-action="complete" data-id="${todo.id}">•</button>
-                    <button type="button" class="state-button-m state-m-button_${todo.completed}" data-action="uncomplete" data-id="${todo.id}">«</button>
-                    <button type="button" class="delete-button" data-action="delete" data-id="${todo.id}">Ø</button>
+                    <button type="button" class="state-button-k state-k-button_${todo.completed}" data-action="complete" data-id="${todo.id}" title="Kész">•</button>
+                    <button type="button" class="state-button-m state-m-button_${todo.completed}" data-action="uncomplete" data-id="${todo.id}" title="Felfüggesztés">«</button>
+                    <button type="button" class="delete-button" data-action="delete" data-id="${todo.id}" title="Törlés">Ø</button>
                 </td>
             </tr>`;
 };
@@ -260,6 +267,7 @@ async function renderTable() {
         let todos = [];
         if (resjson.type === 'result') {
             todos = resjson.body;
+            console.log('API válasz (todos):', todos); // Naplózás
         } else {
             console.error('Hiba a teendők lekérdezésekor:', resjson.message);
             if (resjson.message === 'Sikertelen autentikáció.') {
@@ -270,7 +278,7 @@ async function renderTable() {
                 todayTodoCount.textContent = 'Teendőid száma: 0';
             }
             todoTable.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #c0c0c0;">Nincs teendő</td></tr>';
-           
+            
         }
 
         let todosToRender = [];
@@ -297,6 +305,8 @@ async function renderTable() {
             todoInputContainer.style.display = 'none';
             saveButton.style.display = 'none';
         }
+
+        console.log('todosToRender:', todosToRender); // Naplózás
 
         if (todayTodoCount) {
             todayTodoCount.textContent = `Teendőid száma: ${todoCountValue}`;

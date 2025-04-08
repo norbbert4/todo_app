@@ -3,6 +3,9 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+    font-size: 16px;
+    /* Görgetés engedélyezése a body-n */
+    overflow-y: auto;
 }
 
 /* Navigációs sáv */
@@ -12,7 +15,7 @@ body {
     width: 100%;
     background: rgba(255, 255, 255, 0.1);
     color: #ffffff;
-    padding: 15px 20px;
+    padding: 1rem 1.5rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -42,7 +45,7 @@ body {
     font-weight: 700;
     color: #ffffff;
     text-decoration: none;
-    padding: 5px;
+    padding: 0.3rem;
     transition: color 0.3s ease, transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
@@ -54,10 +57,10 @@ body {
 .nav-links {
     list-style: none;
     display: flex;
-    gap: 35px;
+    gap: 2rem;
     margin: 0;
     padding: 0;
-    margin-top: 10px;
+    margin-top: 0.5rem;
     transition: all 0.3s ease;
 }
 
@@ -100,7 +103,7 @@ body {
     background: none;
     border: none;
     cursor: pointer;
-    padding: 10px;
+    padding: 0.5rem;
     z-index: 101;
 }
 
@@ -128,7 +131,7 @@ body {
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        gap: 40px;
+        gap: 2rem;
         height: calc(100vh - 60px);
         transform: translateX(-100%);
         z-index: 99;
@@ -162,36 +165,40 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 70vh; /* Kissebb magasság, hogy ne érjen a navbarhez */
-    margin-top: 60px; /* Navbar elkerülése */
+    /* A fix magasság helyett min-height, hogy a tartalom túlfuthasson */
+    min-height: 70vh;
+    margin-top: 60px;
     width: 90%;
     max-width: 1200px;
+    /* Görgetés engedélyezése, ha a tartalom nem fér el */
+    overflow-y: auto;
+    padding-bottom: 2rem; /* Extra hely az alján a görgetéshez */
 }
 
 /* A bal oldali szöveg és a jobb oldali form szélessége */
 .col-md-7 {
     flex: 1;
     max-width: 500px;
-    margin: 20px;
+    margin: 1rem;
 }
 
 /* Bal oldali üdvözlő szöveg */
 .login_bal_text {
-    font-size: 2.5rem;
+    font-size: 2rem;
     font-weight: 700;
-    margin-bottom: 1.5rem;
-    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* Finom árnyék a jobb láthatóságért */
+    margin-bottom: 1rem;
+    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
 .login_bal_text_kis {
-    font-size: 1.1rem;
+    font-size: 1rem;
     color: #e6fffb;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); /* Finom árnyék */
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 /* Jobb oldali form szöveg */
 .login_bejel_text_cim {
-    font-size: 1.5rem;
+    font-size: 1.3rem;
     font-weight: normal;
     color: white;
     text-align: center;
@@ -199,71 +206,73 @@ body {
 
 /* A form megjelenése */
 form {
-    background: rgba(20, 20, 20, 0.8); /* Sötétebb üveg effektus */
+    background: rgba(20, 20, 20, 0.8);
     border-radius: 20px;
-    padding: 3rem;
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4), 0 5px 15px rgba(0, 0, 0, 0.2); /* Mélyebb 3D-s árnyék */
-    backdrop-filter: blur(15px); /* Erősebb üveg effektus */
-    border: 2px solid #000000; /* Fekete keret */
-    transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 0.4s ease; /* Spring animáció */
+    padding: 2rem;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4), 0 5px 15px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(15px);
+    border: 2px solid #000000;
+    transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 0.4s ease;
 }
+
 .form-check-label {
-    color: white; /* Ensure the text is visible against the dark background */
-    font-size: 1rem; /* Adjust font size for readability */
-    margin-left: 0.5rem; /* Add some spacing between the checkbox and the label */
+    color: white;
+    font-size: 0.9rem;
+    margin-left: 0.5rem;
 }
+
 .form-check {
     display: flex;
-    align-items: center; /* Vertically center the checkbox and label */
-    margin-bottom: 1.5rem; /* Match the spacing of other form elements */
+    align-items: center;
+    margin-bottom: 1rem;
 }
 
 /* Beviteli mezők */
 .form-control {
     width: 100%;
-    padding: 14px;
-    font-size: 1.1rem;
-    color: rgba(255, 255, 255, 0.1); /* Világosabb, jobban látható szín */
+    padding: 0.8rem;
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.1);
     background-color: rgba(255, 255, 255, 0.1);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 12px;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
     text-align: center;
     transition: border-color 0.3s ease, background-color 0.3s ease, transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2); /* 3D-s beviteli mező */
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 /* Hover és focus állapotok */
 .form-control:hover,
 .form-control:focus {
-    border-color: #00ffcc; /* Neonos cián keret */
-    transform: scale(1.02); /* Kissebb nagyítás */
+    border-color: #00ffcc;
+    transform: scale(1.02);
     outline: none;
 }
 
 .form-control::placeholder {
-    color: rgba(230, 255, 251, 0.7); /* Világosabb placeholder szín */
+    color: rgba(230, 255, 251, 0.7);
 }
 
 /* A gombok */
 .btn-primary {
-    background: rgba(26, 115, 232, 0.6); /* Neonos gradient gomb */
+    background: rgba(26, 115, 232, 0.6);
     border: none;
-    padding: 12px 24px;
-    font-size: 1.1rem;
-    color: white; /* Javítva a szín gradient helyett */
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    color: white;
     border-radius: 12px;
     cursor: pointer;
     transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), background 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 5px 15px rgba(0, 255, 204, 0.4), 0 2px 5px rgba(0, 0, 0, 0.2); /* 3D-s árnyék */
+    box-shadow: 0 5px 15px rgba(0, 255, 204, 0.4), 0 2px 5px rgba(0, 0, 0, 0.2);
     width: 100%;
     margin-top: 0.5rem;
 }
 
 .btn-primary:hover {
-    background: rgba(26, 115, 232, 0.8); /* Sötétebb gradient hoverre */
-    transform: translateY(-3px) scale(1.05); /* 3D-s felugrás és nagyítás */
-    box-shadow: 0 8px 20px rgba(0, 255, 204, 0.5), 0 4px 10px rgba(0, 0, 0, 0.3); /* Mélyebb árnyék */
+    background: rgba(26, 115, 232, 0.8);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 8px 20px rgba(0, 255, 204, 0.5), 0 4px 10px rgba(0, 0, 0, 0.3);
 }
 
 /* További információk (pl. regisztráció) */
@@ -273,23 +282,26 @@ form {
 }
 
 /* A bejelentkezési információk színe és stílusa */
-#login-info {
+#login-info,
+#reg-info,
+#forgot-info,
+#code-info {
     width: 100%;
     text-align: center;
-    padding: 0rem 0rem;
+    padding: 0.5rem 0;
     margin-top: 1rem;
     color: white;
     border-radius: 5px;
-    font-size: 1rem;
+    font-size: 0.9rem;
     font-weight: 600;
 }
 
 /* Regisztrációs információk */
 #reg-info {
-    padding: 15px;
-    margin-top: 10px;
+    padding: 0.8rem;
+    margin-top: 0.5rem;
     border-radius: 5px;
-    font-size: 1.2rem;
+    font-size: 1rem;
     text-align: center;
     color: white;
 }
@@ -298,7 +310,7 @@ form {
 .bg-green { background-color: green; }
 
 h2 {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
 }
 
 p {
@@ -308,9 +320,167 @@ p {
 }
 
 .bg-green {
-    background-color: #4CAF50; /* Zöld szín a sikeres regisztrációhoz */
+    background-color: #4CAF50;
 }
 
 .bg-red {
-    background-color: #f44336; /* Piros szín a hibához */
+    background-color: #f44336;
+}
+
+/* Kódbeviteli mező a registration.html-hez */
+#codeInput {
+    background: rgba(20, 20, 20, 0.8);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4), 0 5px 15px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(15px);
+    border: 2px solid #000000;
+    transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 0.4s ease;
+}
+
+/* Media query-k az S8+ és A51/71 közötti különbségek kezelésére */
+@media (max-width: 768px) {
+    .container {
+        flex-direction: column;
+        min-height: auto; /* A tartalomhoz igazodjon a magasság */
+        margin-top: 4rem;
+        padding: 1rem;
+        /* Görgetés biztosítása */
+        height: auto;
+        overflow-y: auto;
+    }
+
+    .col-md-5,
+    .col-md-7 {
+        max-width: 100%;
+        margin: 0.5rem 0;
+    }
+
+    .login_bal_text {
+        font-size: 1.8rem;
+    }
+
+    .login_bal_text_kis {
+        font-size: 0.9rem;
+    }
+
+    .login_bejel_text_cim {
+        font-size: 1.2rem;
+    }
+
+    form,
+    #codeInput {
+        padding: 1.5rem;
+    }
+
+    .form-control {
+        padding: 0.7rem;
+        font-size: 0.9rem;
+    }
+
+    .btn-primary {
+        padding: 0.7rem 1.2rem;
+        font-size: 0.9rem;
+    }
+
+    .form-check-label {
+        font-size: 0.8rem;
+    }
+}
+
+/* Az S8+ specifikus media query (1440px szélesség és 18.5:9 képarány körül) */
+@media (min-width: 769px) and (max-width: 1440px) and (min-aspect-ratio: 18/9) {
+    body {
+        font-size: 10px;
+        overflow-y: auto; /* Görgetés engedélyezése */
+    }
+
+    .container {
+        max-width: 900px;
+        min-height: 40vh; /* Kisebb magasság, hogy a tartalom elférjen */
+        height: auto; /* A tartalomhoz igazodjon */
+        overflow-y: none; /* Görgetés engedélyezése */
+        padding-bottom: 0.2rem; /* Extra hely az alján */
+    }
+
+    .col-md-7 {
+        max-width: 450px;
+    }
+
+    .login_bal_text {
+        font-size: 2rem; /* Kisebb betűméret az S8+ képarányához */
+    }
+
+    .login_bal_text_kis {
+        font-size: 1rem;
+    }
+
+    .login_bejel_text_cim {
+        font-size: 1.3rem;
+    }
+
+    form,
+    #codeInput {
+        padding: 1rem; /* Kisebb padding, hogy kompaktabb legyen */
+    }
+
+    .form-control {
+        padding: 0.8rem;
+        font-size: 1rem;
+    }
+
+    .btn-primary {
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+    }
+
+    .form-check-label {
+        font-size: 0.9rem;
+    }
+}
+
+/* Az A51/71 specifikus media query (1080px szélesség és 20:9 képarány körül) */
+@media (max-width: 1080px) and (min-aspect-ratio: 19/9) {
+    body {
+        font-size: 16px;
+    }
+
+    .container {
+        max-width: 400px;
+    }
+
+    .col-md-7 {
+        max-width: 400px;
+    }
+
+    .login_bal_text {
+        font-size: 2rem;
+    }
+
+    .login_bal_text_kis {
+        font-size: 1rem;
+    }
+
+    .login_bejel_text_cim {
+        font-size: 1.3rem;
+    }
+
+    form,
+    #codeInput {
+        padding: 2rem;
+    }
+
+    .form-control {
+        padding: 0.8rem;
+        font-size: 1rem;
+    }
+
+    .btn-primary {
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+    }
+
+    .form-check-label {
+        font-size: 0.9rem;
+    }
 }

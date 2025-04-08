@@ -634,3 +634,74 @@ footer button:hover {
     .error-message::after { display: none; }
     footer table tbody tr td:nth-child(2) { padding-bottom: 40px; flex-direction: column; align-items: flex-start; }
 }
+@media (max-width: 400px) {
+    /* Body padding további csökkentése */
+    body {
+        padding: 90px 10px 1px; /* Növeljük a padding-top-ot 70px-re az S8+-on */
+    }
+
+    /* Main konténer */
+    main {
+        width: 100%; /* Szélesebb, hogy jobban kihasználja a képernyőt */
+        padding: 1rem; /* Kisebb padding */
+        max-height: 650px; /* Kisebb magasság az S8+ képernyőjéhez */
+        margin: 1px auto; /* Margó a navbar alatt */
+    }
+
+    /* Header */
+    main header h1 {
+        font-size: 1.5rem; /* Kisebb címsor */
+        padding-bottom: 0.8rem;
+    }
+    main header input {
+        font-size: 0.9rem; /* Kicsit kisebb betűméret */
+        padding: 0.8rem; /* Kisebb padding az input mezőben */
+    }
+    #todo-input-container {
+        gap: 0.8rem; /* Kisebb távolság az elemek között */
+    }
+    .time-picker select {
+        max-width: 48%; /* Kicsit szélesebb select mezők */
+        font-size: 0.9rem;
+        padding: 8px 25px 8px 10px; /* Kisebb padding */
+    }
+    main header .save-button {
+        padding: 0.7rem; /* Kisebb padding a gombon */
+        font-size: 0.9rem;
+    }
+
+    /* Todo count box */
+    .todo-count-box {
+        font-size: 1rem; /* Kisebb betűméret */
+        padding: 0.6rem 1rem;
+    }
+
+    /* Táblázat kártyák finomhangolása */
+    .todo-table-container {
+        height: 600px; /* Kisebb magasság az S8+ képernyőjéhez */
+        padding: 0 0.3rem;
+    }
+    footer table tbody tr {
+        min-height: 200px; /* Kisebb kártya magasság */
+        padding: 0.8rem; /* Kisebb padding a kártyákban */
+    }
+    footer table tbody tr td {
+        font-size: 0.9rem; /* Kisebb betűméret */
+        padding: 0.3rem 0;
+    }
+    footer table tbody tr td:nth-child(2) {
+        padding-bottom: 30px; /* Kisebb padding a teendő szöveg alatt */
+    }
+    footer button {
+        width: 35px; /* Kisebb gombok */
+        height: 35px;
+        font-size: 1rem;
+    }
+
+    /* Üzenetek */
+    .save-message {
+        font-size: 0.7rem;
+        padding: 0.3rem 0.6rem;
+        max-width: 150px;
+    }
+}

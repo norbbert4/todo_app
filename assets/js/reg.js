@@ -49,8 +49,14 @@ const registration = async () => {
         if (data.success && data.step === 'verify_code') {
             regInfo.classList.add('bg-green');
             regInfo.textContent = data.message;
+
+            // Dinamikusan beállítjuk az útvonalat
+            const redirectUrl = window.location.hostname === 'localhost' ? 
+                '/todo_app/verify_code.html' : 
+                'https://todoapp.norbbert4.hu/verify_code.html';
+
             setTimeout(() => {
-                window.location.href = "/todo_app/verify_code.html"; // Abszolút útvonal
+                window.location.href = redirectUrl;
             }, 2000);
         } else if (!data.success) {
             regInfo.classList.add('bg-red');
@@ -92,6 +98,7 @@ const verifyCode = async () => {
         if (data.success) {
             codeInfo.classList.add('bg-green');
             codeInfo.textContent = data.message;
+
             setTimeout(() => {
                 window.location.href = "./index.html";
             }, 2000);

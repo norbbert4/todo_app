@@ -51,7 +51,7 @@ body {
 }
 
 .navbar:hover {
-    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.6);
 }
 
 .nav-container {
@@ -59,7 +59,6 @@ body {
     justify-content: space-between;
     width: 100%;
     max-width: 1200px;
-    margin: 0 auto;
     align-items: center;
 }
 
@@ -84,11 +83,6 @@ body {
     margin: 0;
     padding: 0;
     margin-top: 10px;
-    transition: all 0.3s ease;
-}
-
-.nav-links li {
-    display: inline;
 }
 
 .nav-links a {
@@ -106,12 +100,12 @@ body {
     height: 2px;
     bottom: -5px;
     left: 0;
-    background-color: #88c0d0;
+    background-color: #ffffff;
     transition: width 0.3s ease;
 }
 
 .nav-links a:hover {
-    color: #88c0d0;
+    color: #ffffff;
     transform: translateY(-3px) scale(1.05);
 }
 
@@ -141,17 +135,16 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    color: #ffffff;
+    color: #facc15;
     font-size: 1.2rem;
     font-weight: 500;
     padding: 5px 15px;
     border-radius: 10px;
-    background: rgba(255, 255, 255, 0.1); /* Transparent background */
-    transition: all 0.3s ease;
+    background: rgba(250, 204, 21, 0.2);
 }
 
 .user-info:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(250, 204, 21, 0.3);
     transform: scale(1.05);
 }
 
@@ -161,14 +154,6 @@ body {
     gap: 5px;
     margin-top: 5px;
     font-size: 1rem;
-    padding: 2px 8px; /* Added padding for the transparent square */
-    border-radius: 5px; /* Rounded corners for the square */
-    background: rgba(255, 255, 255, 0.1); /* Transparent background for the coin info */
-    transition: all 0.3s ease;
-}
-
-.coin-info:hover {
-    background: rgba(255, 255, 255, 0.2); /* Slightly less transparent on hover */
 }
 
 .coin-icon {
@@ -179,6 +164,7 @@ body {
     font-weight: 600;
     color: #ffffff;
 }
+
 /* Skin választó kártyák */
 main {
     display: flex;
@@ -299,14 +285,49 @@ main .skin-card.locked:hover {
         font-size: 1rem;
         padding: 5px 10px;
     }
-
-    .coin-info {
+    .coin-info { 
         font-size: 0.9rem;
-    }
+     }
 
     main .skin-card {
         width: 100%;
         max-width: 300px;
         height: 150px;
     }
+}
+
+.modal#confirmModal .modal-content {
+    background-color: #1a1a1a !important; /* Fekete háttér */
+    color: #ffffff !important; /* Fehér szöveg */
+    border: 1px solid #333 !important; /* Sötét szegély */
+}
+
+/* Modal fejléc és lábléc háttérszínének módosítása */
+.modal#confirmModal .modal-header,
+.modal#confirmModal .modal-footer {
+    background-color: #1a1a1a !important; /* Fekete háttér */
+    border-color: #333 !important; /* Sötét szegély a fejléc és lábléc között */
+}
+
+/* Modal cím (Skin vásárlás megerősítése) fehér színűvé tétele */
+.modal#confirmModal .modal-title {
+    color: #ffffff !important; /* Fehér szöveg */
+}
+
+/* Bezárás gomb (X) színének módosítása, hogy látható legyen */
+.modal#confirmModal .btn-close {
+    filter: invert(1) !important; /* A bezárás gomb fehérre vált, hogy látható legyen a fekete háttéren */
+}
+
+/* Gombok stílusának megtartása */
+.modal#confirmModal .btn-secondary {
+    background-color: #6c757d !important; /* Szürke "Mégse" gomb */
+    border-color: #6c757d !important;
+    color: #ffffff !important; /* Fehér szöveg a gombon */
+}
+
+.modal#confirmModal .btn-primary {
+    background-color: #007bff !important; /* Kék "Megveszem" gomb */
+    border-color: #007bff !important;
+    color: #ffffff !important; /* Fehér szöveg a gombon */
 }

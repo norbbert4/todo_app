@@ -1,5 +1,7 @@
-//const loginApiUrl = 'api/authentication/login.php';
-const loginApiUrl = 'http://localhost/todo_app/api/authentication/login.php';
+// apiUrl dinamikus beállítása
+const apiUrl = location.hostname === 'localhost' ? 'http://localhost/todo_app/api/' : 'https://todoapp.norbbert4.hu/api/';
+
+const loginApiUrl = `${apiUrl}authentication/login.php`; // Dinamikusan beállítva
 const usernameInput = document.getElementById('username');
 const passwordInput = document.getElementById('password');
 const loginInfo = document.getElementById('login-info');

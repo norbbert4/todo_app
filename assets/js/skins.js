@@ -1,4 +1,6 @@
-const apiUrl = 'http://localhost/todo_app/api/';
+const apiUrl = window.location.hostname === 'localhost' ? 
+    'http://localhost/todo_app/api/' : 
+    'https://todoapp.norbbert4.hu/api/';
 
 const main = document.querySelector('main');
 const aside = document.querySelector('aside');
@@ -51,7 +53,6 @@ document.addEventListener('DOMContentLoaded', () => {
     check();
 });
 
-
 async function getSkins() {
     const get_apiUrl = `${apiUrl}?token=${userData.token}&userid=${userData.user_ID}&entity=skins`;
     console.log('GET kérés URL:', get_apiUrl);
@@ -65,11 +66,9 @@ async function getSkins() {
             console.error('Hiba a skinek lekérdezésekor:', resjson.message);
         }
 
-        // Default skin box
         let skinsContent = `
             <div onclick="changeSkin('default', '0')" title="alapértelmezett" class="skin-card unlocked">
                 <h3>Default</h3>
-                <h5>default</h5>
             </div>`;
 
         skins.forEach((skin, index) => {
@@ -77,7 +76,6 @@ async function getSkins() {
             skinsContent += `
                 <div id="skin_${skin.id}" ${ skin.unlock_date ? 'onclick="changeSkin(\''+skin.css_file+'\', '+skin.id+')" title="feloldva" class="skin-card unlocked"' : 'onclick="unlockSkin(\''+skin.css_file+'\', '+skin.id+', '+skin.price+')" class="skin-card locked" title="nincs feloldva"' }>
                     <h3>${skin.skin_name}</h3>
-                    <h5>${skin.css_file}</h5>
                     ${ skin.unlock_date ? `<h6>${skin.unlock_date}</h6>` : `<h6 class="price">Ár: ${skin.price} 🪙</h6>` }
                 </div>`;
         });
@@ -88,7 +86,6 @@ async function getSkins() {
         window.location.href = 'index.html';
     }
 }
-
 
 const changeSkin = async (skinDirector, skinID) => {
     const skinLink = document.querySelector('#skinlink');
@@ -122,6 +119,29 @@ const showMessage = (message) => {
 };
 
 const unlockSkin = async (skinDirector, skinID, price) => {
+    const confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'));
+    const modalPrice = document.getElementById('modalPrice');
+    const confirmPurchaseBtn = document.getElementById('confirmPurchaseBtn');
+
+    modalPrice.textContent = price;
+
+    confirmModal.show();
+
+    const proceedWithPurchase = await new Promise((resolve) => {
+        confirmPurchaseBtn.onclick = () => {
+            confirmModal.hide();
+            resolve(true);
+        };
+        document.querySelector('#confirmModal .btn-secondary').onclick = () => {
+            confirmModal.hide();
+            resolve(false);
+        };
+    });
+
+    if (!proceedWithPurchase) {
+        return;
+    }
+
     try {
         const res = await fetch(`${apiUrl}?token=${userData.token}&userid=${userData.user_ID}&entity=skins&entityid=${skinID}`, {
             method: 'PATCH',
@@ -130,22 +150,17 @@ const unlockSkin = async (skinDirector, skinID, price) => {
         });
         const response = await res.json();
         if (response.type == 'result') {
-            // Sikeres a feloldás, frissítjük a kártyát
             const skinCard = document.querySelector(`#skin_${skinID}`);
             skinCard.classList.remove('locked');
             skinCard.classList.add('unlocked');
             skinCard.setAttribute('onclick', `changeSkin('${skinDirector}', ${skinID})`);
 
-            // A kártya tartalmának frissítése: eltávolítjuk az árat
             const skinName = skinCard.querySelector('h3').textContent;
-            const cssFile = skinCard.querySelector('h5').textContent;
             skinCard.innerHTML = `
                 <h3>${skinName}</h3>
-                <h5>${cssFile}</h5>
                 <h6 class="unlocked-text">Feloldva!</h6>
             `;
 
-            // Coin levonása és frissítése
             userData.coins -= price;
             localStorage.setItem('userData', JSON.stringify(userData));
             coinCountSpan.textContent = userData.coins;

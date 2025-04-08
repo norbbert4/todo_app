@@ -1,6 +1,11 @@
 // diagram.js
 
-const apiUrl = 'http://localhost/todo_app/api/';
+//const apiUrl = 'http://localhost/todo_app/api/';
+
+const apiUrl = (location.hostname === 'localhost')
+    ? 'http://localhost/todo_app/api/'
+    : `${location.protocol}//${location.hostname}/api/`;
+
 
 let userData = { user_ID: 0, token: '-', username: '', coins: 0 };
 if (localStorage.getItem('userData') !== null) userData = JSON.parse(localStorage.getItem('userData'));
