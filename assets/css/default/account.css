@@ -13,6 +13,12 @@ body {
     animation: fadeIn 1s ease-in forwards;
 }
 
+.login_bal_text_kis {
+    font-size: 1rem;
+    color: #e6fffb;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+	text-align: center !important; 
+}
 
 body {
     font-family: 'Roboto', Arial, sans-serif;
