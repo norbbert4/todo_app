@@ -8,10 +8,10 @@
     }
 }
 
-/* Alapértelmezett fade-in az oldal betöltésekor */
+/* Alapértelmezett fade-in az oldal betöltésekor 
 body {
-    animation: fadeIn 1s ease-in forwards;
-}
+    animation: fadeIn 0.2s ease-in forwards;
+}*/
 
 
 /* Alapvető reset és testreszabás */

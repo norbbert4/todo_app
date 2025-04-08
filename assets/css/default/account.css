@@ -8,10 +8,10 @@
     }
 }
 
-/* Alapértelmezett fade-in az oldal betöltésekor */
+/* Alapértelmezett fade-in az oldal betöltésekor 
 body {
-    animation: fadeIn 1s ease-in forwards;
-}
+    animation: fadeIn 0.2s ease-in forwards;
+}*/
 
 .login_bal_text_kis {
     font-size: 1rem;

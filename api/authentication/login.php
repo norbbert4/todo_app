@@ -61,7 +61,9 @@ function send_2fa_email($email, $username, $temp_code, $persistent_code) {
                             <h2 style="margin: 0 0 20px; font-size: 24px; color: #00C4FF;">Kedves ' . htmlspecialchars($username) . '!</h2>
                             <p style="margin: 0 0 20px; font-size: 16px; color: #ffffff;">Az alábbi kódot használhatod a bejelentkezéshez:</p>
                             <p style="margin: 0 0 10px; font-size: 16px; color: #ffffff;"> <strong>' . htmlspecialchars($temp_code) . '</strong></p>
-                            <p style="margin: 0 0 10px; font-size: 16px; color: #ffffff;"> <strong>Egy belépésig érvényes.</strong></p>
+                            <p style="margin: 0 0 10px; font-size: 16px; color: #ffffff;"> Ez egy belépésig érvényes, vagy használhatod az alábbit, amellyel 30 napig megjegyzi.</p>
+							<p style="margin: 0 0 20px; font-size: 16px; color: #ffffff;">Tartós belépéshez:</p>
+							<p style="margin: 0 0 10px; font-size: 16px; color: #ffffff;"> <strong>' . htmlspecialchars($persistent_code) . '</strong></p>
                         </td>
                     </tr>
                     <tr>
