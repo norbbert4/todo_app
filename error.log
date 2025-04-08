@@ -1,0 +1,2 @@
+[08-Apr-2025 19:48:02 Europe/Berlin] PHP Warning:  Attempt to read property "num_rows" on bool in C:\xampp\htdocs\todo_app\api\authentication\delete_account.php on line 151
+[08-Apr-2025 19:48:47 Europe/Berlin] PHP Warning:  Attempt to read property "num_rows" on bool in C:\xampp\htdocs\todo_app\api\authentication\delete_account.php on line 151

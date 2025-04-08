@@ -34,9 +34,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit;
     }
 
-    // Jelszó erősség ellenőrzése
-    if (strlen($password) < 8 || !preg_match('/[A-Z]/', $password) || !preg_match('/[0-9]/', $password)) {
-        $response = array('success' => false, 'error' => array('message' => 'Jelszó: minimum 8 karakter, legalább egy nagybetű és egy szám'));
+    // Jelszó követelmények ellenőrzése: legalább 8 karakter, kisbetű, nagybetű, szám
+    if (strlen($password) < 8 || 
+        !preg_match('/[a-z]/', $password) || 
+        !preg_match('/[A-Z]/', $password) || 
+        !preg_match('/[0-9]/', $password)) {
+        $response = array('success' => false, 'error' => array('message' => 'A jelszónak legalább 8 karakter hosszúnak kell lennie, és tartalmaznia kell kisbetűt, nagybetűt és számot.'));
         header('Content-Type: application/json; charset=utf-8');
         echo json_encode($response);
         exit;

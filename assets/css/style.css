@@ -541,3 +541,148 @@ p {
         padding: 0.8rem;
     }
 }
+
+/* Üzenetdoboz stílusa */
+#reset-info {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    width: 90%;
+    max-width: 600px;
+    z-index: 1000;
+    background: rgba(20, 20, 20, 0.8);
+    color: white;
+    padding: 1rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 500;
+    display: none;
+    transform: translateX(-50%);
+}
+
+/* Színek a különböző típusú üzenetekhez */
+#reset-info.bg-danger {
+    background: rgba(244, 67, 54, 0.8);
+    border-color: rgba(244, 67, 54, 0.5);
+}
+
+#reset-info.bg-success {
+    background: rgba(76, 175, 80, 0.8);
+    border-color: rgba(76, 175, 80, 0.5);
+}
+
+
+
+/* Mobil nézet finomítása */
+@media (max-width: 768px) {
+    #reset-info {
+        width: 90%;
+        max-width: 400px;
+        bottom: 10px;
+        font-size: 0.9rem;
+        padding: 0.8rem;
+    }
+}
+
+/* Üzenetdoboz stílusa */
+#profile-info {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    width: 90%;
+    max-width: 600px;
+    z-index: 1000;
+    background: rgba(20, 20, 20, 0.8);
+    color: white;
+    padding: 1rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 500;
+    display: none;
+    transform: translateX(-50%);
+}
+
+/* Színek a különböző típusú üzenetekhez */
+#profile-info.bg-red {
+    background: rgba(244, 67, 54, 0.8);
+    border-color: rgba(244, 67, 54, 0.5);
+}
+
+#profile-info.bg-green {
+    background: rgba(76, 175, 80, 0.8);
+    border-color: rgba(76, 175, 80, 0.5);
+}
+
+/* Mobil nézet finomítása */
+@media (max-width: 768px) {
+    #profile-info {
+        width: 90%;
+        max-width: 400px;
+        bottom: 10px;
+        font-size: 0.9rem;
+        padding: 0.8rem;
+    }
+}
+
+/* Üzenetdoboz stílusa a delete_account.html-hez */
+#delete-info {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    width: 90%;
+    max-width: 600px;
+    z-index: 1000;
+    background: rgba(20, 20, 20, 0.8);
+    color: white;
+    padding: 1rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 500;
+    display: none;
+    transform: translateX(-50%);
+}
+
+/* Színek a különböző típusú üzenetekhez */
+#delete-info.bg-red {
+    background: rgba(244, 67, 54, 0.8);
+    border-color: rgba(244, 67, 54, 0.5);
+}
+
+#delete-info.bg-green {
+    background: rgba(76, 175, 80, 0.8);
+    border-color: rgba(76, 175, 80, 0.5);
+}
+
+#delete-info.bg-info {
+    background: rgba(33, 150, 243, 0.8);
+    border-color: rgba(33, 150, 243, 0.5);
+}
+
+#delete-info.bg-warning {
+    background: rgba(255, 193, 7, 0.8);
+    border-color: rgba(255, 193, 7, 0.5);
+}
+
+/* Media query mobil nézetre */
+@media (max-width: 768px) {
+    #delete-info {
+        width: 90%;
+        max-width: 400px;
+        bottom: 10px;
+        font-size: 0.9rem;
+        padding: 0.8rem;
+    }
+}
+

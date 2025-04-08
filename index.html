@@ -12,7 +12,6 @@
 </head>
 
 <body class="d-flex align-items-center justify-content-center vh-100">
-
     <div class="container">
         <div class="row justify-content-center align-items-center">
             <!-- Bal oldali üdvözlő szöveg -->
@@ -40,36 +39,21 @@
                     <br><br>
                     <p>Elfelejtetted a jelszavad?</p>
                     <a href="./forgotpassword.html"><div class="btn btn-primary col-0 offset-0">Elfelejtett jelszó</div></a>
+                    <br><br>
+                    <p>Törölni szeretnéd a fiókod?</p>
+                    <a href="./delete_account.html"><div class="btn btn-primary col-0 offset-0">Fiók törlése</div></a>
                 </form>
             </div>
         </div>
     </div>
 
-    <div id="login-info" class="bg-red">Hibás felhasználónév vagy jelszó</div>
+    <div id="login-info" style="display: none;"></div>
 
     <script>
         // Hamburger menü toggle (opcionális)
         document.querySelector('.hamburger')?.addEventListener('click', function() {
             this.classList.toggle('active');
             document.querySelector('.nav-links').classList.toggle('active');
-        });
-
-        // Üzenetdoboz animáció
-        window.addEventListener('load', () => {
-            const loginInfo = document.getElementById('login-info');
-            if (loginInfo) {
-                // Fade-in animáció indítása
-                loginInfo.style.animation = 'slideFadeIn 0.5s ease-in forwards';
-
-                // 5 másodperc várakozás, majd fade-out animáció
-                setTimeout(() => {
-                    loginInfo.style.animation = 'slideFadeOut 0.5s ease-out forwards';
-                    // Az animáció végeztével elrejtjük az elemet
-                    setTimeout(() => {
-                        loginInfo.style.display = 'none';
-                    }, 500); // Az animáció időtartama (0.5s)
-                }, 5000); // 5 másodperc várakozás
-            }
         });
     </script>
 </body>

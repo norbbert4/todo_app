@@ -28,7 +28,22 @@ if (!$data || !isset($data->token) || !isset($data->newPassword)) {
 }
 
 $token = $conn->real_escape_string($data->token);
-$newPassword = password_hash($data->newPassword, PASSWORD_DEFAULT);
+$newPassword = $data->newPassword; // Még nem hashelt jelszó
+
+// Jelszó követelmények ellenőrzése
+if (strlen($newPassword) < 8 || 
+    !preg_match('/[a-z]/', $newPassword) || 
+    !preg_match('/[A-Z]/', $newPassword) || 
+    !preg_match('/[0-9]/', $newPassword)) {
+    echo json_encode([
+        'success' => false, 
+        'error' => ['message' => 'A jelszónak legalább 8 karakter hosszúnak kell lennie, és tartalmaznia kell kisbetűt, nagybetűt és számot.']
+    ]);
+    exit;
+}
+
+// Ha a jelszó megfelel, akkor hasheljük
+$newPasswordHashed = password_hash($newPassword, PASSWORD_DEFAULT);
 
 $sql = "SELECT * FROM password_resets WHERE token = '$token'";
 $result = $conn->query($sql);
@@ -45,7 +60,7 @@ if ($result->num_rows > 0) {
     $now = time();
 
     if (($now - $created_at) <= 3600) {
-        $update_sql = "UPDATE users SET user_pw = '$newPassword' WHERE user_email = '$email'";
+        $update_sql = "UPDATE users SET user_pw = '$newPasswordHashed' WHERE user_email = '$email'";
         if ($conn->query($update_sql)) {
             $delete_sql = "DELETE FROM password_resets WHERE token = '$token'";
             $conn->query($delete_sql);

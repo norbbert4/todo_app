@@ -11,13 +11,14 @@ const regInfo = document.getElementById('reg-info');
 const regForm = document.getElementById('reg-form');
 const codeField = document.getElementById('codeField');
 const verifyButton = document.getElementById('verify-button');
+const codeInfo = document.getElementById('code-info');
 
 // Globális változó az időzítő tárolására
 let messageTimeout = null;
 
-// Segédfüggvény az üzenet megjelenítésére
-const showMessage = (message, type) => {
-    if (regInfo) {
+// Segédfüggvény az üzenet megjelenítésére animáció nélkül
+const showMessage = (element, message, type) => {
+    if (element) {
         // Előző időzítő törlése, ha van
         if (messageTimeout) {
             clearTimeout(messageTimeout);
@@ -25,16 +26,16 @@ const showMessage = (message, type) => {
         }
 
         // Üzenet beállítása és osztály hozzáadása
-        regInfo.textContent = message;
-        regInfo.className = ''; // Reseteljük az osztályokat
-        regInfo.classList.add(type); // Pl. bg-red, bg-green
+        element.textContent = message;
+        element.className = ''; // Reseteljük az osztályokat
+        element.classList.add(type); // Pl. bg-red, bg-green
 
-        // Üzenet megjelenítése
-        regInfo.style.display = 'block';
+        // Üzenet megjelenítése animáció nélkül
+        element.style.display = 'block';
 
         // 5 másodperc várakozás, majd elrejtés
         messageTimeout = setTimeout(() => {
-            regInfo.style.display = 'none';
+            element.style.display = 'none';
             messageTimeout = null;
         }, 5000); // 5 másodperc várakozás
     }
@@ -49,7 +50,16 @@ const registration = async (event) => {
 
     // Ellenőrizzük, hogy az e-mail cím tartalmaz-e "@" jelet
     if (!email.includes('@')) {
-        showMessage('Az e-mail címnek tartalmaznia kell egy "@" jelet!', 'bg-red');
+        showMessage(regInfo, 'Az e-mail címnek tartalmaznia kell egy "@" jelet!', 'bg-red');
+        return;
+    }
+
+    // Jelszó követelmények ellenőrzése kliensoldalon
+    if (password.length < 8 || 
+        !/[a-z]/.test(password) || 
+        !/[A-Z]/.test(password) || 
+        !/[0-9]/.test(password)) {
+        showMessage(regInfo, 'A jelszónak legalább 8 karakter hosszúnak kell lennie, és tartalmaznia kell kisbetűt, nagybetűt és számot.', 'bg-red');
         return;
     }
 
@@ -71,7 +81,7 @@ const registration = async (event) => {
         const data = JSON.parse(text);
 
         if (data.success && data.step === 'verify_code') {
-            showMessage(data.message, 'bg-green');
+            showMessage(regInfo, data.message, 'bg-green');
             const redirectUrl = window.location.hostname === 'localhost' ? 
                 '/todo_app/verify_code.html' : 
                 'https://todoapp.norbbert4.hu/verify_code.html';
@@ -79,11 +89,11 @@ const registration = async (event) => {
                 window.location.href = redirectUrl;
             }, 2000);
         } else if (!data.success) {
-            showMessage(data.error.message, 'bg-red');
+            showMessage(regInfo, data.error.message, 'bg-red');
         }
     } catch (error) {
         console.error('Hiba:', error);
-        showMessage('Hiba történt a regisztráció során: ' + error.message, 'bg-red');
+        showMessage(regInfo, 'Hiba történt a regisztráció során: ' + error.message, 'bg-red');
     }
 };
 
@@ -108,16 +118,16 @@ const verifyCode = async () => {
         const data = JSON.parse(text);
 
         if (data.success) {
-            showMessage(data.message, 'bg-green');
+            showMessage(codeInfo, data.message, 'bg-green');
             setTimeout(() => {
                 window.location.href = "./index.html";
             }, 2000);
         } else {
-            showMessage(data.error.message, 'bg-red');
+            showMessage(codeInfo, data.error.message, 'bg-red');
         }
     } catch (error) {
         console.error('Hiba:', error);
-        showMessage('Hiba történt a kód ellenőrzése során: ' + error.message, 'bg-red');
+        showMessage(codeInfo, 'Hiba történt a kód ellenőrzése során: ' + error.message, 'bg-red');
     }
 };
 
@@ -125,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (regForm) {
         regForm.addEventListener('submit', registration);
     } else {
-        console.error('A regForm elem nem található a DOM-ban.');
+        console.log('A regForm elem nem található a DOM-ban.');
     }
 
     if (verifyButton) {

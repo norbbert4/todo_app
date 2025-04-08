@@ -8,8 +8,8 @@ $token = isset($_GET['token']) ? htmlspecialchars($_GET['token']) : '';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jelszó visszaállítása</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="../../assets/css/style.css"> <!-- Abszolút útvonal -->
-    <script src="../../assets/js/resetpassword.js" defer></script> <!-- Abszolút útvonal -->
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <script src="../../assets/js/resetpassword.js" defer></script>
 </head>
 <body class="d-flex align-items-center justify-content-center vh-100">
     <div class="container">
@@ -21,7 +21,7 @@ $token = isset($_GET['token']) ? htmlspecialchars($_GET['token']) : '';
             <div class="col-md-7">
                 <form autocomplete="off" id="reset-password-form">
                     <h2 class="login_bejel_text_cim">Új jelszó beállítása</h2><br>
-                    <input type="hidden" id="token" value="<?php echo $_GET['token']; ?>">
+                    <input type="hidden" id="token" value="<?php echo $token; ?>">
                     <div class="mb-3">
                         <input type="password" class="form-control" id="new-password" name="new-password" placeholder="Új jelszó" required>
                     </div>
@@ -33,11 +33,11 @@ $token = isset($_GET['token']) ? htmlspecialchars($_GET['token']) : '';
                         <p>Sikerült?</p>
                         <a href="../../index.html"><div class="btn btn-primary col-0 offset-0">Bejelentkezés</div></a>
                     </div>
-                    <div id="reset-info"></div>
                 </form>
-                </div>
             </div>
         </div>
     </div>
+    <!-- Üzenetdoboz az oldal alján -->
+    <div id="reset-info" style="display: none;"></div>
 </body>
 </html>

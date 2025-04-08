@@ -1,9 +1,10 @@
 <?php
+session_start(); // Session indítása a fájl elején
+
 ini_set('display_errors', 0);
 error_reporting(E_ALL);
 
 include '../modules/_db.php';
-//require 'C:/xampp/htdocs/todo_app/vendor/autoload.php';
 require '../../vendor/autoload.php';
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -60,16 +61,14 @@ function send_2fa_email($email, $username, $temp_code, $persistent_code) {
                             <h2 style="margin: 0 0 20px; font-size: 24px; color: #00C4FF;">Kedves ' . htmlspecialchars($username) . '!</h2>
                             <p style="margin: 0 0 20px; font-size: 16px; color: #ffffff;">Az alábbi kódot használhatod a bejelentkezéshez:</p>
                             <p style="margin: 0 0 10px; font-size: 16px; color: #ffffff;"> <strong>' . htmlspecialchars($temp_code) . '</strong></p>
-							<p style="margin: 0 0 10px; font-size: 16px; color: #ffffff;"> <strong>Egy belépésig érvényes.</strong></p>
-                            
+                            <p style="margin: 0 0 10px; font-size: 16px; color: #ffffff;"> <strong>Egy belépésig érvényes.</strong></p>
                         </td>
                     </tr>
                     <tr>
                         <td style="padding: 0 30px 30px; text-align: center;">
                             <p style="margin: 20px 0 10px; font-size: 14px; color: #ffffff;">Ha nem te kezdeményezted a bejelentkezést, kérjük, változtasd meg a jelszavadat! Ha ez nem sikerül, lépj kapcsolatba velünk.</p>
                             <p style="margin: 0; font-size: 14px; color: #00C4FF;">Üdvözlettel,<br>Todo App csapata</p>
-							<p style="margin: 10px 0 0; font-size: 14px; color: #00C4FF;"><a href="mailto:todoapp@norbbert4.hu" style="color: #00C4FF; text-decoration: none;">todoapp@norbbert4.hu</a></p>
-
+                            <p style="margin: 10px 0 0; font-size: 14px; color: #00C4FF;"><a href="mailto:todoapp@norbbert4.hu" style="color: #00C4FF; text-decoration: none;">todoapp@norbbert4.hu</a></p>
                         </td>
                     </tr>
                 </table>
@@ -153,6 +152,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         $insertTokenSql = "INSERT INTO logins (login_user_id, login_date, action_date, login_token, login_state) VALUES ('$user_id', NOW(), NOW(), '$token', 1)";
                         $conn->query($insertTokenSql);
 
+                        // Session beállítása
+                        $_SESSION['user_id'] = $user_id;
+
                         $response = array(
                             'success' => true,
                             'userData' => array(
@@ -184,6 +186,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $token = bin2hex(random_bytes(16));
                     $insertTokenSql = "INSERT INTO logins (login_user_id, login_date, action_date, login_token, login_state) VALUES ('$user_id', NOW(), NOW(), '$token', 1)";
                     $conn->query($insertTokenSql);
+
+                    // Session beállítása
+                    $_SESSION['user_id'] = $user_id;
 
                     $response = array(
                         'success' => true,
@@ -225,6 +230,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             
                     $conn->query("UPDATE two_factor_codes SET expires_at = NOW() WHERE user_id = '$user_id' AND id = " . $codes['id']);
             
+                    // Session beállítása
+                    $_SESSION['user_id'] = $user_id;
+
                     $response = array(
                         'success' => true,
                         'userData' => array(
@@ -241,6 +249,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $insertTokenSql = "INSERT INTO logins (login_user_id, login_date, action_date, login_token, login_state) VALUES ('$user_id', NOW(), NOW(), '$token', 1)";
                     $conn->query($insertTokenSql);
             
+                    // Session beállítása
+                    $_SESSION['user_id'] = $user_id;
+
                     $response = array(
                         'success' => true,
                         'userData' => array(
