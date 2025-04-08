@@ -1,11 +1,8 @@
-// const apiUrl = 'http://localhost/todo_app/api/';
-
 const apiUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
     ? 'http://localhost/todo_app/api/'  // Ha localhost, akkor helyi API
     : 'https://todoapp.norbbert4.hu/api/';  // Ha éles környezet, akkor online API
 
 console.log('API URL:', apiUrl);  // Debug üzenet az API URL ellenőrzéséhez
-
 
 const dateObject = { date: '' };
 const urlSearchParams = new URLSearchParams(window.location.search);
@@ -141,24 +138,21 @@ function showSaveMessage(message, isSuccess) {
     }, 10);
 }
 
-// Segédfüggvény az üzenet megjelenítéséhez
+// Segédfüggvény az üzenet megjelenítéséhez (most a save-message div-ben)
 function showMessage(button, message) {
-    const row = button.closest('tr');
-    const todoCell = row.querySelector('td:nth-child(2)');
-
-    const existingMessage = todoCell.querySelector('.error-message');
-    if (existingMessage) {
-        existingMessage.remove();
-    }
-
-    const messageElement = document.createElement('span');
-    messageElement.classList.add('error-message');
-    messageElement.textContent = message;
-    todoCell.appendChild(messageElement);
-
+    const saveMessageDiv = document.querySelector('#save-message');
+    
+    saveMessageDiv.classList.remove('bg-green', 'bg-red');
+    saveMessageDiv.style.display = 'none';
+    
+    saveMessageDiv.textContent = message;
+    saveMessageDiv.classList.add('bg-red'); // Mindig piros, mert ez egy hibaüzenet
+    
+    saveMessageDiv.style.animation = 'none';
     setTimeout(() => {
-        messageElement.remove();
-    }, 3000);
+        saveMessageDiv.style.display = 'block';
+        saveMessageDiv.style.animation = 'fadeInOut 3s forwards';
+    }, 10);
 }
 
 const createTableRow = (todo, index) => {
@@ -278,7 +272,6 @@ async function renderTable() {
                 todayTodoCount.textContent = 'Teendőid száma: 0';
             }
             todoTable.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #c0c0c0;">Nincs teendő</td></tr>';
-            
         }
 
         let todosToRender = [];
