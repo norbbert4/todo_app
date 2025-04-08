@@ -16,7 +16,12 @@ const coinCountSpan = document.querySelector('#coin-count');
 let userData = { user_ID: 0, token: '-', username: 'Ismeretlen felhasználó', coins: 0, password: '' };
 if (localStorage.getItem('userData') !== null) userData = JSON.parse(localStorage.getItem('userData'));
 
-const apiUrl = 'https://todoapp.norbbert4.hu/api/';
+//const apiUrl = 'http://localhost/todo_app/api/';
+
+const apiUrl = (location.hostname === 'localhost')
+    ? 'http://localhost/todo_app/api/'
+    : `${location.protocol}//${location.hostname}/api/`;
+
 
 // Autentikáció ellenőrzése és felhasználó nevének megjelenítése a nav-ban
 const check = async () => {

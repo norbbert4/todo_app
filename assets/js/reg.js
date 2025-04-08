@@ -3,6 +3,7 @@ const verifyApiUrl = 'api/authentication/verify_code.php';
 const emailInput = document.getElementById('email');
 const usernameInput = document.getElementById('username');
 const passwordInput = document.getElementById('password');
+const enable2FAInput = document.getElementById('enable_2fa');
 const regButton = document.getElementById('reg-button');
 const regInfo = document.getElementById('reg-info');
 const regForm = document.getElementById('reg-form');
@@ -14,6 +15,7 @@ const registration = async () => {
     const email = emailInput.value;
     const username = usernameInput.value;
     const password = passwordInput.value;
+    const enable_2fa = enable2FAInput.checked; // 2FA választás
 
     // Ellenőrizzük, hogy az e-mail cím tartalmaz-e "@" jelet
     if (!email.includes('@')) {
@@ -27,7 +29,7 @@ const registration = async () => {
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email, username, password }),
+        body: JSON.stringify({ email, username, password, enable_2fa }),
     })
     .then(response => {
         if (!response.ok) {
@@ -47,8 +49,14 @@ const registration = async () => {
         if (data.success && data.step === 'verify_code') {
             regInfo.classList.add('bg-green');
             regInfo.textContent = data.message;
+
+            // Dinamikusan beállítjuk az útvonalat
+            const redirectUrl = window.location.hostname === 'localhost' ? 
+                '/todo_app/verify_code.html' : 
+                'https://todoapp.norbbert4.hu/verify_code.html';
+
             setTimeout(() => {
-                window.location.href = "/todo_app/verify_code.html"; // Abszolút útvonal
+                window.location.href = redirectUrl;
             }, 2000);
         } else if (!data.success) {
             regInfo.classList.add('bg-red');
@@ -90,6 +98,7 @@ const verifyCode = async () => {
         if (data.success) {
             codeInfo.classList.add('bg-green');
             codeInfo.textContent = data.message;
+
             setTimeout(() => {
                 window.location.href = "./index.html";
             }, 2000);

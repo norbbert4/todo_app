@@ -1,3 +1,3 @@
 <?php
-$sql = "DELETE FROM users WHERE user_ID = $id";
+//$sql = "DELETE FROM users WHERE user_ID = $id";
 ?>

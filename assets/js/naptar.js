@@ -1,5 +1,3 @@
-// naptar.js
-
 let currentDate = new Date();
 const calendarGrid = document.getElementById('calendar-grid');
 const monthSelect = document.getElementById('month-select');
@@ -22,7 +20,11 @@ const months = [
     "Július", "Augusztus", "Szeptember", "Október", "November", "December"
 ];
 
-const apiUrl = 'https://todoapp.norbbert4.hu/api/';
+//const apiUrl = 'http://localhost/todo_app/api/';
+
+// Ellenőrizzük, hogy localhost vagy éles környezetben vagyunk
+const apiUrl = window.location.hostname === 'localhost' ? 'http://localhost/todo_app/api/' : 'https://todoapp.norbbert4.hu/api/';
+
 
 const check = async () => {
     if (userData.token.length > 0) {
@@ -59,19 +61,26 @@ const check = async () => {
     }
 };
 
+// Üzenetkezelő a naptár frissítéséhez
+window.addEventListener('message', (event) => {
+    if (event.data.type === 'UPDATE_CALENDAR') {
+        const year = parseInt(yearSelect.value);
+        const month = parseInt(monthSelect.value);
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        updateTodoCounts(year, month, daysInMonth);
+        console.log('Naptár frissítve az UPDATE_CALENDAR üzenet hatására');
+    }
+});
+
 // Várjuk meg, amíg a DOM betöltődik
 document.addEventListener('DOMContentLoaded', () => {
     check();
 });
 
 document.addEventListener('click', (event) => {
-    // Ellenőrizzük, hogy a task-form látható-e
     if (taskForm && taskForm.style.display === 'block') {
-        // Ha a kattintás a task-form-on kívül történt, elrejtjük
         const isClickInsideForm = taskForm.contains(event.target);
-        const isClickOnDay = event.target.closest('.day'); // Ellenőrizzük, hogy a kattintás egy nap elemre történt-e
-
-        // Ha a kattintás nem a formon belül történt, és nem egy nap elemre (ami megnyitja a formot), akkor elrejtjük a formot
+        const isClickOnDay = event.target.closest('.day');
         if (!isClickInsideForm && !isClickOnDay) {
             closeForm();
             console.log('Kattintás a task-form-on kívül, elrejtve');
@@ -152,63 +161,52 @@ function populateYearSelect() {
     console.log('Évek betöltve:', yearSelect.value);
 }
 
+// Naponta történő lekérdezés
 async function getTodoCount(dateStr) {
-    const get_apiUrl = `${apiUrl}?token=${userData.token}&userid=${userData.user_ID}&entity=todos&entityid=${dateStr}&count=1`;
-    const res = await fetch(get_apiUrl);
-    const resjson = await res.json();
-    return resjson;
+    const get_apiUrl = `${apiUrl}?token=${userData.token}&userid=${userData.user_ID}&entity=todos&date=${dateStr}`;
+    try {
+        const res = await fetch(get_apiUrl);
+        const resjson = await res.json();
+        console.log(`API válasz a ${dateStr} dátumra:`, resjson); // Hibakereséshez
+        if (resjson.type === 'result' && Array.isArray(resjson.body)) {
+            // Szűrjük a teendőket, hogy csak az adott napra vonatkozók legyenek
+            const todosForDate = resjson.body.filter(todo => {
+                const todoDate = todo.date.substring(0, 10);
+                return todoDate === dateStr;
+            });
+            return todosForDate.length || 0;
+        } else {
+            console.error(`Hiba a teendők lekérdezésekor (${dateStr}):`, resjson.message);
+            return 0;
+        }
+    } catch (error) {
+        console.error(`Hiba a teendők lekérdezésekor (${dateStr}):`, error);
+        return 0;
+    }
 }
-
 // Segédfüggvény a helyes "-ra/-re" ragozás meghatározására
 function getCaseSuffix(day) {
-    // Különleges esetek
-    if (day === 1) {
-        return '-jére';
-    } else if (day === 2) {
-        return '-ára';
-    } else if (day === 3) {
-        return '-ára';
-    } else if (day === 10 || day === 20 || day === 30) {
-        return '-ra';
-    }
+    if (day === 1) return '-jére';
+    if (day === 2) return '-ára';
+    if (day === 3) return '-ára';
+    if (day === 10 || day === 20 || day === 30) return '-ra';
 
-    // Az utolsó számjegy alapján döntünk
     const lastDigit = day % 10;
     const lastTwoDigits = day % 100;
 
-    // Ha a szám 10, 20, 30, akkor már kezeltük
-    if (lastTwoDigits === 10 || lastTwoDigits === 20 || lastTwoDigits === 30) {
-        return '-ra';
-    }
+    if (lastTwoDigits === 10 || lastTwoDigits === 20 || lastTwoDigits === 30) return '-ra';
 
-    // A szám szöveges alakja alapján döntünk a magánhangzó-harmóniáról
-    const numberStr = day.toString();
-    const lastChar = numberStr[numberStr.length - 1];
+    if (lastDigit === 0) return '-re';
+    if (lastDigit === 1) return '-re';
+    if (lastDigit === 2) return '-ra';
+    if (lastDigit === 3) return '-ra';
+    if (lastDigit === 4) return '-re';
+    if (lastDigit === 5) return '-re';
+    if (lastDigit === 6) return '-ra';
+    if (lastDigit === 7) return '-re';
+    if (lastDigit === 8) return '-ra';
+    if (lastDigit === 9) return '-re';
 
-    // A magyar számok kiejtése alapján döntünk a magánhangzó-harmóniáról
-    if (lastDigit === 0) {
-        return '-re'; // pl. 10-re, 20-ra (már kezeltük)
-    } else if (lastDigit === 1) {
-        return '-re'; // pl. 11-re, 21-re
-    } else if (lastDigit === 2) {
-        return '-ra'; // pl. 12-re, 22-re (de 2-ára már kezeltük)
-    } else if (lastDigit === 3) {
-        return '-ra'; // pl. 13-ra, 23-ra (de 3-ára már kezeltük)
-    } else if (lastDigit === 4) {
-        return '-re'; // pl. 14-re, 24-re
-    } else if (lastDigit === 5) {
-        return '-re'; // pl. 5-re, 15-re
-    } else if (lastDigit === 6) {
-        return '-ra'; // pl. 6-ra, 16-ra
-    } else if (lastDigit === 7) {
-        return '-re'; // pl. 7-re, 17-re
-    } else if (lastDigit === 8) {
-        return '-ra'; // pl. 8-ra, 18-ra
-    } else if (lastDigit === 9) {
-        return '-re'; // pl. 9-re, 19-re
-    }
-
-    // Alapértelmezett eset (nem kellene ide eljutni)
     return '-ra';
 }
 
@@ -217,8 +215,7 @@ async function renderCalendar() {
         console.error('Naptár rács (calendar-grid) nem található!');
         return;
     }
-    console.log('Naptár rács létezik, törlöm a tartalmát...');
-    calendarGrid.innerHTML = '';
+
     const year = parseInt(yearSelect.value);
     const month = parseInt(monthSelect.value);
     const monthYearText = `${months[month]} ${year}`;
@@ -227,6 +224,19 @@ async function renderCalendar() {
     const firstDay = new Date(year, month, 1).getDay() || 7;
     const daysInMonth = new Date(year, month + 1, 0).getDate();
 
+    // Ellenőrizzük, hogy a naptár már létezik-e, és ugyanazt a hónapot rendereljük-e
+    const currentMonthYear = calendarGrid.getAttribute('data-month-year');
+    if (currentMonthYear === `${month}-${year}`) {
+        // Ha ugyanaz a hónap, csak a teendők számát frissítjük
+        updateTodoCounts(year, month, daysInMonth);
+        return;
+    }
+
+    // Ha új hónap, töröljük a tartalmat és újraépítjük
+    calendarGrid.innerHTML = '';
+    calendarGrid.setAttribute('data-month-year', `${month}-${year}`);
+
+    // Üres napok hozzáadása az első nap előtt
     for (let i = 1; i < firstDay; i++) {
         const emptyDay = document.createElement('div');
         emptyDay.className = 'day empty';
@@ -234,32 +244,23 @@ async function renderCalendar() {
         console.log('Üres nap hozzáadva');
     }
 
+    const today = new Date();
     const datePromises = [];
     for (let day = 1; day <= daysInMonth; day++) {
         const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
         datePromises.push({ dateStr, day });
-    }
 
-    const todoCounts = await Promise.all(
-        datePromises.map(async ({ dateStr }) => {
-            const countResult = await getTodoCount(dateStr);
-            return { dateStr, count: Number(countResult.body.CNT) };
-        })
-    );
-
-    todoCounts.forEach(({ dateStr, count }, index) => {
-        const day = index + 1;
+        // Azonnal rendereljük a napokat teendők nélkül
         const dayElement = document.createElement('div');
         dayElement.className = 'day';
         dayElement.setAttribute('id', `day_${dateStr}`);
         dayElement.textContent = day;
 
+        // Hozzáadunk egy üres todos-for-day elemet, amit később frissítünk
         const todosForDayElement = document.createElement('div');
-        todosForDayElement.className = `todos-for-day ${count === 0 ? 'todos-for-day_hidden' : ''}`;
-        todosForDayElement.textContent = count;
+        todosForDayElement.className = 'todos-for-day todos-for-day_hidden';
         dayElement.appendChild(todosForDayElement);
 
-        const today = new Date();
         if (day === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
             dayElement.classList.add('today');
         }
@@ -268,83 +269,100 @@ async function renderCalendar() {
             console.log(`Kattintás a ${day}. napra, dátum: ${dateStr}`);
             if (taskForm) {
                 selectedDateInput.value = dateStr;
-                taskForm.style.display = 'block'; // Láthatóság beállítása
-        
-                // Üzenet elrejtése a form megnyitásakor
+                taskForm.style.display = 'block';
+
                 const saveMessage = document.getElementById('save-message');
                 saveMessage.style.display = 'none';
                 saveMessage.classList.remove('success', 'error');
                 saveMessage.textContent = '';
-        
-                // A task-form címének frissítése a hónap nevével és a helyes ragozással
+
                 const formTitle = taskForm.querySelector('h3');
                 if (formTitle) {
-                    const monthName = months[month]; // Hónap neve (pl. "Március")
-                    const suffix = getCaseSuffix(day); // Helyes ragozás (pl. "-re", "-ra")
+                    const monthName = months[month];
+                    const suffix = getCaseSuffix(day);
                     formTitle.textContent = `Mi lesz a teendő ${monthName} ${day}.${suffix}?`;
                 } else {
                     console.error('A task-form h3 eleme nem található!');
                 }
-        
-                // A nap elem pozíciójának lekérése
+
                 const rect = dayElement.getBoundingClientRect();
                 const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
                 const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
-        
-                // Képernyő méretei
+
                 const windowHeight = window.innerHeight;
                 const windowWidth = window.innerWidth;
-        
-                // A task-form méretei
                 const formHeight = taskForm.offsetHeight;
                 const formWidth = taskForm.offsetWidth;
-        
-                // Navbar magassága (mobilon 80px a CSS szerint)
                 const navbarHeight = 80;
-        
-                // Minimum és maximum top/left értékek, hogy a form ne lógjon ki
-                const minTop = navbarHeight + 10; // A navbar alatt + némi padding
-                const maxTop = windowHeight - formHeight - 10; // Hogy a form alja ne lógjon ki
-                const minLeft = 10; // Hogy a form bal oldala ne lógjon ki
-                const maxLeft = windowWidth - formWidth - 10; // Hogy a form jobb oldala ne lógjon ki
-        
-                // Alapértelmezett pozíció: a nap alatt, középen igazítva
-                let topPosition = rect.bottom + scrollTop + 5; // A nap alatt 5px-re
-                let leftPosition = rect.left + scrollLeft + (rect.width / 2) - (formWidth / 2); // A nap közepéhez igazítva
-        
-                // Ha a form alja kilógna a képernyőből, feljebb toljuk (a nap fölé)
+
+                const minTop = navbarHeight + 10;
+                const maxTop = windowHeight - formHeight - 10;
+                const minLeft = 10;
+                const maxLeft = windowWidth - formWidth - 10;
+
+                let topPosition = rect.bottom + scrollTop + 5;
+                let leftPosition = rect.left + scrollLeft + (rect.width / 2) - (formWidth / 2);
+
                 if (topPosition + formHeight > windowHeight - 10) {
-                    topPosition = rect.top + scrollTop - formHeight - 5; // A nap fölé 5px-re
+                    topPosition = rect.top + scrollTop - formHeight - 5;
                 }
-        
-                // Ha a form teteje a navbar alá kerülne, lejjebb toljuk
                 if (topPosition < minTop) {
                     topPosition = minTop;
                 }
-        
-                // Ha a form bal oldala kilógna, jobbra toljuk
                 if (leftPosition < minLeft) {
                     leftPosition = minLeft;
                 }
-        
-                // Ha a form jobb oldala kilógna, balra toljuk
                 if (leftPosition > maxLeft) {
                     leftPosition = maxLeft;
                 }
-        
-                // A pozíció beállítása
+
                 taskForm.style.top = `${topPosition}px`;
                 taskForm.style.left = `${leftPosition}px`;
-                taskForm.style.transform = 'none'; // Nem használunk transformot, mert a left/top pontosan pozícionál
-        
+                taskForm.style.transform = 'none';
+
                 console.log('Teendő űrlap megjelenítve:', dateStr, 'Pozíció:', { top: topPosition, left: leftPosition });
             } else {
                 console.error('Teendő űrlap (task-form) nem található!');
             }
         };
         calendarGrid.appendChild(dayElement);
-        console.log(`Nap hozzáadva: ${day}, Teendők száma: ${count}`);
-    });
+        console.log(`Nap hozzáadva: ${day}`);
+    }
+
+    // Aszinkron módon frissítjük a teendők számát
+    updateTodoCounts(year, month, daysInMonth);
+}
+
+async function updateTodoCounts(year, month, daysInMonth) {
+    const datePromises = [];
+    for (let day = 1; day <= daysInMonth; day++) {
+        const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        datePromises.push({ dateStr, day });
+    }
+
+    // API-hívások csoportosítása (batch-ek) a memória terhelésének csökkentése érdekében
+    const batchSize = 10;
+    for (let i = 0; i < datePromises.length; i += batchSize) {
+        const batch = datePromises.slice(i, i + batchSize);
+        const batchResults = await Promise.all(
+            batch.map(async ({ dateStr }) => {
+                const count = await getTodoCount(dateStr);
+                return { dateStr, count };
+            })
+        );
+
+        // Frissítjük a már létező napokat a teendők számával
+        batchResults.forEach(({ dateStr, count }) => {
+            const dayElement = document.getElementById(`day_${dateStr}`);
+            if (dayElement) {
+                const todosForDayElement = dayElement.querySelector('.todos-for-day');
+                if (todosForDayElement) {
+                    todosForDayElement.className = `todos-for-day ${count === 0 ? 'todos-for-day_hidden' : ''}`;
+                    todosForDayElement.textContent = count;
+                }
+            }
+        });
+    }
 }
 
 function closeForm() {
@@ -352,11 +370,11 @@ function closeForm() {
         taskForm.style.display = 'none';
         startHourSelect.value = '';
         startMinuteSelect.value = '';
-        todoInput.value = ''; // Input mező ürítése
+        todoInput.value = '';
         const saveMessage = document.getElementById('save-message');
-        saveMessage.style.display = 'none'; // Üzenet elrejtése
-        saveMessage.classList.remove('success', 'error'); // Osztályok eltávolítása
-        saveMessage.textContent = ''; // Üzenet szövegének törlése
+        saveMessage.style.display = 'none';
+        saveMessage.classList.remove('success', 'error');
+        saveMessage.textContent = '';
         console.log('Teendő űrlap elrejtve');
     } else {
         console.error('Teendő űrlap (task-form) nem található!');
@@ -370,15 +388,11 @@ async function saveTodo() {
     const start_minute = startMinuteSelect.value;
     const start_time = start_hour && start_minute ? `${start_hour}:${start_minute}` : null;
 
-    // Üzenet elem lekérése
     const saveMessage = document.getElementById('save-message');
-
-    // Üzenet alaphelyzetbe állítása (elrejtés és osztályok eltávolítása)
     saveMessage.style.display = 'none';
     saveMessage.classList.remove('success', 'error');
     saveMessage.textContent = '';
 
-    // Ellenőrizzük, hogy üres-e az input
     if (title.length === 0) {
         saveMessage.textContent = 'A teendő neve nem lehet üres!';
         saveMessage.classList.add('error');
@@ -406,7 +420,6 @@ async function saveTodo() {
 
         console.log('API válasz státusza:', res.status, res.statusText);
 
-        // Próbáljuk meg JSON-ként értelmezni a választ
         let data;
         const contentType = res.headers.get('content-type');
         if (contentType && contentType.includes('application/json')) {
@@ -419,20 +432,20 @@ async function saveTodo() {
         }
 
         if (res.ok) {
-            // Sikeres mentés
             saveMessage.textContent = 'Sikeres mentés!';
             saveMessage.classList.add('success');
             saveMessage.style.display = 'block';
 
-            // Input mezők ürítése
             todoInput.value = '';
             startHourSelect.value = '';
             startMinuteSelect.value = '';
 
-            // Naptár frissítése
-            await renderCalendar();
+            // Csak a teendők számát frissítjük, nem az egész naptárat
+            const year = parseInt(yearSelect.value);
+            const month = parseInt(monthSelect.value);
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+            await updateTodoCounts(year, month, daysInMonth);
 
-            // Üzenet eltüntetése 2 másodperc után
             setTimeout(() => {
                 saveMessage.style.display = 'none';
                 saveMessage.classList.remove('success', 'error');
@@ -440,7 +453,6 @@ async function saveTodo() {
                 closeForm();
             }, 2000);
         } else {
-            // Sikertelen mentés
             saveMessage.textContent = data.message || 'Sikertelen mentés!';
             saveMessage.classList.add('error');
             saveMessage.style.display = 'block';

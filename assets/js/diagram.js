@@ -1,6 +1,11 @@
 // diagram.js
 
-const apiUrl = 'https://todoapp.norbbert4.hu/api/';
+//const apiUrl = 'http://localhost/todo_app/api/';
+
+const apiUrl = (location.hostname === 'localhost')
+    ? 'http://localhost/todo_app/api/'
+    : `${location.protocol}//${location.hostname}/api/`;
+
 
 let userData = { user_ID: 0, token: '-', username: '', coins: 0 };
 if (localStorage.getItem('userData') !== null) userData = JSON.parse(localStorage.getItem('userData'));
@@ -106,7 +111,7 @@ const fetchAndRenderChart = async () => {
 
 function renderNoTodosMessage() {
     if (chartContainer) {
-        chartContainer.innerHTML = '<p style="color: #c0c0c0; font-size: 1.2rem; text-align: center;">Nincs teendő</p>';
+        chartContainer.innerHTML = '<p style="color:rgb(255, 0, 0); font-size: 1.2rem; text-align: center;">Nincs teendő</p>';
     } else {
         console.error('A chartContainer elem nem található a DOM-ban!');
     }

@@ -2,54 +2,64 @@
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require 'https://todoapp.norbbert4.hu/todo_app/vendor/autoload.php';
-include '../modules/_db.php';
+try {
+    require '../../vendor/autoload.php';
+    include '../modules/_db.php';
 
-header('Content-Type: application/json; charset=utf-8');
+    header('Content-Type: application/json; charset=utf-8');
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $data = json_decode(file_get_contents("php://input"));
-    if (!$data || !isset($data->email)) {
-        echo json_encode(['success' => false, 'error' => ['message' => 'Érvénytelen bemenet']]);
-        exit;
-    }
+    // Hibák kikapcsolása a kimenetben, logolás bekapcsolása
+    ini_set('display_errors', 0);
+    ini_set('log_errors', 1);
+    ini_set('error_log', $_SERVER['HTTP_HOST'] === 'localhost' ? 'C:/xampp/htdocs/todo_app/error.log' : '/home/norbbert4/public_html/error.log');
 
-    $email = $conn->real_escape_string($data->email);
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        $data = json_decode(file_get_contents("php://input"));
+        if (!$data || !isset($data->email)) {
+            echo json_encode(['success' => false, 'error' => ['message' => 'Érvénytelen bemenet']]);
+            exit;
+        }
 
-    $sql = "SELECT * FROM users WHERE user_email = '$email'";
-    $result = $conn->query($sql);
+        $email = $conn->real_escape_string($data->email);
 
-    if ($result === false) {
-        echo json_encode(['success' => false, 'error' => ['message' => 'Adatbázis hiba: ' . $conn->error]]);
-        exit;
-    }
+        $sql = "SELECT * FROM users WHERE user_email = '$email'";
+        $result = $conn->query($sql);
 
-    if ($result->num_rows > 0) {
-        $token = bin2hex(random_bytes(16));
-        $created_at = date("Y-m-d H:i:s");
+        if ($result === false) {
+            echo json_encode(['success' => false, 'error' => ['message' => 'Adatbázis hiba: ' . $conn->error]]);
+            exit;
+        }
 
-        $insert_sql = "INSERT INTO password_resets (email, token, created_at) VALUES ('$email', '$token', '$created_at')";
-        if ($conn->query($insert_sql)) {
-            $mail = new PHPMailer(true);
-            try {
-                $mail->isSMTP();
-                $mail->Host = 'mail.nethely.hu';
-                $mail->SMTPAuth = true;
-                $mail->Username = 'todoapp@norbbert4.hu';
-                $mail->Password = 'T0d0A@ppP@ssw0rd2025';
-                $mail->SMTPSecure = 'ssl'; // SSL használata
-                $mail->Port = 465; // Nethely port SSL-lel
+        if ($result->num_rows > 0) {
+            $token = bin2hex(random_bytes(16));
+            $created_at = date("Y-m-d H:i:s");
 
-                $mail->setFrom('todoapp@norbbert4.hu', 'Todo App');
-                $mail->addAddress($email);
-                $mail->isHTML(true);
-                $mail->Subject = 'Jelszó visszaállítás - Todo App';
+            $insert_sql = "INSERT INTO password_resets (email, token, created_at) VALUES ('$email', '$token', '$created_at')";
+            if ($conn->query($insert_sql)) {
+                $mail = new PHPMailer(true);
+                try {
+                    $mail->isSMTP();
+                    $mail->Host = 'mail.nethely.hu';
+                    $mail->SMTPAuth = true;
+                    $mail->Username = 'todoapp@norbbert4.hu';
+                    $mail->Password = 'T0d0A@ppP@ssw0rd2025';
+                    $mail->SMTPSecure = 'ssl';
+                    $mail->Port = 465;
+                    $mail->CharSet = "UTF-8";
 
-                // Dinamikus adatok
-                $resetLink = "https://todoapp.norbbert4.hu/todo_app/resetpassword.php?token=$token";
+                    $mail->setFrom('todoapp@norbbert4.hu', 'Todo App');
+                    $mail->addAddress($email);
+                    $mail->isHTML(true);
+                    $mail->Subject = 'Jelszó visszaállítás - Todo App';
 
-                
-                $mail->Body = '<!DOCTYPE html>
+                    $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+                    $host = $_SERVER['HTTP_HOST'];
+                    $baseUrl = ($host === 'localhost' || $host === '127.0.0.1')
+                        ? "$protocol://$host/todo_app/"
+                        : "$protocol://todoapp.norbbert4.hu/";
+                    $resetLink = $baseUrl . "api/authentication/resetpassword_form.php?token=$token";
+
+                    $mail->Body = '<!DOCTYPE html>
 <html lang="hu">
 <head>
     <meta charset="UTF-8">
@@ -61,17 +71,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <tr>
             <td align="center" style="padding: 40px 0;">
                 <table role="presentation" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse; background-color: #1C2526; border: 2px solid #00C4FF; border-radius: 10px; color: #ffffff;">
-                    <!-- Üzenet -->
                     <tr>
                         <td style="padding: 30px; text-align: center;">
                             <h2 style="margin: 0 0 20px; font-size: 24px; color: #00C4FF;">Kedves Felhasználó!</h2>
                             <p style="margin: 0 0 10px; font-size: 16px; color: #FF6666;">Ez egy automatikusan elküldött üzenet, kérjük ne válaszoljon rá!</p>
                             <p style="margin: 0 0 20px; font-size: 16px; color: #ffffff;">Kaptunk egy kérést a jelszavad visszaállítására a Todo App fiókodhoz. Az alábbi gombra kattintva új jelszót állíthatsz be:</p>
-                            <!-- Gomb -->
                             <a href="' . htmlspecialchars($resetLink) . '" style="display: inline-block; padding: 10px 20px; background-color: #2575fc; color: #ffffff; text-decoration: none; border-radius: 5px; font-size: 16px;">Jelszó visszaállítás</a>
                         </td>
                     </tr>
-                    <!-- Lábjegyzet -->
                     <tr>
                         <td style="padding: 0 30px 30px; text-align: center;">
                             <p style="margin: 20px 0 10px; font-size: 14px; color: #ffffff;">Ha nem te kérted a jelszó visszaállítását, kérjük, hagyd figyelmen kívül ezt az e-mailt. Ha bármilyen kérdésed van, lépj kapcsolatba velünk.</p>
@@ -86,24 +93,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </table>
 </body>
 </html>';
-
-                // Szöveges verzió (ha a HTML nem jelenik meg)
                 $mail->AltBody = "Kedves Felhasználó!\n\nKaptunk egy kérést a jelszavad visszaállítására a Todo App fiókodhoz. Kattints az alábbi linkre az új jelszó beállításához:\n\n$resetLink\n\nHa nem te kérted a jelszó visszaállítását, kérjük, hagyd figyelmen kívül ezt az e-mailt.\n\n$created_at\n\nÜdvözlettel,\nTodo App csapata\nsupport@todoapp.hu";
 
-                $mail->send();
-                $response = ['success' => true, 'message' => 'Email elküldve'];
-            } catch (Exception $e) {
-                $response = ['success' => false, 'error' => ['message' => 'Az email küldése sikertelen: ' . $mail->ErrorInfo]];
+                    $mail->send();
+                    $response = ['success' => true, 'message' => 'Email elküldve'];
+                } catch (Exception $e) {
+                    $response = ['success' => false, 'error' => ['message' => 'Az email küldése sikertelen: ' . $mail->ErrorInfo]];
+                }
+            } else {
+                $response = ['success' => false, 'error' => ['message' => 'Hiba a token tárolása során: ' . $conn->error]];
             }
         } else {
-            $response = ['success' => false, 'error' => ['message' => 'Hiba a token tárolása során: ' . $conn->error]];
+            $response = ['success' => false, 'error' => ['message' => 'Nincs ilyen email cím regisztrálva']];
         }
+
+        echo json_encode($response);
     } else {
-        $response = ['success' => false, 'error' => ['message' => 'Nincs ilyen email cím regisztrálva']];
+        echo json_encode(['success' => false, 'error' => ['message' => 'Csak POST kérések engedélyezettek']]);
     }
 
-    echo json_encode($response);
+    $conn->close();
+} catch (Exception $e) {
+    header('Content-Type: application/json; charset=utf-8');
+    echo json_encode(['success' => false, 'error' => ['message' => 'Szerver hiba: ' . $e->getMessage()]]);
+    exit;
 }
-
-$conn->close();
-?>

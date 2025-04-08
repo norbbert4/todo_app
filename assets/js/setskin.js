@@ -10,7 +10,8 @@ const setCSS = async() => {
         selectedSkinDir = resjson.body;
         console.log(selectedSkinDir);
         skinLink.setAttribute('href', './assets/css/'+selectedSkinDir.css_file+'/'+pageCSS);
-    } else {
+    }
+    else {
         console.error('hiba:', resjson.message);
         console.log(resjson.message);
     }

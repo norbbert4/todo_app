@@ -2,7 +2,7 @@ body {
     font-family: 'Roboto', Arial, sans-serif;
     width: 100%;
     min-height: 100vh;
-    background: linear-gradient(135deg, #1d0c3a, #0a224b);
+    background: url('https://www.transparenttextures.com/patterns/wood-pattern.png') repeat, #d2b48c; /* Fa textúra */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -10,24 +10,122 @@ body {
     padding: 20px;
 }
 
-/* Felhasználói információk (navigációs sáv jobb felső sarka) */
+/* Navbar */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(255, 245, 224, 0.9); /* Bézs, papírhatású háttér */
+    color: #4a3728; /* Sötétbarna szöveg */
+    padding: 15px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    z-index: 100;
+    border-radius: 0 0 15px 15px;
+}
+
+.navbar:hover {
+    transform: translateY(-2px);
+}
+
+.nav-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1200px;
+    align-items: center;
+}
+
+.logo {
+    font-family: 'Roboto', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #4a3728;
+    text-decoration: none;
+    padding: 5px;
+}
+
+.logo:hover {
+    color: #e67e22; /* Narancssárga hover */
+    transform: scale(1.1) rotate(2deg);
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 35px;
+    margin: 0;
+    padding: 0;
+    margin-top: 10px;
+}
+
+.nav-links a {
+    color: #4a3728;
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-weight: 500;
+    position: relative;
+}
+
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 2px;
+    bottom: -5px;
+    left: 0;
+    background-color: #e67e22;
+    transition: width 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: #e67e22;
+    transform: translateY(-3px) scale(1.05);
+}
+
+.nav-links a:hover::after {
+    width: 100%;
+}
+
+/* Hamburger gomb */
+.hamburger {
+    display: none;
+    background: none;
+    cursor: pointer;
+    padding: 10px;
+    z-index: 101;
+}
+
+.hamburger span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background: #4a3728;
+    margin: 5px 0;
+}
+
+/* User info */
 .user-info {
     display: flex;
     flex-direction: column;
     align-items: center;
-    color: #ffffff;
+    color: #4a3728; /* Sötétbarna */
     font-size: 1.2rem;
     font-weight: 500;
     padding: 5px 15px;
     border-radius: 10px;
-    background: rgba(255, 255, 255, 0.1);
+    background: #d2b48c; /* Bézs */
     transition: all 0.3s ease;
 }
 
 .user-info:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: #c19b76; /* Világosabb barna */
     transform: scale(1.05);
 }
+
 
 .coin-info {
     display: flex;
@@ -43,118 +141,10 @@ body {
 
 #coin-count {
     font-weight: 600;
-    color: #ffd700;
+    color: #8b6f47; /* Világosabb barna */
 }
 
-/* Navigációs sáv - Üveg effektus és 3D-s árnyék */
-.navbar {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    background: rgba(255, 255, 255, 0.1);
-    color: #ffffff;
-    padding: 15px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3), 0 1px 6px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(10px);
-    z-index: 100;
-    border-radius: 0 0 15px 15px;
-    transition: transform 0.3s ease-out;
-}
-
-.navbar:hover {
-    transform: translateY(-2px);
-}
-
-.nav-container {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    align-items: center;
-}
-
-.logo {
-    font-family: 'Inter', sans-serif;
-    font-size: 2rem;
-    font-weight: 700;
-    color: #ffffff;
-    text-decoration: none;
-    padding: 5px;
-    transition: color 0.3s ease, transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
-}
-
-.logo:hover {
-    color: #00ffcc;
-    transform: scale(1.1) rotate(2deg);
-}
-
-.nav-links {
-    list-style: none;
-    display: flex;
-    gap: 35px;
-    margin: 0;
-    padding: 0;
-    margin-top: 10px;
-    transition: all 0.3s ease;
-}
-
-.nav-links li {
-    display: inline;
-}
-
-.nav-links a {
-    color: #ffffff;
-    text-decoration: none;
-    font-size: 1.2rem;
-    font-weight: 500;
-    transition: color 0.3s ease, transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
-    position: relative;
-}
-
-.nav-links a::after {
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 2px;
-    bottom: -5px;
-    left: 0;
-    background-color: #00ffcc;
-    transition: width 0.3s ease;
-}
-
-.nav-links a:hover {
-    color: #00ffcc;
-    transform: translateY(-3px) scale(1.05);
-}
-
-.nav-links a:hover::after {
-    width: 100%;
-}
-
-/* Hamburger gomb */
-.hamburger {
-    display: none;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 10px;
-    z-index: 101;
-}
-
-.hamburger span {
-    display: block;
-    width: 25px;
-    height: 3px;
-    background: #ffffff;
-    margin: 5px 0;
-    transition: all 0.3s ease;
-}
-
-/* Fő tartalom (Todo kártya) - Üveg effektus és dinamikus keret */
+/* Fő tartalom */
 .container {
     display: flex;
     justify-content: center;
@@ -173,7 +163,7 @@ body {
     align-items: center;
 }
 
-/* Bal oldali üdvözlő szöveg - Üveg effektusú kártya */
+/* Bal oldali üdvözlő szöveg */
 .col-md-5 {
     flex: 1;
     max-width: 500px;
@@ -181,36 +171,33 @@ body {
 }
 
 .text-card-left {
-    background: rgba(20, 20, 20, 0.8);
+    background: url('https://www.transparenttextures.com/patterns/lined-paper.png') repeat; /* Vonalas papír */
     border-radius: 20px;
     padding: 3rem;
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4), 0 5px 15px rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(15px);
-    border: 2px solid #000000;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+    border: 2px solid #d2b48c;
     transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 0.4s ease;
-    color: #e6fffb;
+    color: #4a3728;
     text-align: center;
 }
 
 .text-card-left:hover {
     transform: translateY(-5px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 10px 20px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
 }
 
 .login_bal_text {
     font-size: 2.5rem;
     font-weight: 700;
     margin-bottom: 1.5rem;
-    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
 .login_bal_text_kis {
     font-size: 1.1rem;
-    color: #e6fffb;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    color: #8b6f47; /* Világosabb barna */
 }
 
-/* Jobb oldali profil adatok - Üveg effektusú kártya */
+/* Jobb oldali profil adatok */
 .profile-card {
     flex: 1;
     max-width: 500px;
@@ -218,33 +205,30 @@ body {
 }
 
 form {
-    background: rgba(20, 20, 20, 0.8);
+    background: url('https://www.transparenttextures.com/patterns/lined-paper.png') repeat; /* Vonalas papír */
     border-radius: 20px;
     padding: 3rem;
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4), 0 5px 15px rgba(0, 0, 0, 0.2);
-    backdrop-filter: blur(15px);
-    border: 2px solid #000000;
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+    border: 2px solid #d2b48c;
     transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), box-shadow 0.4s ease;
 }
 
 form:hover {
     transform: translateY(-5px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 10px 20px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
 }
 
 .login_bejel_text_cim {
     font-size: 1.8rem;
     font-weight: 700;
-    color: #e6fffb;
-    text-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    color: #4a3728;
     margin-bottom: 2rem;
     text-align: center;
 }
 
 p {
     font-size: 1rem;
-    color: #e6fffb;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    color: #4a3728;
     margin-bottom: 0.5rem;
 }
 
@@ -253,66 +237,63 @@ p {
     width: 100%;
     padding: 14px;
     font-size: 1.1rem;
-    color: #e6fffb;
-    background-color: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #4a3728;
+    background-color: #f5f5dc;
+    border: 1px solid #d2b48c;
     border-radius: 12px;
     margin-bottom: 1.5rem;
     text-align: center;
     transition: border-color 0.3s ease, background-color 0.3s ease, transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .form-control:hover,
 .form-control:focus {
-    border-color: #00ffcc;
-    background-color: rgba(255, 255, 255, 0.15);
+    border-color: #c19b76;
+    background-color: #f5f5dc;
     transform: scale(1.02);
     outline: none;
 }
 
 .form-control::placeholder {
-    color: rgba(230, 255, 251, 0.7);
+    color: #8b6f47;
 }
 
-/* Gombok - 3D-s effektus */
+/* Gombok */
 .btn-primary {
-    background: rgba(26, 115, 232, 0.6);
+    background: #d2b48c;
     border: none;
     padding: 12px 24px;
     font-size: 1.1rem;
-    color: #ffffff;
+    color: #4a3728;
     border-radius: 12px;
     cursor: pointer;
     transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1), background 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 5px 15px rgba(0, 255, 204, 0.4), 0 2px 5px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 5px 15px rgba(193, 155, 118, 0.4);
     width: 100%;
     margin-top: 0.5rem;
 }
 
 .btn-primary:hover {
-    background: rgba(26, 115, 232, 0.8);
+    background: #c19b76;
     transform: translateY(-3px) scale(1.05);
-    box-shadow: 0 8px 20px rgba(0, 255, 204, 0.5), 0 4px 10px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 8px 20px rgba(193, 155, 118, 0.5);
 }
 
 .btn-primary:active {
     transform: translateY(1px) scale(0.98);
-    box-shadow: 0 2px 5px rgba(0, 255, 204, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 5px rgba(193, 155, 118, 0.3);
 }
 
 /* Profil információk */
 #profile-info {
     font-size: 1rem;
-    color: #e6fffb;
-    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    color: #4a3728;
     margin-top: 1rem;
     text-align: center;
 }
 
-/* Reszponzív kezelés - Mobilnézet */
+/* Reszponzív kezelés */
 @media (max-width: 768px) {
-    /* Navigációs sáv */
     .hamburger {
         display: block;
     }
@@ -322,7 +303,7 @@ p {
         top: 60px;
         left: 0;
         width: 100%;
-        background: rgba(39, 39, 39, 0.95);
+        background: #f5f5dc;
         flex-direction: column;
         align-items: center;
         justify-content: center;
@@ -353,8 +334,6 @@ p {
     .hamburger.active span:nth-child(3) {
         transform: rotate(-45deg) translate(7px, -7px);
     }
-
-    /* Felhasználói információk (jobb felső sarok) */
     .user-info {
         position: absolute;
         top: 7px;
@@ -367,7 +346,6 @@ p {
         font-size: 0.9rem;
     }
 
-    /* Konténer és elrendezés */
     .container {
         height: auto;
         margin-top: 80px;
@@ -380,12 +358,10 @@ p {
         align-items: center;
     }
 
-    /* Bal oldali üdvözlő szöveg elrejtése */
     .welcome-text {
         display: none;
     }
 
-    /* Profil kártya */
     .profile-card {
         max-width: 350px;
         margin: 10px;
@@ -394,7 +370,7 @@ p {
     form {
         padding: 2rem;
         border-radius: 15px;
-        background: rgba(20, 20, 20, 0.9);
+        background: url('https://www.transparenttextures.com/patterns/lined-paper.png') repeat;
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
         border: none;
     }
@@ -415,7 +391,6 @@ p {
         border-radius: 8px;
     }
 
-    /* Gombok */
     .btn-primary {
         padding: 10px 20px;
         font-size: 1rem;

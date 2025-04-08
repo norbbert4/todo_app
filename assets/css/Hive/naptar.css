@@ -1,9 +1,8 @@
 /* Alapvető reset és testreszabás */
-
 html, body {
-    touch-action: manipulation; /* Csak a szükséges érintési interakciókat engedélyezi */
-    -webkit-text-size-adjust: 100%; /* iOS-en megakadályozza a szöveg automatikus nagyítását */
-    -webkit-overflow-scrolling: touch; /* Sima görgetés iOS-en */
+    touch-action: manipulation;
+    -webkit-text-size-adjust: 100%;
+    -webkit-overflow-scrolling: touch;
 }
 
 * {
@@ -15,360 +14,15 @@ html, body {
 body {
     font-family: 'Roboto', Arial, sans-serif;
     width: 100vw;
-    height: 100vh; /* Teljes viewport magasság */
-    background: linear-gradient(135deg, #404551, #383C49);
+    height: 100vh;
+    background: linear-gradient(135deg, #000000, #1f2937) no-repeat center center fixed;
+    background: url('https://images.unsplash.com/photo-1618477461853-e6838c61e32c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80') no-repeat center center fixed, linear-gradient(135deg, #000000, #1f2937);
+    background-size: cover;
     display: flex;
     justify-content: center;
     align-items: center;
     overflow: hidden;
-    margin: 0; /* Biztosítjuk, hogy ne legyen alapértelmezett margó */
-}
-
-/* Naptár konténer */
-.calendar-container {
-    width: 100%;
-    max-width: 1200px;
-    background: rgba(39, 39, 39, 0.95);
-    border-radius: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    overflow: hidden;
-    color: #b3b3b3;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-/* Naptár fejléc */
-.calendar-header {
-    background: linear-gradient(90deg, #2d2d2d, #444);
-    color: #ffffff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    width: 100%;
-    font-size: 24px;
-    text-align: center;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-}
-
-.calendar-header select {
-    background-color: #3a3a3a;
-    color: #d4d4d4;
-    border: 1px solid #444;
-    border-radius: 6px;
-    padding: 10px 15px;
-    font-size: 16px;
-    cursor: pointer;
-    max-width: 130px;
-    outline: none;
-}
-
-.calendar-header select:focus {
-    border-color: #1a73e8;
-    box-shadow: 0 0 8px rgba(26, 115, 232, 0.4);
-}
-
-.calendar-header select:hover {
-    border-color: #1a73e8;
-}
-
-.calendar-header button {
-    background: none;
-    color: #f1f1f1;
-    font-size: 20px;
-    cursor: pointer;
-    padding: 10px 15px;
-    border-radius: 6px;
-}
-
-.calendar-header button:hover {
-    background-color: rgba(85, 85, 85, 0.8);
-    transform: scale(1.05);
-}
-
-/* Naptár napok */
-.calendar-days {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    background: rgba(30, 30, 30, 0.95);
-    color: #c0c0c0;
-    text-align: center;
-    font-weight: 500;
-    font-size: 16px;
-    width: 100%;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.day-name {
-    padding: 10px;
-    border-right: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.day-name:last-child {
-    border-right: none;
-}
-
-.day-name:hover {
-    color: #1a73e8;
-}
-
-/* Naptár grid */
-.calendar-grid {
-    display: grid;
-    grid-template-columns: repeat(7, 1fr);
-    gap: 5px;
-    flex-grow: 1; /* A grid kitölti a rendelkezésre álló helyet */
-    background: rgba(39, 39, 39, 0.95);
-    width: 100%;
-    min-height: 0;
-    overflow: auto;
-}
-
-.day {
-    background: rgba(50, 50, 50, 0.9);
-    text-align: center;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    cursor: pointer;
-    min-height: 80px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    color: #d4d4d4;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    position: relative;
-    padding-top: 20px; /* Helyet adunk a jelzésnek a tetején */
-}
-
-.day-number {
-    font-size: 18px;
-    color: #d4d4d4;
-    position: relative;
-    z-index: 1;
-}
-
-.day.empty {
-    background-color: transparent;
-    border-color: transparent;
-    box-shadow: none;
-}
-
-.day:hover {
-    background-color: rgba(85, 85, 85, 0.8);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-}
-
-.today {
-    background: linear-gradient(90deg, #1a73e8, #55efc4);
-    color: #ffffff;
-    font-weight: 600;
-    border-color: #1a73e8;
-    box-shadow: 0 4px 12px rgba(26, 115, 232, 0.4);
-}
-
-.day .todo-indicator {
-    margin-top: 5px;
-    font-size: 14px;
-    color: #00b894;
-    font-weight: 500;
-    display: block;
-    line-height: 1;
-}
-
-.day .todo-indicator::before {
-    content: '';
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    background-color: #00b894;
-    border-radius: 50%;
-    margin-right: 5px;
-    vertical-align: middle;
-}
-
-.todos-for-day {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    background-color: #6a11cb;
-    color: white;
-    width: 1.3rem;
-    height: 1.3rem;
-    line-height: 1.2rem;
-    text-align: center;
-    border-radius: 0.6rem;
-    font-size: 12px;
-    z-index: 0;
-}
-
-.todos-for-day_hidden {
-    display: none;
-}
-
-/* Feladat űrlap (Desktop nézet) */
-.task-form {
-    position: fixed;
-    background: rgba(39, 39, 39, 0.95);
-    padding: 20px; /* Csökkentett padding a desktop nézetben */
-    border-radius: 12px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-    top: 0;
-    left: 0;
-    width: 300px; /* Csökkentett szélesség a desktop nézetben */
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    z-index: 1000;
-    display: none;
-    color: #d4d4d4;
-    opacity: 0;
-    transition: opacity 0.3s ease, top 0.3s ease, left 0.3s ease; /* Animáció a pozíció változásához */
-}
-
-/* Láthatóság esetén opacity animáció */
-.task-form[style*="display: block"] {
-    opacity: 1;
-}
-
-/* Cím stílusa */
-.task-form h3 {
-    font-size: 18px; /* Kisebb cím betűméret */
-    margin-bottom: 15px;
-    font-weight: 500;
-    color: #ffffff;
-}
-
-/* Űrlap elemek (input, select) */
-.task-form input[type="text"],
-.task-form select {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 15px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 8px;
-    background: rgba(255, 255, 255, 0.1);
-    color: #d4d4d4;
-    font-size: 14px; /* Kisebb betűméret */
-    box-sizing: border-box;
-}
-
-.task-form input[type="text"]::placeholder {
-    color: #a0a0a0;
-}
-
-.task-form input:focus {
-    border-color: #1a73e8;
-    box-shadow: 0 0 8px rgba(26, 115, 232, 0.4);
-}
-
-/* Időválasztó konténer */
-.time-picker {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    position: relative;
-    margin: 15px 0;
-}
-
-/* Időválasztó select elemek */
-.time-picker select {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    background: #2d2d2d;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    padding: 8px 25px 8px 10px; /* Kisebb padding a desktop nézetben */
-    font-size: 14px; /* Kisebb betűméret */
-    color: #e0e0e0;
-    width: 90px; /* Kisebb szélesség a desktop nézetben */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), inset 0 2px 4px rgba(255, 255, 255, 0.05);
-    cursor: pointer;
-    outline: none;
-    position: relative;
-    backdrop-filter: blur(3px);
-}
-
-.time-picker select:focus {
-    border-color: #1a73e8;
-    box-shadow: 0 0 12px rgba(26, 115, 232, 0.5), inset 0 2px 6px rgba(255, 255, 255, 0.1);
-    transform: translateY(-2px);
-}
-
-.time-picker select:hover {
-    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
-    color: white;
-    transform: translateY(-2px);
-}
-
-.time-picker select {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23e0e0e0' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 10px center;
-    background-size: 12px;
-}
-
-.time-picker select:focus,
-.time-picker select:hover {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2300ffcc' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-}
-
-.time-picker span {
-    color: #d4d4d4;
-    font-size: 1.4rem;
-    font-weight: 600;
-    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-}
-
-.time-picker::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(5px);
-    border-radius: 12px;
-    z-index: -1;
-    opacity: 0.8;
-}
-
-/* Gombok stílusa */
-.task-form button {
-    padding: 8px 16px; /* Kisebb padding a gombokon */
-    border: none;
-    border-radius: 8px;
-    font-size: 14px; /* Kisebb betűméret a gombokon */
-    cursor: pointer;
-    margin: 5px; /* Több hely a gombok között */
-    transition: transform 0.2s ease, box-shadow 0.3s ease;
-}
-
-/* Mentés gomb */
-.task-form button#save-button {
-    background: linear-gradient(90deg, #1a73e8, #55efc4);
-    color: #fff;
-}
-
-/* Mégse gomb */
-.task-form button[onclick="closeForm()"] {
-    background: linear-gradient(90deg, #ff4d4d, #ff7878);
-    color: #fff;
-}
-
-/* Teendők erre a napra gomb */
-.task-form button#go-to_todos {
-    background: linear-gradient(90deg, #6a5acd, #00c4b4);
-    color: #fff;
-}
-
-.task-form button:hover {
-    transform: scale(1.05);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    margin: 0;
 }
 
 /* Navbar */
@@ -376,21 +30,20 @@ body {
     position: fixed;
     top: 0;
     width: 100%;
-    background: rgba(255, 255, 255, 0.1);
-    color: #ffffff;
+    background: rgba(0, 0, 0, 0.9);
+    color: #facc15;
     padding: 15px 20px;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3), 0 1px 6px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(10px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
     z-index: 100;
     border-radius: 0 0 15px 15px;
-    transition: transform 0.3s ease-out;
 }
 
 .navbar:hover {
-    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.6);
 }
 
 .nav-container {
@@ -398,7 +51,6 @@ body {
     justify-content: space-between;
     width: 100%;
     max-width: 1200px;
-    margin: 0 auto;
     align-items: center;
 }
 
@@ -406,14 +58,13 @@ body {
     font-family: 'Inter', sans-serif;
     font-size: 2rem;
     font-weight: 700;
-    color: #ffffff;
+    color: #facc15;
     text-decoration: none;
     padding: 5px;
-    transition: color 0.3s ease, transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .logo:hover {
-    color: #00ffcc;
+    color: #ffffff;
     transform: scale(1.1) rotate(2deg);
 }
 
@@ -424,19 +75,13 @@ body {
     margin: 0;
     padding: 0;
     margin-top: 10px;
-    transition: all 0.3s ease;
-}
-
-.nav-links li {
-    display: inline;
 }
 
 .nav-links a {
-    color: #ffffff;
+    color: #facc15;
     text-decoration: none;
     font-size: 1.2rem;
     font-weight: 500;
-    transition: color 0.3s ease, transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
     position: relative;
 }
 
@@ -447,12 +92,12 @@ body {
     height: 2px;
     bottom: -5px;
     left: 0;
-    background-color: #00ffcc;
+    background-color: #ffffff;
     transition: width 0.3s ease;
 }
 
 .nav-links a:hover {
-    color: #00ffcc;
+    color: #ffffff;
     transform: translateY(-3px) scale(1.05);
 }
 
@@ -464,7 +109,6 @@ body {
 .hamburger {
     display: none;
     background: none;
-    border: none;
     cursor: pointer;
     padding: 10px;
     z-index: 101;
@@ -474,26 +118,25 @@ body {
     display: block;
     width: 25px;
     height: 3px;
-    background: #ffffff;
+    background: #facc15;
     margin: 5px 0;
-    transition: all 0.3s ease;
 }
-/* Felhasználói információ */
+
+/* User info */
 .user-info {
     display: flex;
     flex-direction: column;
     align-items: center;
-    color: #ffffff;
+    color: #facc15;
     font-size: 1.2rem;
     font-weight: 500;
     padding: 5px 15px;
     border-radius: 10px;
-    background: rgba(255, 255, 255, 0.1);
-    transition: all 0.3s ease;
+    background: rgba(250, 204, 21, 0.2);
 }
 
 .user-info:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(250, 204, 21, 0.3);
     transform: scale(1.05);
 }
 
@@ -511,27 +154,349 @@ body {
 
 #coin-count {
     font-weight: 600;
-    color: #ffd700;
+    color: #ffffff;
 }
 
+/* Naptár konténer */
+.calendar-container {
+    width: 100%;
+    max-width: 1200px;
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #facc15;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(5px);
+}
+
+/* Naptár fejléc */
+.calendar-header {
+    background: linear-gradient(90deg, #facc15, #f97316);
+    color: #000000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    font-size: 24px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    padding: 10px;
+}
+
+.calendar-header select {
+    background: #1f2937;
+    color: #facc15;
+    border: 1px solid #facc15;
+    border-radius: 8px;
+    padding: 10px 30px 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    max-width: 130px;
+    outline: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23facc15' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 16px;
+}
+
+.calendar-header select:focus,
+.calendar-header select:hover {
+    border-color: #f97316;
+    box-shadow: 0 0 8px rgba(249, 115, 22, 0.3);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23f97316' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+}
+
+.calendar-header button {
+    background: none;
+    color: #000000;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 10px 15px;
+    border-radius: 6px;
+}
+
+.calendar-header button:hover {
+    background: rgba(250, 204, 21, 0.2);
+    transform: scale(1.05);
+}
+
+/* Naptár napok */
+.calendar-days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    background: #1f2937;
+    color: #facc15;
+    text-align: center;
+    font-weight: 500;
+    font-size: 16px;
+    width: 100%;
+    border-bottom: 1px solid rgba(250, 204, 21, 0.2);
+}
+
+.day-name {
+    padding: 10px;
+    border-right: 1px solid rgba(250, 204, 21, 0.1);
+}
+
+.day-name:last-child {
+    border-right: none;
+}
+
+.day-name:hover {
+    color: #ffffff;
+}
+
+/* Naptár grid */
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+    flex-grow: 1;
+    background: rgba(0, 0, 0, 0.8);
+    width: 100%;
+    min-height: 0;
+    overflow: auto;
+}
+
+.day {
+    background: #1f2937;
+    text-align: center;
+    border: 1px solid rgba(250, 204, 21, 0.2);
+    cursor: pointer;
+    min-height: 80px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: #facc15;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+    padding-top: 20px;
+}
+
+.day-number {
+    font-size: 18px;
+    color: #facc15;
+    position: relative;
+    z-index: 1;
+}
+
+.day.empty {
+    background-color: transparent;
+    border-color: transparent;
+    box-shadow: none;
+}
+
+.day:hover {
+    background-color: rgba(250, 204, 21, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.today {
+    background: linear-gradient(90deg, #facc15, #f97316);
+    color: #000000;
+    font-weight: 600;
+    border-color: #facc15;
+    box-shadow: 0 4px 12px rgba(250, 204, 21, 0.4);
+}
+
+.day .todo-indicator {
+    margin-top: 5px;
+    font-size: 14px;
+    color: #22c55e;
+    font-weight: 500;
+    display: block;
+    line-height: 1;
+}
+
+.day .todo-indicator::before {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background-color: #22c55e;
+    border-radius: 50%;
+    margin-right: 5px;
+    vertical-align: middle;
+}
+
+.todos-for-day {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: #f97316;
+    color: #000000;
+    width: 1.3rem;
+    height: 1.3rem;
+    line-height: 1.2rem;
+    text-align: center;
+    border-radius: 0.6rem;
+    font-size: 12px;
+    z-index: 0;
+}
+
+.todos-for-day_hidden {
+    display: none;
+}
+
+/* Feladat űrlap */
+.task-form {
+    position: fixed;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    top: 0;
+    left: 0;
+    width: 300px;
+    backdrop-filter: blur(5px);
+    z-index: 1000;
+    display: none;
+    color: #facc15;
+    opacity: 0;
+    transition: opacity 0.3s ease, top 0.3s ease, left 0.3s ease;
+}
+
+.task-form[style*="display: block"] {
+    opacity: 1;
+}
+
+.task-form h3 {
+    font-size: 18px;
+    margin-bottom: 15px;
+    font-weight: 500;
+    color: #facc15;
+}
+
+.task-form input[type="text"],
+.task-form select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #facc15;
+    border-radius: 8px;
+    background: #1f2937;
+    color: #facc15;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.task-form input[type="text"]::placeholder {
+    color: rgba(250, 204, 21, 0.7);
+}
+
+.task-form input:focus {
+    border-color: #ffffff;
+    box-shadow: 0 0 8px rgba(250, 204, 21, 0.3);
+}
+
+/* Időválasztó konténer */
+.time-picker {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    margin: 15px 0;
+}
+
+.time-picker select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background: #1f2937;
+    border: 1px solid #facc15;
+    border-radius: 8px;
+    padding: 8px 25px 8px 10px;
+    font-size: 14px;
+    color: #facc15;
+    width: 90px;
+    cursor: pointer;
+    outline: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23facc15' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 12px;
+}
+
+.time-picker select:focus,
+.time-picker select:hover {
+    border-color: #ffffff;
+    box-shadow: 0 0 8px rgba(250, 204, 21, 0.3);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+}
+
+.time-picker span {
+    color: #facc15;
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+/* Gombok stílusa */
+.task-form button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    margin: 5px;
+}
+
+.task-form .button-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 5px;
+    width: 100%;
+}
+
+.task-form button#save-button {
+    background: linear-gradient(90deg, #facc15, #f97316);
+    color: #000000;
+}
+
+.task-form button[onclick="closeForm()"] {
+    background: linear-gradient(90deg, #ef4444, #f87171);
+    color: #000000;
+}
+
+.task-form button#go-to_todos {
+    background: linear-gradient(90deg, #22c55e, #4ade80);
+    color: #000000;
+}
+
+.task-form button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 5px 15px rgba(250, 204, 21, 0.3);
+}
+
+/* Üzenetek */
 .save-message {
     margin-top: 10px;
     font-size: 14px;
     text-align: center;
     padding: 5px;
     border-radius: 5px;
-    display: none; /* Alapértelmezettként rejtve */
+    display: none;
 }
 
 .save-message.success {
-    background-color: rgba(0, 184, 148, 0.2); /* Zöld háttér */
-    color: #00b894; /* Zöld szöveg */
+    background: linear-gradient(135deg, #22c55e, #4ade80);
+    color: #000000;
     display: block;
 }
 
 .save-message.error {
-    background-color: rgba(255, 77, 77, 0.2); /* Piros háttér */
-    color: #ff4d4d; /* Piros szöveg */
+    background: linear-gradient(135deg, #ef4444, #f87171);
+    color: #000000;
     display: block;
 }
 

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="hu">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,25 +13,6 @@
 
 <body class="d-flex align-items-center justify-content-center vh-100">
 
-    <!-- Navigációs sáv
-    <nav class="navbar">
-        <div class="nav-container">
-            <a class="logo">Todo App</a>
-            <button class="hamburger" aria-label="Toggle menu">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-            <ul class="nav-links">
-                <li><a href="./todo.html?date=today">Mai teendők</a></li>
-                <li><a href="./todo.html">Összes teendők</a></li>
-                <li><a href="./calendar.html">Naptár</a></li>
-                <li><a href="./account.html">Fiók</a></li>
-                <li><a href="./logout.html">Kijelentkezés</a></li>
-            </ul>
-        </div>
-    </nav> -->
-
     <div class="container">
         <div class="row justify-content-center align-items-center">
             <!-- Bal oldali üdvözlő szöveg -->
@@ -41,7 +22,7 @@
             </div>
             <!-- Jobb oldali bejelentkezés form -->
             <div class="col-md-7">
-                <form autocomplete="off">
+                <form autocomplete="off" id="login-form">
                     <h2 class="login_bejel_text_cim">Bejelentkezés</h2>
                     <div class="mb-3">
                         <input type="text" class="form-control" id="username" name="username" placeholder="Felhasználónév" value="">
@@ -50,10 +31,11 @@
                         <input type="password" class="form-control" id="password" name="password" placeholder="Jelszó" value="">
                     </div>
                     <div class="mb-3">
-                        <div class="btn btn-primary col-0 offset-0" id="login-button">Bejelentkezés</div>
+                        <button type="submit" class="btn btn-primary col-12" id="login-button">Bejelentkezés</button>
                     </div>
-                    <div id="login-info"></div><br>
-                    <!-- regisztráció gomb -->
+                    <div id="login-info"></div>
+                    <br>
+                    <!-- Regisztráció gomb -->
                     <p>Nincs még fiókod?</p>
                     <a href="./registration.html"><div class="btn btn-primary col-0 offset-0">Regisztráció</div></a>
                     <br><br>
@@ -66,7 +48,7 @@
 
     <script>
         // Hamburger menü toggle
-        document.querySelector('.hamburger').addEventListener('click', function() {
+        document.querySelector('.hamburger')?.addEventListener('click', function() {
             this.classList.toggle('active');
             document.querySelector('.nav-links').classList.toggle('active');
         });

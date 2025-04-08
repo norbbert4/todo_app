@@ -1,3 +1,3 @@
 <?php
-$sql = "SELECT * FROM users WHERE user_ID=$entityID";
+//$sql = "SELECT * FROM users WHERE user_ID=$entityID";
 ?>
