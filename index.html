@@ -23,7 +23,7 @@
             <!-- Jobb oldali bejelentkezés form -->
             <div class="col-md-7">
                 <form autocomplete="off" id="login-form">
-                    <h2 class="login_bejel_text_cim">Bejelentkezés</h2>
+                    <h2 class="login_bejel_text_cim">Bejelentkezés</h2><br>
                     <div class="mb-3">
                         <input type="text" class="form-control" id="username" name="username" placeholder="Felhasználónév" value="">
                     </div>
@@ -33,8 +33,7 @@
                     <div class="mb-3">
                         <button type="submit" class="btn btn-primary col-12" id="login-button">Bejelentkezés</button>
                     </div>
-                    <div id="login-info"></div>
-                    <br>
+                    
                     <!-- Regisztráció gomb -->
                     <p>Nincs még fiókod?</p>
                     <a href="./registration.html"><div class="btn btn-primary col-0 offset-0">Regisztráció</div></a>
@@ -46,11 +45,31 @@
         </div>
     </div>
 
+    <div id="login-info" class="bg-red">Hibás felhasználónév vagy jelszó</div>
+
     <script>
-        // Hamburger menü toggle
+        // Hamburger menü toggle (opcionális)
         document.querySelector('.hamburger')?.addEventListener('click', function() {
             this.classList.toggle('active');
             document.querySelector('.nav-links').classList.toggle('active');
+        });
+
+        // Üzenetdoboz animáció
+        window.addEventListener('load', () => {
+            const loginInfo = document.getElementById('login-info');
+            if (loginInfo) {
+                // Fade-in animáció indítása
+                loginInfo.style.animation = 'slideFadeIn 0.5s ease-in forwards';
+
+                // 5 másodperc várakozás, majd fade-out animáció
+                setTimeout(() => {
+                    loginInfo.style.animation = 'slideFadeOut 0.5s ease-out forwards';
+                    // Az animáció végeztével elrejtjük az elemet
+                    setTimeout(() => {
+                        loginInfo.style.display = 'none';
+                    }, 500); // Az animáció időtartama (0.5s)
+                }, 5000); // 5 másodperc várakozás
+            }
         });
     </script>
 </body>

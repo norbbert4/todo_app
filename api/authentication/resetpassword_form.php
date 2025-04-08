@@ -20,7 +20,7 @@ $token = isset($_GET['token']) ? htmlspecialchars($_GET['token']) : '';
             </div>
             <div class="col-md-7">
                 <form autocomplete="off" id="reset-password-form">
-                    <h2 class="login_bejel_text_cim">Új jelszó beállítása</h2>
+                    <h2 class="login_bejel_text_cim">Új jelszó beállítása</h2><br>
                     <input type="hidden" id="token" value="<?php echo $_GET['token']; ?>">
                     <div class="mb-3">
                         <input type="password" class="form-control" id="new-password" name="new-password" placeholder="Új jelszó" required>

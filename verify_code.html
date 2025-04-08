@@ -1,24 +1,41 @@
 <!DOCTYPE html>
-<html lang="hu">
+<html lang="hu" data-bs-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kód ellenőrzése - Todo App</title>
-    <link rel="stylesheet" href="./assets/css/verify_code.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./assets/css/style.css">
+    <script src="./assets/js/reg.js" defer></script>
 </head>
-<body>
+<body class="d-flex align-items-center justify-content-center vh-100">
     <div class="container">
-        <h2>Üdvözlünk!</h2>
-        <p class="subtitle">Add meg az e-mailben kapott kódot</p>
-        <div class="form-group">
-            <input type="text" id="codeField" placeholder="ELLENŐRZŐ KÓD">
-            <p id="code-info"></p>
-            <button type="button" id="verify-button">Kód ellenőrzése</button>
-        </div>
-        <div class="register-link">
-            <p>Ha nincs még fiókod, <a href="registration.html">regisztrálj</a>.</p>
+        <div class="row justify-content-center align-items-center">
+            <!-- Bal oldali üdvözlő szöveg -->
+            <div class="col-md-5 text-center text-white">
+                <h1 class="login_bal_text">Kód ellenőrzése</h1>
+                <p class="login_bal_text_kis">Add meg az e-mailben kapott kódot a regisztráció befejezéséhez.</p>
+            </div>
+            <!-- Jobb oldali kódellenőrző form -->
+            <div class="col-md-7">
+                <div id="codeInput">
+                    <h2 class="login_bejel_text_cim">Kód ellenőrzése</h2><br>
+                    <div class="mb-3">
+                        <input type="text" class="form-control" id="codeField" placeholder="Ellenőrző kód" required>
+                    </div>
+                    <div class="mb-3">
+                        <button type="button" class="btn btn-primary col-12" id="verify-button">Kód ellenőrzése</button>
+                    </div>
+                    <!-- Regisztráció gomb -->
+                    <p>Nincs még fiókod?</p>
+                    <a href="./registration.html"><div class="btn btn-primary col-0 offset-0">Regisztráció</div></a>
+                    <br><br>
+                </div>
+            </div>
         </div>
     </div>
-    <script src="./assets/js/reg.js" defer></script>
+
+    <!-- Üzenetdoboz az oldal alján -->
+    <div id="code-info" style="display: none;"></div>
 </body>
 </html>

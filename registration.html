@@ -12,7 +12,6 @@
 </head>
 
 <body class="d-flex align-items-center justify-content-center vh-100">
-
     <div class="container">
         <div class="row justify-content-center align-items-center">
             <!-- Bal oldali üdvözlő szöveg -->
@@ -23,7 +22,7 @@
             <!-- Jobb oldali regisztrációs form -->
             <div class="col-md-7">
                 <form autocomplete="off" id="reg-form">
-                    <h2 class="login_bejel_text_cim">Regisztráció</h2>
+                    <h2 class="login_bejel_text_cim">Regisztráció</h2><br>
                     <div class="mb-3">
                         <input type="email" class="form-control" id="email" name="email" placeholder="E-mail cím" value="" required>
                     </div>
@@ -33,14 +32,18 @@
                     <div class="mb-3">
                         <input type="password" class="form-control" id="password" name="password" placeholder="Jelszó" value="" required>
                     </div>
-                    <div class="mb-3 form-check">
-                        <input type="checkbox" class="form-check-input" id="enable_2fa" name="enable_2fa">
-                        <label class="form-check-label" for="enable_2fa">Kétfaktoros hitelesítés (2FA) engedélyezése</label>
+                    <div class="mb-3 form-check d-flex align-items-center">
+                        <label class="login_bal_text_kis ms-4">Kétfaktoros hitelesítés (2FA) engedélyezése:</label>
+                        <div class="c2">
+                            <label class="switch">
+                                <input type="checkbox" class="form-check-input" id="enable_2fa" name="enable_2fa">
+                                <div class="slider round"></div>
+                            </label>
+                        </div>
                     </div>
                     <div class="mb-3">
                         <button type="submit" class="btn btn-primary col-12" id="reg-button">Regisztráció</button>
                     </div>
-                    <div id="reg-info"></div>
                     <!-- Bejelentkezés gomb -->
                     <p>Már van fiókod?</p>
                     <a href="./index.html"><div class="btn btn-primary col-0 offset-0">Bejelentkezés</div></a>
@@ -55,13 +58,15 @@
                         <input type="text" class="form-control" id="codeField" placeholder="Ellenőrző kód" required>
                     </div>
                     <div class="mb-3">
-                        <button type="button" class="btn btn-primary col-12" onclick="verifyCode()">Kód ellenőrzése</button>
+                        <button type="button" class="btn btn-primary col-12" id="verify-button">Kód ellenőrzése</button>
                     </div>
-                    <div id="code-info"></div>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Üzenetdoboz az oldal alján -->
+    <div id="reg-info" style="display: none;"></div>
 
     <script>
         // Hamburger menü toggle (ha később szükséged lesz rá)

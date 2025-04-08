@@ -48,7 +48,7 @@ function send_2fa_email($email, $username, $temp_code, $persistent_code) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Todo App - 2FA kódok</title>
+    <title>Todo App - kétfaktoros azonosítás</title>
 </head>
 <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #4A43C4; background: linear-gradient(135deg, #6a11cb, #2575fc);">
     <table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;">
@@ -58,17 +58,18 @@ function send_2fa_email($email, $username, $temp_code, $persistent_code) {
                     <tr>
                         <td style="padding: 30px; text-align: center;">
                             <h2 style="margin: 0 0 20px; font-size: 24px; color: #00C4FF;">Kedves ' . htmlspecialchars($username) . '!</h2>
-                            <p style="margin: 0 0 10px; font-size: 16px; color: #FF6666;">Ez egy automatikusan elküldött üzenet, kérjük ne válaszoljon rá!</p>
-                            <p style="margin: 0 0 20px; font-size: 16px; color: #ffffff;">Az alábbi kódokat használhatod a bejelentkezéshez:</p>
-                            <p style="margin: 0 0 10px; font-size: 16px; color: #ffffff;">Egyszeri belépéshez (érvényes: egy belépésre): <strong>' . htmlspecialchars($temp_code) . '</strong></p>
-                            <p style="margin: 0 0 20px; font-size: 16px; color: #ffffff;">Tartós belépéshez (érvényes 30 napig): <strong>' . htmlspecialchars($persistent_code) . '</strong></p>
+                            <p style="margin: 0 0 20px; font-size: 16px; color: #ffffff;">Az alábbi kódot használhatod a bejelentkezéshez:</p>
+                            <p style="margin: 0 0 10px; font-size: 16px; color: #ffffff;"> <strong>' . htmlspecialchars($temp_code) . '</strong></p>
+							<p style="margin: 0 0 10px; font-size: 16px; color: #ffffff;"> <strong>Egy belépésig érvényes.</strong></p>
+                            
                         </td>
                     </tr>
                     <tr>
                         <td style="padding: 0 30px 30px; text-align: center;">
-                            <p style="margin: 20px 0 10px; font-size: 14px; color: #ffffff;">Ha nem te kezdeményezted a bejelentkezést, kérjük, változtasd meg a jelszavadat!</p>
-                            <p style="margin: 0 0 10px; font-size: 14px; color: #ffffff;">' . $currentDateTime . '</p>
+                            <p style="margin: 20px 0 10px; font-size: 14px; color: #ffffff;">Ha nem te kezdeményezted a bejelentkezést, kérjük, változtasd meg a jelszavadat! Ha ez nem sikerül, lépj kapcsolatba velünk.</p>
                             <p style="margin: 0; font-size: 14px; color: #00C4FF;">Üdvözlettel,<br>Todo App csapata</p>
+							<p style="margin: 10px 0 0; font-size: 14px; color: #00C4FF;"><a href="mailto:todoapp@norbbert4.hu" style="color: #00C4FF; text-decoration: none;">todoapp@norbbert4.hu</a></p>
+
                         </td>
                     </tr>
                 </table>

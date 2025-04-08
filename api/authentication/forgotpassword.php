@@ -31,6 +31,10 @@ try {
         }
 
         if ($result->num_rows > 0) {
+            // Felhasználó adatainak kiolvasása
+            $row = $result->fetch_assoc();
+            $username = $row['user_name']; // A user_name mező kiolvasása
+
             $token = bin2hex(random_bytes(16));
             $created_at = date("Y-m-d H:i:s");
 
@@ -50,7 +54,7 @@ try {
                     $mail->setFrom('todoapp@norbbert4.hu', 'Todo App');
                     $mail->addAddress($email);
                     $mail->isHTML(true);
-                    $mail->Subject = 'Jelszó visszaállítás - Todo App';
+                    $mail->Subject = 'Todo App - Jelszó visszaállítás';
 
                     $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
                     $host = $_SERVER['HTTP_HOST'];
@@ -73,16 +77,15 @@ try {
                 <table role="presentation" cellpadding="0" cellspacing="0" width="600" style="border-collapse: collapse; background-color: #1C2526; border: 2px solid #00C4FF; border-radius: 10px; color: #ffffff;">
                     <tr>
                         <td style="padding: 30px; text-align: center;">
-                            <h2 style="margin: 0 0 20px; font-size: 24px; color: #00C4FF;">Kedves Felhasználó!</h2>
-                            <p style="margin: 0 0 10px; font-size: 16px; color: #FF6666;">Ez egy automatikusan elküldött üzenet, kérjük ne válaszoljon rá!</p>
-                            <p style="margin: 0 0 20px; font-size: 16px; color: #ffffff;">Kaptunk egy kérést a jelszavad visszaállítására a Todo App fiókodhoz. Az alábbi gombra kattintva új jelszót állíthatsz be:</p>
+                            <h2 style="margin: 0 0 20px; font-size: 24px; color: #00C4FF;">Kedves ' . htmlspecialchars($username) . '!</h2>
+                            
+                            <p style="margin: 0 0 20px; font-size: 16px; color: #ffffff;">A jelszavad visszaállítását kezdeményezted a Todo App oldalon <strong>' . htmlspecialchars($username) . ' </strong> felhasználónevű fiókodhoz. Az alábbi gombra kattintva új jelszót állíthatsz be:</p>
                             <a href="' . htmlspecialchars($resetLink) . '" style="display: inline-block; padding: 10px 20px; background-color: #2575fc; color: #ffffff; text-decoration: none; border-radius: 5px; font-size: 16px;">Jelszó visszaállítás</a>
                         </td>
                     </tr>
                     <tr>
                         <td style="padding: 0 30px 30px; text-align: center;">
                             <p style="margin: 20px 0 10px; font-size: 14px; color: #ffffff;">Ha nem te kérted a jelszó visszaállítását, kérjük, hagyd figyelmen kívül ezt az e-mailt. Ha bármilyen kérdésed van, lépj kapcsolatba velünk.</p>
-                            <p style="margin: 0 0 10px; font-size: 14px; color: #ffffff;">' . $created_at . '</p>
                             <p style="margin: 0; font-size: 14px; color: #00C4FF;">Üdvözlettel,<br>Todo App csapata</p>
                             <p style="margin: 10px 0 0; font-size: 14px; color: #00C4FF;"><a href="mailto:todoapp@norbbert4.hu" style="color: #00C4FF; text-decoration: none;">todoapp@norbbert4.hu</a></p>
                         </td>
@@ -93,7 +96,7 @@ try {
     </table>
 </body>
 </html>';
-                $mail->AltBody = "Kedves Felhasználó!\n\nKaptunk egy kérést a jelszavad visszaállítására a Todo App fiókodhoz. Kattints az alábbi linkre az új jelszó beállításához:\n\n$resetLink\n\nHa nem te kérted a jelszó visszaállítását, kérjük, hagyd figyelmen kívül ezt az e-mailt.\n\n$created_at\n\nÜdvözlettel,\nTodo App csapata\nsupport@todoapp.hu";
+                    $mail->AltBody = "Kedves $username!\n\nKaptunk egy kérést a jelszavad visszaállítására a Todo App fiókodhoz. Kattints az alábbi linkre az új jelszó beállításához:\n\n$resetLink\n\nHa nem te kérted a jelszó visszaállítását, kérjük, hagyd figyelmen kívül ezt az e-mailt.\n\n$created_at\n\nÜdvözlettel,\nTodo App csapata\nsupport@todoapp.hu";
 
                     $mail->send();
                     $response = ['success' => true, 'message' => 'Email elküldve'];
@@ -118,3 +121,4 @@ try {
     echo json_encode(['success' => false, 'error' => ['message' => 'Szerver hiba: ' . $e->getMessage()]]);
     exit;
 }
+?>

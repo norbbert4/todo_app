@@ -1,5 +1,21 @@
 /* ./assets/css/Hive/skins.css */
 
+/* Fade-in animáció definiálása */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Alapértelmezett fade-in az oldal betöltésekor */
+body {
+    animation: fadeIn 1s ease-in forwards;
+}
+
+
 /* Bootstrap felülírások kikapcsolása */
 div {
     background: none !important;

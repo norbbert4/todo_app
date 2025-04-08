@@ -1,5 +1,21 @@
 /* Alapvető reset és testreszabás */
 
+/* Fade-in animáció definiálása */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Alapértelmezett fade-in az oldal betöltésekor */
+body {
+    animation: fadeIn 1s ease-in forwards;
+}
+
+
 html, body {
     touch-action: manipulation; /* Csak a szükséges érintési interakciókat engedélyezi */
     -webkit-text-size-adjust: 100%; /* iOS-en megakadályozza a szöveg automatikus nagyítását */

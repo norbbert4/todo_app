@@ -1,3 +1,33 @@
+/* Fade-in animáció definiálása */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Fade-out animáció definiálása */
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+/* Alapértelmezett fade-in az oldal betöltésekor */
+body {
+    animation: fadeIn 1s ease-in forwards;
+}
+
+/* Fade-out hozzáadása, amikor az oldal elhagyásra kerül */
+body.fade-out {
+    animation: fadeOut 3s ease-in forwards;
+}
+
 /* Alapvető reset és testreszabás */
 * {
     padding: 0;

@@ -3,7 +3,6 @@ ini_set('display_errors', 1);
 ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
-//nemkell, localhostos : require 'C:/xampp/htdocs/todo_app/vendor/autoload.php';
 require '../../vendor/autoload.php';
 include '../modules/_db.php';
 
@@ -27,6 +26,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit;
     }
 
+    // További validáció: felhasználónév formátuma
+    if (!preg_match('/^[a-zA-Z0-9_]+$/', $username)) {
+        $response = array('success' => false, 'error' => array('message' => 'A felhasználónév csak betűket, számokat és aláhúzást tartalmazhat'));
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode($response);
+        exit;
+    }
+
+    // Jelszó erősség ellenőrzése
+    if (strlen($password) < 8 || !preg_match('/[A-Z]/', $password) || !preg_match('/[0-9]/', $password)) {
+        $response = array('success' => false, 'error' => array('message' => 'Jelszó: minimum 8 karakter, legalább egy nagybetű és egy szám'));
+        header('Content-Type: application/json; charset=utf-8');
+        echo json_encode($response);
+        exit;
+    }
+
     $sql = "SELECT * FROM users WHERE user_name = ? OR user_email = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('ss', $username, $email);
@@ -36,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($result->num_rows > 0) {
         $response = array('success' => false, 'error' => array('message' => 'A felhasználónév vagy e-mail már foglalt'));
     } else {
-        $verificationCode = substr(str_shuffle("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, rand(4, 5));
+        $verificationCode = substr(str_shuffle("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ"), 0, 6); // Hosszabb kód: 6 karakter
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
         $two_factor_enabled = $enable_2fa ? 1 : 0;
 
@@ -62,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $mail->addAddress($email);
 
             $mail->isHTML(true);
-            $mail->Subject = 'Kedves Felhasználó! Regisztráció ellenőrző kód';
+            $mail->Subject = 'Todo App - Regisztráció ellenőrző kód';
             $currentDateTime = date('Y-m-d H:i:s');
 
             $mailBody = '<!DOCTYPE html>
@@ -80,8 +95,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <tr>
                         <td style="padding: 30px; text-align: center;">
                             <h2 style="margin: 0 0 20px; font-size: 24px; color: #00C4FF;">Kedves ' . htmlspecialchars($username) . '!</h2>
-                            <p style="margin: 0 0 10px; font-size: 16px; color: #FF6666;">Ez egy automatikusan elküldött üzenet, kérjük ne válaszoljon rá!</p>
-                            <p style="margin: 0 0 20px; font-size: 16px; color: #ffffff;">Kaptunk egy kérést a regisztrációd véglegesítésére a Todo App fiókodhoz. Az alábbi kódot használd a regisztrációd befejezéséhez:</p>
+                            <p style="margin: 0 0 20px; font-size: 16px; color: #ffffff;">Véglegesítsd a regisztrációdat a TodoApp oldalon az alábbi kóddal:</p>
                             <div style="display: inline-block; padding: 10px 20px; background-color: #333; color: #ffffff; border-radius: 5px; font-size: 16px; margin: 20px 0;">
                                 ' . htmlspecialchars($verificationCode) . '
                             </div>
@@ -90,7 +104,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <tr>
                         <td style="padding: 0 30px 30px; text-align: center;">
                             <p style="margin: 20px 0 10px; font-size: 14px; color: #ffffff;">Ha nem te kezdeményezted a regisztrációt, kérjük, hagyd figyelmen kívül ezt az e-mailt. Ha bármilyen kérdésed van, lépj kapcsolatba velünk.</p>
-                            <p style="margin: 0 0 10px; font-size: 14px; color: #ffffff;">' . $currentDateTime . '</p>
                             <p style="margin: 0; font-size: 14px; color: #00C4FF;">Üdvözlettel,<br>Todo App csapata</p>
                             <p style="margin: 10px 0 0; font-size: 14px; color: #00C4FF;"><a href="mailto:todoapp@norbert4.hu" style="color: #00C4FF; text-decoration: none;">todoapp@norbert4.hu</a></p>
                         </td>
@@ -109,6 +122,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             $response = array('success' => true, 'message' => 'Ellenőrző kód elküldve az e-mail címedre', 'step' => 'verify_code');
         } catch (Exception $e) {
+            unset($_SESSION['pending_user']);
+            unset($_SESSION['verification_code']);
             $response = array('success' => false, 'error' => array('message' => 'Hiba az e-mail küldése közben: ' . $mail->ErrorInfo));
         }
     }

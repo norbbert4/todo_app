@@ -2,7 +2,6 @@ const verifyApiUrl = 'api/authentication/login.php';
 const codeInput = document.getElementById('code');
 const verifyButton = document.getElementById('verify-button');
 const codeInfo = document.getElementById('code-info');
-const emailInfo = document.getElementById('email-info');
 
 const urlParams = new URLSearchParams(window.location.search);
 const sessionId = urlParams.get('session_id');
@@ -27,8 +26,7 @@ const verifyCode = async () => {
         console.log('Verify response:', data);
 
         if (data.success) {
-            codeInfo.classList.add('bg-green');
-            codeInfo.textContent = 'Sikeres hitelesítés!';
+            showMessage(codeInfo, 'Sikeres hitelesítés!', 'green');
             
             const pendingLogin = sessionStorage.getItem('pending_login');
             let username = '';
@@ -51,29 +49,19 @@ const verifyCode = async () => {
             setTimeout(() => {
                 console.log('Átirányítás a todo.html-re...');
                 window.location.href = "./todo.html";
-            }, 2000);
+            }, 2000); // Redirect after 2 seconds
         } else {
-            codeInfo.classList.add('bg-red');
-            codeInfo.textContent = data.error || 'Érvénytelen kód!';
+            showMessage(codeInfo, data.error || 'Érvénytelen kód!', 'red');
         }
     } catch (error) {
         console.error('Hiba:', error);
-        codeInfo.classList.add('bg-red');
-        codeInfo.textContent = 'Hiba történt a kód ellenőrzése során: ' + error.message;
+        showMessage(codeInfo, 'Hiba történt a kód ellenőrzése során: ' + error.message, 'red');
     }
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-    if (sessionId) {
-        emailInfo.classList.add('bg-green');
-        emailInfo.textContent = 'A kódot elküldtük az e-mail címedre. Kérjük, ellenőrizd a postafiókodat!';
-    } else {
-        emailInfo.classList.add('bg-red');
-        emailInfo.textContent = 'Hiba: Érvénytelen session.';
-    }
-
     document.getElementById('verify-2fa-form').addEventListener('submit', function(event) {
-        event.preventDefault();
+        event.preventDefault(); // Prevent page reload
         verifyCode();
     });
 });

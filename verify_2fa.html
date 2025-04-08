@@ -20,19 +20,37 @@
             </div>
             <div class="col-md-7">
                 <form autocomplete="off" id="verify-2fa-form">
-                    <h2 class="login_bejel_text_cim">Kétfaktoros hitelesítés</h2>
-                    <!-- Új üzenet mező -->
-                    <div id="email-info" class="mb-3 text-center"></div>
+                    <h2 class="login_bejel_text_cim">Kétfaktoros hitelesítés</h2><br>
                     <div class="mb-3">
                         <input type="text" class="form-control" id="code" name="code" placeholder="2FA kód" required>
                     </div>
+                    <p>A kódot elküldtük az e-mail címedre. Kérjük, ellenőrizd a postafiókodat!</p>
                     <div class="mb-3">
                         <button type="submit" class="btn btn-primary col-12" id="verify-button">Kód ellenőrzése</button>
                     </div>
-                    <div id="code-info"></div>
                 </form>
             </div>
         </div>
     </div>
+
+    <!-- Moved #code-info outside the form and to the bottom -->
+    <div id="code-info"></div>
+
+    <script>
+        // Add animation logic for #code-info (similar to index.html)
+        function showMessage(element, message, type) {
+            element.textContent = message;
+            element.className = `bg-${type}`; // Reset to the appropriate class
+            element.style.display = 'block';
+            element.style.animation = 'slideFadeIn 0.5s ease-in forwards';
+
+            setTimeout(() => {
+                element.style.animation = 'slideFadeOut 0.5s ease-out forwards';
+                setTimeout(() => {
+                    element.style.display = 'none';
+                }, 500); // Match animation duration
+            }, 5000); // Display for 5 seconds
+        }
+    </script>
 </body>
 </html>

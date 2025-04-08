@@ -103,7 +103,6 @@ if (!empty($usersWithTodos)) {
                     <tr>
                         <td style="padding: 30px; text-align: center;">
                             <h2 style="margin: 0 0 20px; font-size: 24px; color: #00C4FF;">Kedves ' . htmlspecialchars($userName) . '!</h2>
-                            <p style="margin: 0 0 10px; font-size: 16px; color: #FF6666;">Ez egy automatikusan elküldött üzenet, kérjük ne válaszoljon rá!</p>
                             <p style="margin: 0 0 20px; font-size: 16px; color: #ffffff;">Holnapra a következő teendőid vannak:</p>
                             <ul style="list-style-type: none; padding: 0; margin: 0 0 20px; font-size: 16px; color: #ffffff; text-align: left;">
                                 ' . $todoListHtml . '
@@ -114,7 +113,6 @@ if (!empty($usersWithTodos)) {
                     <tr>
                         <td style="padding: 0 30px 30px; text-align: center;">
                             <p style="margin: 20px 0 10px; font-size: 14px; color: #ffffff;">Ha bármilyen kérdésed van, lépj kapcsolatba velünk.</p>
-                            <p style="margin: 0 0 10px; font-size: 14px; color: #ffffff;">' . $currentDateTime . '</p>
                             <p style="margin: 0; font-size: 14px; color: #00C4FF;">Üdvözlettel,<br>Todo App csapata</p>
                             <p style="margin: 10px 0 0; font-size: 14px; color: #00C4FF;"><a href="mailto:todoapp@norbbert4.hu" style="color: #00C4FF; text-decoration: none;">todoapp@norbbert4.hu</a></p>
                         </td>
@@ -147,7 +145,7 @@ if (!empty($usersWithTodos)) {
             $mail->setFrom('todoapp@norbbert4.hu', 'Todo App');
             $mail->addAddress($userEmail);
             $mail->isHTML(true);
-            $mail->Subject = 'Holnapi teendők emlékeztető';
+            $mail->Subject = 'TodoApp - Holnapi teendők';
             $mail->Body = $emailBody;
             $mail->AltBody = $emailAltBody;
 
