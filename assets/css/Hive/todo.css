@@ -404,9 +404,9 @@ footer button:hover {
 }
 
 /* Gombok színei és állapotok */
-.state-button-k { background-color: #22c55e; } /* Zöld */
-.state-button-m { background-color: #f97316; } /* Narancs */
-.delete-button { background-color: #ef4444; } /* Piros */
+.state-button-k { background-color: #22c55e;min-width: 60px; margin-right: 20px} /* Zöld */
+.state-button-m { background-color: #f97316;min-width: 60px;margin-right: 20px } /* Narancs */
+.delete-button { background-color: #ef4444; min-width: 60px;margin-right: 20px} /* Piros */
 .state-k-button_1 { display: none; }
 .state-k-button_0 { display: inline; }
 .state-m-button_1 { display: inline; }

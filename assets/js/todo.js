@@ -163,9 +163,9 @@ const createTableRow = (todo, index) => {
                 <td class="state-${todo.completed}">${todo.date.substring(0, 10)}</td>
                 <td class="state-${todo.completed}">${startTimeDisplay}</td>
                 <td class="action-cell">
-                    <button type="button" class="state-button-k state-k-button_${todo.completed}" data-action="complete" data-id="${todo.id}" title="Kész">•</button>
-                    <button type="button" class="state-button-m state-m-button_${todo.completed}" data-action="uncomplete" data-id="${todo.id}" title="Felfüggesztés">«</button>
-                    <button type="button" class="delete-button" data-action="delete" data-id="${todo.id}" title="Törlés">Ø</button>
+                    <button type="button" class="state-button-k state-k-button_${todo.completed}" data-action="complete" data-id="${todo.id}" title="Kész">Kész</button>
+                    <button type="button" class="state-button-m state-m-button_${todo.completed}" data-action="uncomplete" data-id="${todo.id}" title="Mégsincs kész">Mégse</button>
+                    <button type="button" class="delete-button" data-action="delete" data-id="${todo.id}" title="Törlés">Törlés</button>
                 </td>
             </tr>`;
 };

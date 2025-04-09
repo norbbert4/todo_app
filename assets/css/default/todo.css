@@ -273,7 +273,7 @@ main header input[type="number"] {
 
 /* Todo count box */
 .todo-count-box {
-    margin: 1.5rem 0;
+    
     padding: 0.8rem 1.5rem;
     background: linear-gradient(90deg, #1a73e8, #55efc4);
     color: #ffffff;
@@ -453,9 +453,9 @@ footer button:hover {
 }
 
 /* Gombok színei és állapotok */
-.state-button-k { background-color: #068148; }
-.state-button-m { background-color: #ae820a; }
-.delete-button { background-color: #aa3910; }
+.state-button-k { background-color: #068148; min-width: 100px; }
+.state-button-m { background-color: #ae820a; min-width: 100px; }
+.delete-button { background-color: #aa3910; min-width: 100px; }
 .state-k-button_1 { display: none; }
 .state-k-button_0 { display: inline; }
 .state-m-button_1 { display: inline; }
@@ -703,7 +703,6 @@ footer button:hover {
     /* Todo count box */
     .todo-count-box {
         font-size: 1rem; /* Kisebb betűméret */
-        padding: 0.6rem 1rem;
     }
 
     /* Táblázat kártyák finomhangolása */
@@ -734,4 +733,16 @@ footer button:hover {
         padding: 0.3rem 0.6rem;
         max-width: 150px;
     }
+}
+
+.beiros {
+    
+    padding: 0.8rem 1.5rem;
+    color: #ffffff;
+    font-size: 1.2rem;
+    font-weight: 500;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(26, 115, 232, 0.4);
+    text-align: center;
+    z-index: 1;
 }

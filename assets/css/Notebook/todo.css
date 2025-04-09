@@ -447,9 +447,9 @@ footer button:hover {
 }
 
 /* Gombok színei és állapotok */
-.state-button-k { background-color: #27ae60; }
-.state-button-m { background-color: #f39c12; }
-.delete-button { background-color: #c0392b; }
+.state-button-k { background-color: #27ae60;min-width: 60px; margin-right: 20px }
+.state-button-m { background-color: #f39c12;min-width: 60px; margin-right: 20px }
+.delete-button { background-color: #c0392b; min-width: 60px; margin-right: 20px}
 .state-k-button_1 { display: none; }
 .state-k-button_0 { display: inline; }
 .state-m-button_1 { display: inline; }
@@ -793,4 +793,10 @@ footer button:hover {
         color: #fffef0;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     }
+}
+
+.thadat {
+  max-width: 10px;
+  white-space: normal;
+  word-wrap: break-word;
 }

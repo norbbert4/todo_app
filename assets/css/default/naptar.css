@@ -285,8 +285,6 @@ body {
     display: flex;
     align-items: center;
     gap: 8px;
-    position: relative;
-    margin: 15px 0;
 }
 
 /* Időválasztó select elemek */
@@ -300,7 +298,7 @@ body {
     padding: 8px 25px 8px 10px; /* Kisebb padding a desktop nézetben */
     font-size: 14px; /* Kisebb betűméret */
     color: #e0e0e0;
-    width: 90px; /* Kisebb szélesség a desktop nézetben */
+    width: 300px; /* Kisebb szélesség a desktop nézetben */
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3), inset 0 2px 4px rgba(255, 255, 255, 0.05);
     cursor: pointer;
     outline: none;
@@ -765,4 +763,12 @@ body {
         min-height: 70px;
         padding-top: 10px;
     }
+}
+
+.mentestorlesgomb {
+    min-width: 100%;
+}
+
+.teendokee {
+    min-width: 100%;
 }

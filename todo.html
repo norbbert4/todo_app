@@ -57,18 +57,17 @@
             <h1></h1>
             <form>
                 <div id="todo-input-container">
-                    <input 
-                        type="text" 
-                        name="todo" 
-                        autocomplete="off" 
-                        placeholder="Mi lesz az új teendő?">
-                    <div class="time-picker" id="time-picker"></div>
+
+                    <input type="text" name="todo" autocomplete="off" maxlength="30" placeholder="Mi lesz az új teendő?" class="beiros">
+                    <div class="time-picker" id="time-picker"></div>	
+					<button type="button" id="save-button" class="todo-count-box">Mentés</button>
+					<div id="today-todo-count" class="todo-count-box"></div>
+
                 </div>
-                <button type="button" id="save-button" class="save-button">MENTÉS</button>
                 <!-- A save-message most a form-on belül, a save-button után van -->
                 <div id="save-message" class="save-message"></div>
             </form>
-            <div id="today-todo-count" class="todo-count-box"></div>
+            
         </header>
     
         <!-- Új konténer a táblázat számára -->
@@ -88,8 +87,8 @@
             </footer>
         </div>
     </main>
+    <aside style="color: white;"></aside>
 
-    <aside style="color: white;">Nincs jogosultságod az alkalmazás használatához. Kérlek jelentkezz be!</aside>
 
     <script>
         // Hamburger menü toggle
